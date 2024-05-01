@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 10:47:07 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/01 13:08:45 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		command = readline("\033[32mminishell> \033[0m");
+		command = readline("\033[32mminishell>     \033[0m");
 		if (command == NULL || strcmp(command, "exit") == 0)
 		{
 			if (command)
