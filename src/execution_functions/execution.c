@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/04/30 14:15:05 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/01 13:06:07 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int	pipe_cmds(t_tree *tmp, char **envp)
 		if (tmp ->child_pipe)
 			dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
+		if (tmp->command)
+			handle_builtins(tmp);
 		exec_cmd(tmp, envp);
 	}
 	else
