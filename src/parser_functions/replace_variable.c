@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 14:52:19 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/13 16:22:18 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ int	search_for_variable_in_env(char **s, char **envp, char *arg, char **var)
 			j++;
 		if (envp[i][j] && envp[i][j] == '=')
 		{
+			*var = malloc(sizeof(char) * (j + 2));
+			ft_strlcpy(*var, *s, j + 2);
 			len = strlen(envp[i] + ++j);
 			new_str = ft_substr(envp[i], j, len);
 			if (new_str != NULL)
@@ -38,52 +40,56 @@ int	search_for_variable_in_env(char **s, char **envp, char *arg, char **var)
 				*s = ft_strdup(new_str);
 				return (free(new_str), 1);
 			}
-			else
-				return (0);
+			return (0);
 		}
 	}
 	return (0);
 }
 
 //	this function allocates the new substring for the string replace in a string
-int	alloc_string(char **s, char **substr_pos, char *str_replace, int result_len)
+int	alloc_string(char **s, int result_len)
 {
 	char	*temp;
+	int		str_len;
 
-	if (result_len > (int)ft_strlen(*s))
+	temp = NULL;
+	str_len = (int)ft_strlen(*s);
+	if (result_len != str_len)
 	{
-		temp = realloc(*s, result_len + 1);
+		temp = (char *)malloc(sizeof(char) * (result_len + 1));
 		if (!temp)
 			return (EXIT_FAILURE);
+		ft_memcpy(temp, *s, str_len);
+		temp[str_len] = '\0';
+		free(*s);
 		*s = temp;
-		*substr_pos = strstr(*s, str_replace);
-		if (*substr_pos == NULL)
-			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
 //	this function replaces in the str s the str_replace with the new_str
-int	replace__var(char **s, char *str_replace, char *new_str, int *start)
+int	replace_var(char **s, char *str_replace, char *new_str, int *start)
 {
-	int replace_len = ft_strlen(str_replace);
-	char *substr_pos = *s + *start;
-	if (substr_pos == NULL)
-		return 0;
-	int suf_len = ft_strlen(substr_pos + replace_len);
-	int len_new_st = ft_strlen(new_str);
-	int result_len = ft_strlen(*s) - replace_len + len_new_st;
-	printf("\ns; %d surf: %d new: %d result: %d replace: %d \n", (int)ft_strlen(*s), suf_len, len_new_st, result_len, replace_len);
-	if (alloc_string(s, &substr_pos, str_replace, result_len) == EXIT_FAILURE)
+	char	*suffix_pos;
+	char	*substr_pos;
+	int		rep_len;
+	int		len_new_st;
+
+	rep_len = ft_strlen(str_replace);
+	len_new_st = ft_strlen(new_str);
+	if (alloc_string(s, ft_strlen(*s) - rep_len + len_new_st) == EXIT_FAILURE)
 	{
-		free(str_replace);
 		free(new_str);
 		return (0);
 	}
-	ft_memmove(substr_pos + len_new_st, substr_pos + replace_len, suf_len + 1);
+	substr_pos = *s + *start;
+	if (substr_pos == NULL)
+		return (0);
+	suffix_pos = substr_pos + rep_len;
+	ft_memmove(substr_pos + len_new_st, substr_pos + rep_len, ft_strlen(suffix_pos) + 1);
 	ft_memcpy(substr_pos, new_str, len_new_st);
-	free(str_replace);
 	free(new_str);
+	*start += len_new_st;
 	return (1);
 }
 
@@ -106,10 +112,8 @@ int	export_dollar_sign(char **args, char **envp)
 			{
 				if (search_for_variable_in_env(&replace, envp, args[i] + j, &var))
 				{
-					if (!replace__var(&args[i], var, replace, &j))
+					if (!replace_var(&args[i], var, replace, &j))
 						return (EXIT_FAILURE);
-					else
-						printf("%s\n", args[i]);
 				}
 			}
 			j++;

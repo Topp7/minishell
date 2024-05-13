@@ -71,55 +71,50 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 }
 
 //	this function allocates the new substring for the string replace in a string
-int	alloc_string(char **s, char **substr_pos, char *str_replace, int result_len)
+int	alloc_string(char **s, int result_len)
 {
 	char	*temp;
+	int		str_len;
 
-	if (result_len != (int)ft_strlen(*s))
+	temp = NULL;
+	str_len = (int)ft_strlen(*s);
+	if (result_len != str_len)
 	{
-		temp = malloc(result_len + 1);
+		temp = (char *)malloc(sizeof(char) * (result_len + 1));
 		if (!temp)
 			return (EXIT_FAILURE);
-		ft_memcpy(temp, *s, result_len - 1);
-		temp[result_len] = '\0';
+		ft_memcpy(temp, *s, str_len);
+		temp[str_len] = '\0';
 		free(*s);
 		*s = temp;
-		*substr_pos = strstr(*s, str_replace);
-		if (*substr_pos == NULL)
-			return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
 //	this function replaces in the str s the str_replace with the new_str
-int	replace__var(char **s, char *str_replace, char *new_str, int *start)
+int	replace_var(char **s, char *str_replace, char *new_str, int *start)
 {
-	int		replace_len;
+	char	*suffix_pos;
 	char	*substr_pos;
-	int		suf_len;
+	int		rep_len;
 	int		len_new_st;
-	int		result_len;
 
-	replace_len = ft_strlen(str_replace);
-	substr_pos = *s + *start;
-	if (substr_pos == NULL)
-		return (0);
-	suf_len = ft_strlen(substr_pos + replace_len);
+	rep_len = ft_strlen(str_replace);
 	len_new_st = ft_strlen(new_str);
-	result_len = ft_strlen(*s) - replace_len + len_new_st;
-	printf("hello\n");
-	printf("\ns: [%s] substr_pos: [%s] s_len: %d result_len: %d \n",
-		*s, substr_pos, (int)ft_strlen(*s), result_len);
-	if (alloc_string(s, &substr_pos, str_replace, result_len) == EXIT_FAILURE)
+	if (alloc_string(s, ft_strlen(*s) - rep_len + len_new_st) == EXIT_FAILURE)
 	{
-		free(str_replace);
 		free(new_str);
 		return (0);
 	}
-	ft_memmove(substr_pos + len_new_st, substr_pos + replace_len, suf_len);
+	substr_pos = *s + *start;
+	if (substr_pos == NULL)
+		return (0);
+	suffix_pos = substr_pos + rep_len;
+	ft_memmove(substr_pos + len_new_st, substr_pos + rep_len, ft_strlen(suffix_pos) + 1);
 	ft_memcpy(substr_pos, new_str, len_new_st);
 	free(str_replace);
 	free(new_str);
+	*start += len_new_st;
 	return (1);
 }
 
@@ -132,9 +127,9 @@ void	test_replace_substr(void)
 	char	*replacement;
 	int		i;
 
-	i = 0;
-	original_string = strdup("Hello  '$PWD'  Hello  ");
-	substring = strdup("$PWD");
+	i = 4;
+	original_string = strdup("  $PWD . ");
+	substring = strdup("$P");
 	replacement = strdup("test/file");
 	if (original_string == NULL || substring == NULL || replacement == NULL)
 	{
@@ -142,7 +137,7 @@ void	test_replace_substr(void)
 		return ;
 	}
 	printf("Original string: [%s]\n", original_string);
-	success = replace__var(&original_string, substring, replacement, &i);
+	success = replace_var(&original_string, substring, replacement, &i);
 	if (success)
 		printf("After replacement: [%s]\n", original_string);
 	else
