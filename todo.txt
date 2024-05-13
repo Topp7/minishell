@@ -1,2 +1,1 @@
-echo -n -n -n -n -> echo -n
-space zwischen echo arguments
+implement linked list for env

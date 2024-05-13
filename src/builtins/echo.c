@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:45:53 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/13 12:42:49 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/13 13:01:23 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ void	ft_echo(t_tree *tree)
 		printf("\n");
 		exit (0);
 	}
-	if (ft_strncmp(tree->arguments[i], "-n", 2) == 0)
+	while (ft_strncmp(tree->arguments[i], "-n", 2) == 0)
 	{
 		n_chk = 1;
-		i = 2;
+		i++;
 	}
 	while (tree->arguments[i])
-		printf("%s", tree->arguments[i++]);
+	{
+		printf("%s", tree->arguments[i]);
+		if (tree->arguments[++i])
+			printf(" ");
+	}
 	if (!n_chk)
 		printf("\n");
 	exit (0);
