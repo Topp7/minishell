@@ -1,0 +1,2 @@
+echo -n -n -n -n -> echo -n
+space zwischen echo arguments

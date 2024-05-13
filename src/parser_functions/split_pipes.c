@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:19 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/04/30 10:48:19 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/12 08:07:16 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ int	quote_check(const char *s, int *pipe_len, char pipe, int *i)
 	else if (s[*i] == pipe && sing_quo % 2 == 0 && doub_quo % 2 == 0)
 	{
 		sing_quo = 0;
-		doub_quo = 0;
-		return (1);
+		return (doub_quo = 0, 1);
 	}
 	if (!s[(*i) + 1])
 	{
@@ -67,8 +66,7 @@ int	quote_check(const char *s, int *pipe_len, char pipe, int *i)
 		doub_quo = 0;
 	}
 	*pipe_len += 1;
-	*i += 1;
-	return (0);
+	return (*i += 1, 0);
 }
 
 //	function to assign the pipes into two dimensional array accordance of quotes

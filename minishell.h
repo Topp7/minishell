@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 12:57:18 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/13 12:31:49 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,8 @@
 //	maybe not necessary
 typedef struct s_command
 {
-	int					type;
-	int					flag;
-	int					order;
+	char				*name;
+	char				*value;
 	struct s_command	*next;
 
 }	t_cmd;

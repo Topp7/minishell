@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 13:12:12 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/12 08:48:20 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,20 @@
 int	main(int argc, char **argv, char **envp)
 {
 	char	*command;
-	//char	**new_envp;
 	t_tree	*parse_tree;
-	int debug_mode = 0;
+	int		debug_mode;
+	//char	**new_envp;
 
 	command = NULL;
 	(void)argc;
 	(void)argv;
 	//new_envp = envp;
+	debug_mode = 0;
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		command = readline("\033[32mminishell>xzy \033[0m");
+		command = readline("\033[32mminishell> \033[0m");
 		if (command == NULL || strcmp(command, "exit") == 0)
 		{
 			if (command)
@@ -58,46 +59,6 @@ int	main(int argc, char **argv, char **envp)
 	clear_history();
 	return (0);
 }
-
-//int	main(void)
-//{
-//	char	*command;
-//	t_tree	*parse_tree;
-
-//	command = NULL;
-//	signal(SIGINT, handle_signal);
-//	while (1)
-//	{
-//		//printf("\033[32mminishell>\033[0m");
-//		fflush(stdout);
-//		//command = ft_fgets();
-//		command = readline("\033[32mminishell>\033[0m");
-//		if (command == NULL)
-//		{
-//			continue ;
-//		}
-//		//printf("%s", command);
-//		if (command[0] && command[0] == '\n')
-//		{
-//			free(command);
-//			continue ;
-//		}
-//		if (strcmp(command, "exit") == 0)
-//		{
-//			free(command);
-//			break ;
-//		}
-//		parse_tree = parse_command(command);
-//		free(command);
-//		if (parse_tree == NULL)
-//			continue ;
-//		command = NULL;
-//		print_parse_tree(parse_tree);
-//		//execute_command(parse_tree);
-//		free_tree(parse_tree);
-//	}
-//	return (0);
-//}
 
 //char	*args[MAX_ARGS];
 

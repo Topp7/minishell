@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:45:53 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/01 13:04:28 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/13 12:42:49 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ void	ft_echo(t_tree *tree)
 		printf("%s", tree->arguments[i++]);
 	if (!n_chk)
 		printf("\n");
-	printf("test\n");
 	exit (0);
 }

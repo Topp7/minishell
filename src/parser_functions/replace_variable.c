@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 12:17:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/01 14:52:19 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,14 @@ int	alloc_string(char **s, char **substr_pos, char *str_replace, int result_len)
 //	this function replaces in the str s the str_replace with the new_str
 int	replace__var(char **s, char *str_replace, char *new_str, int *start)
 {
-	int		replace_len;
-	char	*substr_pos;
-	int		suf_len;
-	int		result_len;
-	int		len_new_st;
-
-	(void)start;
-	printf("%s slen: %ld\n", *s, ft_strlen(*s));
-	len_new_st = ft_strlen(new_str);
-	replace_len = ft_strlen(str_replace);
-	substr_pos = strstr(*s + *start, str_replace);
+	int replace_len = ft_strlen(str_replace);
+	char *substr_pos = *s + *start;
 	if (substr_pos == NULL)
-		return (0);
-	suf_len = ft_strlen(substr_pos + replace_len);
-    result_len = *start + len_new_st + suf_len;
+		return 0;
+	int suf_len = ft_strlen(substr_pos + replace_len);
+	int len_new_st = ft_strlen(new_str);
+	int result_len = ft_strlen(*s) - replace_len + len_new_st;
+	printf("\ns; %d surf: %d new: %d result: %d replace: %d \n", (int)ft_strlen(*s), suf_len, len_new_st, result_len, replace_len);
 	if (alloc_string(s, &substr_pos, str_replace, result_len) == EXIT_FAILURE)
 	{
 		free(str_replace);
@@ -89,7 +82,6 @@ int	replace__var(char **s, char *str_replace, char *new_str, int *start)
 	}
 	ft_memmove(substr_pos + len_new_st, substr_pos + replace_len, suf_len + 1);
 	ft_memcpy(substr_pos, new_str, len_new_st);
-	printf("slen: %ld\n", ft_strlen(substr_pos));
 	free(str_replace);
 	free(new_str);
 	return (1);

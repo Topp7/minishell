@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 10:38:40 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/12 08:49:42 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*insert_char_at_position(char *s, char c, size_t len, size_t pos)
 		perror("malloc");
 		return (NULL);
 	}
-	strncpy(new_s, s, pos);
+	ft_strncpy(new_s, s, pos);
 	new_s[pos] = c;
 	strcpy(new_s + pos + 1, s + pos);
 	return (new_s);
