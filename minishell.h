@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/13 12:31:49 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/13 18:32:51 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,12 @@
 /* -------------------------------- STRUCTS --------------------------------- */
 
 //	maybe not necessary
-typedef struct s_command
+typedef struct s_env
 {
-	char				*name;
-	char				*value;
-	struct s_command	*next;
-
-}	t_cmd;
+	char		*name;
+	char		*value;
+	struct s_env		*next;
+}	t_env;
 
 //	main struct, if there is a pipe, it will be in child_pipe
 typedef struct s_parse_tree
@@ -86,7 +85,7 @@ typedef struct s_parse_tree
 	struct s_parse_tree	*child_pipe;	// NULL if there is no children
 	int					output;			// output we dont need right?
 	int					pipes_num;		// number of pipes, starting with one
-	t_cmd				*parsed_command; // see above, maybe unnecessary
+	t_env				*env;			// env linked-list
 }	t_tree;
 
 /*
@@ -117,7 +116,7 @@ int		pipes_error(char *errorstr, t_tree *tree, char **array);
 //--------------------------- execution functions ------------------------------
 
 //	execute.c
-void    execute_command(t_tree *tree, char **envp);
+void    execute_command(t_tree *tree, t_env **env_lst);
 
 //----------------------------- helper functions -------------------------------
 

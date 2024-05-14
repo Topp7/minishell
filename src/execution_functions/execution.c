@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/01 13:06:07 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/13 18:36:37 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char	**get_paths(void)
 	char	**paths;
 
 	i = 0;
+	while (ft_strncmp())
 	path = getenv("PATH");
 	if (path)
 	{
@@ -40,7 +41,7 @@ char	**get_paths(void)
 		return (NULL);
 }
 
-char	*get_cmdpath(char *cmd)
+char	*get_cmdpath(char *cmd, t_env **env_lst)
 {
 	int		i;
 	char	*cmd_path;
@@ -59,11 +60,11 @@ char	*get_cmdpath(char *cmd)
 	return (NULL);
 }
 
-void	exec_cmd(t_tree *tmp, char **envp)
+void	exec_cmd(t_tree *tmp, t_env **env_lst)
 {
 	char	*cmdpath;
 
-	cmdpath = get_cmdpath(tmp->arguments[0]);
+	cmdpath = get_cmdpath(tmp->arguments[0], env_lst);
 	execve(cmdpath, tmp->arguments, envp);
 	perror("execution failed");
 	exit (0);
@@ -98,7 +99,7 @@ int	pipe_cmds(t_tree *tmp, char **envp)
 	return (1);
 }
 
-void	execute_command(t_tree *tree, char **envp)
+void	execute_command(t_tree *tree, t_env **env_lst)
 {
 	t_tree	*tmp;
 	int		stdina;
@@ -107,7 +108,7 @@ void	execute_command(t_tree *tree, char **envp)
 	stdina = dup(STDIN_FILENO);
 	while (tmp)
 	{
-		pipe_cmds(tmp, envp);
+		pipe_cmds(tmp, env_lst);
 		tmp = tmp->child_pipe;
 	}
 	dup2(stdina, STDIN_FILENO);
