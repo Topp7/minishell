@@ -6,14 +6,14 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/13 16:22:18 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/14 12:39:51 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 //	this function searches for a variable in the environment and saves in var
-int	search_for_variable_in_env(char **s, char **envp, char *arg, char **var)
+int	search_for_var_in_env(char **s, char **envp, char *arg, char **var)
 {
 	size_t	len;
 	char	*new_str;
@@ -28,7 +28,8 @@ int	search_for_variable_in_env(char **s, char **envp, char *arg, char **var)
 		j = 0;
 		while (envp[i][j] && (*s)[j + 1] && envp[i][j] == (*s)[j + 1])
 			j++;
-		if (envp[i][j] && envp[i][j] == '=')
+		if (envp[i][j] && envp[i][j] == '=' && (!(*s)[j + 1] || ((*s)[j + 1]
+			&& ((*s)[j + 1] == ' ' || (*s)[j + 1] == '\'' || (*s)[j + 1] == '\"'))))
 		{
 			*var = malloc(sizeof(char) * (j + 2));
 			ft_strlcpy(*var, *s, j + 2);
@@ -42,6 +43,13 @@ int	search_for_variable_in_env(char **s, char **envp, char *arg, char **var)
 			}
 			return (0);
 		}
+	}
+	if ((*s)[j + 1])
+	{
+		free(*s);
+		*s = malloc(sizeof(char));
+		*s[0] = '\0';
+		return (1);
 	}
 	return (0);
 }
@@ -86,10 +94,34 @@ int	replace_var(char **s, char *str_replace, char *new_str, int *start)
 	if (substr_pos == NULL)
 		return (0);
 	suffix_pos = substr_pos + rep_len;
-	ft_memmove(substr_pos + len_new_st, substr_pos + rep_len, ft_strlen(suffix_pos) + 1);
+	ft_memmove(substr_pos + len_new_st, substr_pos + rep_len,
+		ft_strlen(suffix_pos) + 1);
 	ft_memcpy(substr_pos, new_str, len_new_st);
 	free(new_str);
 	*start += len_new_st;
+	return (1);
+}
+
+int	quote_checker(char *arg, int j)
+{
+	static int	single_quote = 0;
+	static int	double_quote = 0;
+
+	if (j == 0)
+	{
+		single_quote = 0;
+		double_quote = 0;
+	}
+	if (arg[j] && arg[j] == '\'' && !(double_quote))
+	{
+		single_quote = !(single_quote);
+	}
+	else if (arg[j] && arg[j] == '\"' && !(single_quote))
+	{
+		double_quote = !(double_quote);
+	}
+	if (single_quote)
+		return (0);
 	return (1);
 }
 
@@ -108,16 +140,24 @@ int	export_dollar_sign(char **args, char **envp)
 		j = 0;
 		while (args[i][j])
 		{
-			if (args[i][j] == '$')
-			{
-				if (search_for_variable_in_env(&replace, envp, args[i] + j, &var))
-				{
-					if (!replace_var(&args[i], var, replace, &j))
-						return (EXIT_FAILURE);
-				}
-			}
+			if (quote_checker(args[i], j) && args[i][j] == '$'
+				&& search_for_var_in_env(&replace, envp, args[i] + j, &var)
+				&& !replace_var(&args[i], var, replace, &j))
+				return (EXIT_FAILURE);
 			j++;
 		}
+		if (args[i][j - 1])
+		{
+			if (args[i] && args[i][j - 1] == '\'')
+				remove_char(args[i], '\'', j - 1, &j);
+			else if (args[i] && args[i][j - 1] == '\"')
+				remove_char(args[i], '\"', j - 1, &j);
+		}
+		j = 1;
+		if (args[i] && args[i][0] == '\'')
+			remove_char(args[i], '\'', 0, &j);
+		else if (args[i] && args[i][0] == '\"')
+			remove_char(args[i], '\"', 0, &j);
 		i++;
 	}
 	return (EXIT_SUCCESS);

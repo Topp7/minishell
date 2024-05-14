@@ -127,11 +127,11 @@ void	test_replace_substr(void)
 	char	*replacement;
 	int		i;
 
-	i = 4;
-	original_string = strdup("  $PWD . ");
-	substring = strdup("$P");
-	replacement = strdup("test/file");
-	if (original_string == NULL || substring == NULL || replacement == NULL)
+	i = 2;
+	original_string = strdup("$PWDDDD");
+	substring = strdup("$PWD");
+	replacement = strdup("");;
+	if (original_string == NULL || substring == NULL)
 	{
 		printf("Memory allocation failed!\n");
 		return ;
