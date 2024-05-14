@@ -6,21 +6,34 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/13 18:36:37 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/14 16:02:10 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	**get_paths(void)
+char	*ft_getenv(t_env **env_lst, char *name)
+{
+	t_env	*tmp;
+
+	tmp = *env_lst;
+	while(tmp)
+	{
+		if (ft_strncmp(tmp->name, name, ft_strlen(name)) == 0)
+			return (tmp->value);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
+
+char	**get_paths(t_env **env_lst)
 {
 	int		i;
 	char	*path;
 	char	**paths;
 
 	i = 0;
-	while (ft_strncmp())
-	path = getenv("PATH");
+	path = ft_getenv(env_lst, "PATH");
 	if (path)
 	{
 		paths = ft_split(path, ':');
@@ -48,7 +61,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst)
 	char	**paths;
 
 	i = 0;
-	paths = get_paths();
+	paths = get_paths(env_lst);
 	while (paths[i])
 	{
 		cmd_path = ft_strjoin(paths[i], cmd);
@@ -60,17 +73,66 @@ char	*get_cmdpath(char *cmd, t_env **env_lst)
 	return (NULL);
 }
 
+int	join_name_value(t_env *env_node, char **env_array, int i)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(env_node->name, "=");
+	if (!tmp)
+		return (0);
+	env_array[i] = ft_strjoin(tmp, env_node->value);
+	if (!env_array[i])
+		return (free(tmp), 0);
+	free (tmp);
+	return (1);
+}
+
+char	**create_env_array(t_env *env_lst)
+{
+	int		i;
+	t_env	*tmp;
+	char	**env_array;
+
+	i = 0;
+	tmp = env_lst;
+	while (tmp)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	env_array = malloc(sizeof(char *) * (i + 1));
+	if (!env_array)
+		return (NULL);
+	env_array[i] = NULL;
+	tmp = env_lst;
+	i = 0;
+	while (tmp)
+	{
+		if (!join_name_value(tmp, env_array, i++))
+			return (NULL);
+		tmp = tmp->next;
+	}
+	return (env_array);
+}
+
 void	exec_cmd(t_tree *tmp, t_env **env_lst)
 {
 	char	*cmdpath;
+	char	**env_array;
 
 	cmdpath = get_cmdpath(tmp->arguments[0], env_lst);
-	execve(cmdpath, tmp->arguments, envp);
+	env_array = create_env_array(*env_lst);
+	if (!env_array)
+		exit (1);
+	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/'))
+		execve(tmp->arguments[0], tmp->arguments, env_array);
+	else
+		execve(cmdpath, tmp->arguments, env_array);
 	perror("execution failed");
-	exit (0);
+	exit (1);
 }
 
-int	pipe_cmds(t_tree *tmp, char **envp)
+int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -88,7 +150,7 @@ int	pipe_cmds(t_tree *tmp, char **envp)
 		close(fd[1]);
 		if (tmp->command)
 			handle_builtins(tmp);
-		exec_cmd(tmp, envp);
+		exec_cmd(tmp, env_lst);
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 12:46:48 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/14 15:59:40 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,9 @@ int	main(int argc, char **argv, char **envp)
 	t_tree	*parse_tree;
 	int		debug_mode;
 	t_env	**env_lst;
+	int		i;
 
+	i = 0;
 	command = NULL;
 	(void)argc;
 	(void)argv;
@@ -102,6 +104,11 @@ int	main(int argc, char **argv, char **envp)
 	env_lst = init_env_list(envp);
 	if (!env_lst)
 		return(1);
+	// print_list(*env_lst);
+	// printf("\n\n\n");
+	// while (envp[i])
+	// 	printf("%s\n", envp[i++]);
+	// return (0);
 	while (1)
 	{
 		command = readline("\033[32mminishell> \033[0m");
