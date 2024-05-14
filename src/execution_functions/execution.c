@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 16:02:10 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/14 17:20:18 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 			dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
 		if (tmp->command)
-			handle_builtins(tmp);
+			handle_builtins(tmp, env_lst);
 		exec_cmd(tmp, env_lst);
 	}
 	else
