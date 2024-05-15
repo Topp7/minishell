@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 12:39:51 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 12:31:18 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	search_for_var_in_env(char **s, char **envp, char *arg, char **var)
 		if (envp[i][j] && envp[i][j] == '=' && (!(*s)[j + 1] || ((*s)[j + 1]
 			&& ((*s)[j + 1] == ' ' || (*s)[j + 1] == '\'' || (*s)[j + 1] == '\"'))))
 		{
+			free(*var);
 			*var = malloc(sizeof(char) * (j + 2));
 			ft_strlcpy(*var, *s, j + 2);
 			len = strlen(envp[i] + ++j);
@@ -41,6 +42,7 @@ int	search_for_var_in_env(char **s, char **envp, char *arg, char **var)
 				*s = ft_strdup(new_str);
 				return (free(new_str), 1);
 			}
+			free(*var);
 			return (0);
 		}
 	}
@@ -51,6 +53,7 @@ int	search_for_var_in_env(char **s, char **envp, char *arg, char **var)
 		*s[0] = '\0';
 		return (1);
 	}
+	free(*var);
 	return (0);
 }
 
@@ -76,14 +79,15 @@ int	alloc_string(char **s, int result_len)
 }
 
 //	this function replaces in the str s the str_replace with the new_str
-int	replace_var(char **s, char *str_replace, char *new_str, int *start)
+int	replace_var(char **s, char **str_replace, char *new_str, int *start)
 {
 	char	*suffix_pos;
 	char	*substr_pos;
 	int		rep_len;
 	int		len_new_st;
 
-	rep_len = ft_strlen(str_replace);
+	rep_len = ft_strlen(*str_replace);
+	free(*str_replace);
 	len_new_st = ft_strlen(new_str);
 	if (alloc_string(s, ft_strlen(*s) - rep_len + len_new_st) == EXIT_FAILURE)
 	{
@@ -98,7 +102,7 @@ int	replace_var(char **s, char *str_replace, char *new_str, int *start)
 		ft_strlen(suffix_pos) + 1);
 	ft_memcpy(substr_pos, new_str, len_new_st);
 	free(new_str);
-	*start += len_new_st;
+	*start += - rep_len + len_new_st;
 	return (1);
 }
 
@@ -126,7 +130,7 @@ int	quote_checker(char *arg, int j)
 }
 
 //	function to convert the argument into the string
-int	export_dollar_sign(char **args, char **envp)
+int	export_dollar_sign(char **args, char **env)
 {
 	char	*var;
 	char	*replace;
@@ -138,11 +142,11 @@ int	export_dollar_sign(char **args, char **envp)
 	while (args[i])
 	{
 		j = 0;
-		while (args[i][j])
+		while (args[i][j] != '\0')
 		{
 			if (quote_checker(args[i], j) && args[i][j] == '$'
-				&& search_for_var_in_env(&replace, envp, args[i] + j, &var)
-				&& !replace_var(&args[i], var, replace, &j))
+				&& search_for_var_in_env(&replace, env, args[i] + j, &var)
+				&& !replace_var(&args[i], &var, replace, &j))
 				return (EXIT_FAILURE);
 			j++;
 		}
@@ -160,5 +164,6 @@ int	export_dollar_sign(char **args, char **envp)
 			remove_char(args[i], '\"', 0, &j);
 		i++;
 	}
+	free_two_dimensional_array(env);
 	return (EXIT_SUCCESS);
 }

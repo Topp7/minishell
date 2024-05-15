@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 17:20:18 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 12:52:40 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 	return (1);
 }
 
-void	execute_command(t_tree *tree, t_env **env_lst)
+void	execute_command(t_tree *tree)
 {
 	t_tree	*tmp;
 	int		stdina;
@@ -170,7 +170,7 @@ void	execute_command(t_tree *tree, t_env **env_lst)
 	stdina = dup(STDIN_FILENO);
 	while (tmp)
 	{
-		pipe_cmds(tmp, env_lst);
+		pipe_cmds(tmp, tmp->env);
 		tmp = tmp->child_pipe;
 	}
 	dup2(stdina, STDIN_FILENO);
