@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 17:40:45 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 12:29:33 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,13 @@ void	ft_free(char **split, int words);
 //---------------------------- command functions -------------------------------
 
 //	command.c
+
+//------------------------------ util functions --------------------------------
+
+//	lst_utils.c
+t_env	**init_env_list(char **envp);
+void	lstadd_back_env(t_env **lst, t_env *new);
+t_env	*init_node(char *envp);
 
 //----------------------------- error functions --------------------------------
 
