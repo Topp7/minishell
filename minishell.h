@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 12:58:03 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 17:24:05 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,9 @@ void	handle_builtins(t_tree *tree, t_env **env_lst);
 //echo.c
 void	ft_echo(t_tree *tree);
 //pwd.c
-void	ft_pwd(t_tree *tree);
+void	ft_pwd(void);
+//cd.c
+void	ft_chdir(t_tree *tree, t_env **env_lst);
 //----------------------------- clean functions --------------------------------
 
 //	clean.c

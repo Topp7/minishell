@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 12:26:06 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/15 12:27:22 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 17:33:57 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,13 @@ t_env	**init_env_list(char **envp)
 	i++;
 	while (envp[i])
 	{
-		env = init_node(envp[i]);
-		if (!env)
-			return (NULL);
-		lstadd_back_env(env_lst, env);
+		if (ft_strncmp(envp[i], "OLDPWD=", 7) != 0)
+		{
+			env = init_node(envp[i]);
+			if (!env)
+				return (NULL);
+			lstadd_back_env(env_lst, env);
+		}
 		i++;
 	}
 	return (env_lst);

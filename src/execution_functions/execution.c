@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 12:52:40 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 17:10:53 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,11 +145,9 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 	if (pid == 0)
 	{
 		close(fd[0]);
-		if (tmp ->child_pipe)
+		if (tmp->child_pipe)
 			dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		if (tmp->command)
-			handle_builtins(tmp, env_lst);
 		exec_cmd(tmp, env_lst);
 	}
 	else
@@ -164,16 +162,23 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 void	execute_command(t_tree *tree)
 {
 	t_tree	*tmp;
-	int		stdina;
+	int		stdin2;
+	int		stdout2;
 
 	tmp = tree;
-	stdina = dup(STDIN_FILENO);
+	stdin2 = dup(STDIN_FILENO);
+	stdout2 = dup(STDOUT_FILENO);
 	while (tmp)
 	{
-		pipe_cmds(tmp, tmp->env);
+		if (tmp->command)
+			handle_builtins(tmp, tmp->env);
+		else
+			pipe_cmds(tmp, tmp->env);
+		if (tmp->child_pipe)
+			dup2(stdout2, STDOUT_FILENO);
 		tmp = tmp->child_pipe;
 	}
-	dup2(stdina, STDIN_FILENO);
+	dup2(stdin2, STDIN_FILENO);
 	wait(NULL);
 	return ;
 }
