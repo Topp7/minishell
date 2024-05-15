@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 12:26:06 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/15 12:27:22 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 16:27:57 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_env	*init_node(char *envp)
 	env = malloc(sizeof(t_env));
 	if (!env)
 		return (NULL);
-	while(envp[i] != '=' && envp[i])
+	while (envp[i] != '=' && envp[i])
 		i++;
 	env->name = malloc(i + 1);
 	if (!env->name)

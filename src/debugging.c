@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:36:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 10:12:24 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 16:31:57 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,11 @@
 //	function to print the tree struct, only for debugging
 void	print_parse_tree(const t_tree *tree)
 {
-	//t_env	**temp;
-
 	if (tree == NULL)
 	{
 		printf("\nt_parse_tree struct is Empty!\n");
 		return ;
 	}
-	//temp = tree->env;
-	//if (temp)
-	//{
-	//	printf("env: ");
-	//	while (*temp)
-	//	{
-	//		printf("Name: %s Value: %s", (*temp)->name, (*temp)->value);
-	//		*temp = (*temp)->next;
-	//	}
-	//}
 	printf("\npipes_num: %d\nAdress: %p\n", tree->pipes_num, tree);
 	if (tree->child_pipe)
 		printf("childadress: %p\n", tree->child_pipe);

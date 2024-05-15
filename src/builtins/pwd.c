@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:32:06 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/14 17:40:02 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 16:32:12 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,5 @@ void	ft_pwd(t_tree *tree)
 	if (!tree->child_pipe)
 		printf("\n");
 	free(buf);
-	// printf("test\n");
 	exit (0);
 }

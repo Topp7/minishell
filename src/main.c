@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 12:57:26 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 17:41:36 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,9 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		command = readline("\033[32mminishell> \033[0m");
-		if (command == NULL || strcmp(command, "exit") == 0)
-		{
-			if (command)
-				free(command);
+		if (command == NULL)
 			break ;
-		}
-		if (command[0] && command[0] == '\n')
+		if (command[0] == '\0')
 		{
 			free(command);
 			continue ;
@@ -48,11 +44,9 @@ int	main(int argc, char **argv, char **envp)
 			free(command);
 			continue ;
 		}
-		add_history(command);
-		parse_tree = parse_command(command, env_lst);
-		free(command);
+		parse_tree = parse_command(&command, env_lst);
 		if (parse_tree == NULL)
-			continue ;
+			return (1);
 		if (debug_mode)
 			print_parse_tree(parse_tree);
 		execute_command(parse_tree);

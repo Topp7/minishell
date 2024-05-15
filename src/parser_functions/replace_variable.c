@@ -6,45 +6,59 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 12:31:18 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 17:02:58 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+//	function to check for quotes in the env and fills the strings
+int	check_for_quotes(char **s, char *envp, char **var, int *j)
+{
+	char	*new_str;
+	size_t	len;
+
+	*j = 0;
+	while (envp[*j] && (*s)[*j + 1] && envp[*j] == (*s)[*j + 1])
+		(*j)++;
+	if (envp[*j] && envp[*j] == '=' && (!(*s)[*j + 1] || ((*s)[*j + 1]
+		&& ((*s)[*j + 1] == ' ' || (*s)[*j + 1] == '\''
+		|| (*s)[*j + 1] == '\"'))))
+	{
+		free(*var);
+		*var = malloc(sizeof(char) * (*j + 2));
+		ft_strlcpy(*var, *s, *j + 2);
+		len = strlen(envp + ++(*j));
+		new_str = ft_substr(envp, *j, len);
+		if (new_str != NULL)
+		{
+			free(*s);
+			*s = ft_strdup(new_str);
+			return (free(new_str), 1);
+		}
+		free(*var);
+		return (0);
+	}
+	return (-1);
+}
+
 //	this function searches for a variable in the environment and saves in var
 int	search_for_var_in_env(char **s, char **envp, char *arg, char **var)
 {
-	size_t	len;
-	char	*new_str;
 	int		i;
 	int		j;
+	int		quote_check;
 
 	*s = strdup(arg);
 	*var = strdup(*s);
 	i = -1;
 	while (envp[++i])
 	{
-		j = 0;
-		while (envp[i][j] && (*s)[j + 1] && envp[i][j] == (*s)[j + 1])
-			j++;
-		if (envp[i][j] && envp[i][j] == '=' && (!(*s)[j + 1] || ((*s)[j + 1]
-			&& ((*s)[j + 1] == ' ' || (*s)[j + 1] == '\'' || (*s)[j + 1] == '\"'))))
-		{
-			free(*var);
-			*var = malloc(sizeof(char) * (j + 2));
-			ft_strlcpy(*var, *s, j + 2);
-			len = strlen(envp[i] + ++j);
-			new_str = ft_substr(envp[i], j, len);
-			if (new_str != NULL)
-			{
-				free(*s);
-				*s = ft_strdup(new_str);
-				return (free(new_str), 1);
-			}
-			free(*var);
+		quote_check = check_for_quotes(s, envp[i], var, &j);
+		if (quote_check == 1)
+			return (1);
+		else if (quote_check == 0)
 			return (0);
-		}
 	}
 	if ((*s)[j + 1])
 	{
@@ -55,27 +69,6 @@ int	search_for_var_in_env(char **s, char **envp, char *arg, char **var)
 	}
 	free(*var);
 	return (0);
-}
-
-//	this function allocates the new substring for the string replace in a string
-int	alloc_string(char **s, int result_len)
-{
-	char	*temp;
-	int		str_len;
-
-	temp = NULL;
-	str_len = (int)ft_strlen(*s);
-	if (result_len != str_len)
-	{
-		temp = (char *)malloc(sizeof(char) * (result_len + 1));
-		if (!temp)
-			return (EXIT_FAILURE);
-		ft_memcpy(temp, *s, str_len);
-		temp[str_len] = '\0';
-		free(*s);
-		*s = temp;
-	}
-	return (EXIT_SUCCESS);
 }
 
 //	this function replaces in the str s the str_replace with the new_str
@@ -102,36 +95,31 @@ int	replace_var(char **s, char **str_replace, char *new_str, int *start)
 		ft_strlen(suffix_pos) + 1);
 	ft_memcpy(substr_pos, new_str, len_new_st);
 	free(new_str);
-	*start += - rep_len + len_new_st;
+	*start += len_new_st - rep_len;
 	return (1);
 }
 
-int	quote_checker(char *arg, int j)
+//	function to remove single or double quotes form the arg string
+void	remove_quotes(char **args, int i, int j)
 {
-	static int	single_quote = 0;
-	static int	double_quote = 0;
-
-	if (j == 0)
+	if (args[i][j - 1])
 	{
-		single_quote = 0;
-		double_quote = 0;
+		if (args[i] && args[i][j - 1] == '\'')
+			remove_char(args[i], '\'', j - 1, &j);
+		else if (args[i] && args[i][j - 1] == '\"')
+			remove_char(args[i], '\"', j - 1, &j);
 	}
-	if (arg[j] && arg[j] == '\'' && !(double_quote))
-	{
-		single_quote = !(single_quote);
-	}
-	else if (arg[j] && arg[j] == '\"' && !(single_quote))
-	{
-		double_quote = !(double_quote);
-	}
-	if (single_quote)
-		return (0);
-	return (1);
+	j = 1;
+	if (args[i] && args[i][0] == '\'')
+		remove_char(args[i], '\'', 0, &j);
+	else if (args[i] && args[i][0] == '\"')
+		remove_char(args[i], '\"', 0, &j);
 }
 
 //	function to convert the argument into the string
-int	export_dollar_sign(char **args, char **env)
+int	export_dollar_sign(char **args, t_env **env_lst)
 {
+	char	**env;
 	char	*var;
 	char	*replace;
 	int		i;
@@ -139,6 +127,7 @@ int	export_dollar_sign(char **args, char **env)
 
 	i = 0;
 	j = 0;
+	env = create_env_array(*env_lst);
 	while (args[i])
 	{
 		j = 0;
@@ -147,21 +136,10 @@ int	export_dollar_sign(char **args, char **env)
 			if (quote_checker(args[i], j) && args[i][j] == '$'
 				&& search_for_var_in_env(&replace, env, args[i] + j, &var)
 				&& !replace_var(&args[i], &var, replace, &j))
-				return (EXIT_FAILURE);
+				return (free_two_dimensional_array(env), EXIT_FAILURE);
 			j++;
 		}
-		if (args[i][j - 1])
-		{
-			if (args[i] && args[i][j - 1] == '\'')
-				remove_char(args[i], '\'', j - 1, &j);
-			else if (args[i] && args[i][j - 1] == '\"')
-				remove_char(args[i], '\"', j - 1, &j);
-		}
-		j = 1;
-		if (args[i] && args[i][0] == '\'')
-			remove_char(args[i], '\'', 0, &j);
-		else if (args[i] && args[i][0] == '\"')
-			remove_char(args[i], '\"', 0, &j);
+		remove_quotes(args, i, j);
 		i++;
 	}
 	free_two_dimensional_array(env);

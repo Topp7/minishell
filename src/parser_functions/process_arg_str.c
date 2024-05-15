@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 11:39:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 17:29:22 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,99 +36,99 @@ char	*insert_char_at_position(char *s, char c, size_t len, size_t pos)
 	return (new_s);
 }
 
-char *ft_fgets(void)
-{
-	struct termios	old_termios;
-	struct termios	new_termios;
-	char			*line;
-	size_t			len;
-	size_t			courser_pos;
-	int				c;
-	int				arrow_key;
-	//char			*temp;
+//char *ft_fgets(void)
+//{
+//	struct termios	old_termios;
+//	struct termios	new_termios;
+//	char			*line;
+//	size_t			len;
+//	size_t			courser_pos;
+//	int				c;
+//	int				arrow_key;
+//	//char			*temp;
 
-	line = NULL;
-	len = 0;
-	courser_pos = 0;
-	line = malloc(sizeof(char));
-	if (line == NULL)
-	{
-		perror("malloc");
-		return (NULL);
-	}
-	line[0] = '\0';
-	tcgetattr(STDIN_FILENO, &old_termios);
-	new_termios = old_termios;
-	new_termios.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
-	c = getchar();
-	while (c != '\n' && c != EOF)
-	{
-		if (c == 127)
-		{
-			if (len > 0 && courser_pos > 0)
-			{
-				printf("\b \b");
-				courser_pos--;
-				len--;
-				line[len] = '\0';
-			}
-		}
-		else if (c == '\b')
-		{
-			if (len > 0 && courser_pos > 0)
-			{
-				putchar('\b');
-				courser_pos--;
-				len--;
-			}
-		}
-		if (c == ESCAPE_SEQUENCE[0] && getchar() == '[')
-		{
-			arrow_key = getchar();
-			if (arrow_key == 'C')
-			{
-				if (courser_pos <= len + 1)
-				{
-					putchar(line[courser_pos]);
-					courser_pos++;
-				}
-			}
-			else if (arrow_key == 'D')
-			{
-				if (courser_pos > 0)
-				{
-					putchar('\b');
-					courser_pos--;
-				}
-			}
-			printf("%ld", courser_pos);
-		}
-		else
-		{
-			//temp = realloc(line, (len + 2) * sizeof(char));
-			//if (temp == NULL)
-			//{
-			//	free(line);
-			//	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
-			//	perror("realloc");
-			//	return (NULL);
-			//}
-			//line = temp;
-			insert_char_at_position(line, (char)c, len, courser_pos);
-			//line[len++] = (char)c;
-			len++;
-			line[len] = '\0';
-			courser_pos++;
-			putchar(c);
-		}
-		c = getchar();
-	}
-	printf("\nlen: %ld courser: %ld\n", len, courser_pos);
-	printf("\n");
-	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
-	return (line);
-}
+//	line = NULL;
+//	len = 0;
+//	courser_pos = 0;
+//	line = malloc(sizeof(char));
+//	if (line == NULL)
+//	{
+//		perror("malloc");
+//		return (NULL);
+//	}
+//	line[0] = '\0';
+//	tcgetattr(STDIN_FILENO, &old_termios);
+//	new_termios = old_termios;
+//	new_termios.c_lflag &= ~(ICANON | ECHO);
+//	tcsetattr(STDIN_FILENO, TCSANOW, &new_termios);
+//	c = getchar();
+//	while (c != '\n' && c != EOF)
+//	{
+//		if (c == 127)
+//		{
+//			if (len > 0 && courser_pos > 0)
+//			{
+//				printf("\b \b");
+//				courser_pos--;
+//				len--;
+//				line[len] = '\0';
+//			}
+//		}
+//		else if (c == '\b')
+//		{
+//			if (len > 0 && courser_pos > 0)
+//			{
+//				putchar('\b');
+//				courser_pos--;
+//				len--;
+//			}
+//		}
+//		if (c == ESCAPE_SEQUENCE[0] && getchar() == '[')
+//		{
+//			arrow_key = getchar();
+//			if (arrow_key == 'C')
+//			{
+//				if (courser_pos <= len + 1)
+//				{
+//					putchar(line[courser_pos]);
+//					courser_pos++;
+//				}
+//			}
+//			else if (arrow_key == 'D')
+//			{
+//				if (courser_pos > 0)
+//				{
+//					putchar('\b');
+//					courser_pos--;
+//				}
+//			}
+//			printf("%ld", courser_pos);
+//		}
+//		else
+//		{
+//			//temp = realloc(line, (len + 2) * sizeof(char));
+//			//if (temp == NULL)
+//			//{
+//			//	free(line);
+//			//	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
+//			//	perror("realloc");
+//			//	return (NULL);
+//			//}
+//			//line = temp;
+//			insert_char_at_position(line, (char)c, len, courser_pos);
+//			//line[len++] = (char)c;
+//			len++;
+//			line[len] = '\0';
+//			courser_pos++;
+//			putchar(c);
+//		}
+//		c = getchar();
+//	}
+//	printf("\nlen: %ld courser: %ld\n", len, courser_pos);
+//	printf("\n");
+//	tcsetattr(STDIN_FILENO, TCSANOW, &old_termios);
+//	return (line);
+//}
 
 // int main() {
 //     printf("Enter text: ");
@@ -150,7 +150,6 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 	tree->args_num = i;
 	return (EXIT_SUCCESS);
 }
-
 
 //int	search_for_variable_in_env(char *variable, char **envp)
 //{
@@ -197,7 +196,7 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 //    envp[2] = strdup("HOME=/root");
 //    envp[3] = strdup("TERM=xterm");
 //    envp[4] = strdup("SHLVL=1");
-//    envp[5] = strdup("PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin");
+//    envp[5] = strdup("PATH=/usr/local/sbin:/usr/l=");
 //    envp[6] = strdup("OLDPWD=/dorker_workspace/miniiii");
 
 //    // Test the search_for_variable_in_env function
@@ -223,25 +222,10 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 //	function to split the commands into the components
 int	split_command(t_tree *tree, char *command_str, t_env **env_lst)
 {
-	char	**env;
-
-	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE)
-	{
-		printf("undisclosed quotes in first word\n");
+	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE
+		|| adapt_and_count_arguments(tree, command_str) == EXIT_FAILURE
+		|| export_dollar_sign(tree->arguments, env_lst) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	}
-	if (adapt_and_count_arguments(tree, command_str) == EXIT_FAILURE)
-	{
-		printf("Error in arguments\n");
-		return (EXIT_FAILURE);
-	}
-	env = create_env_array(*env_lst);
-	if (export_dollar_sign(tree->arguments, env) == EXIT_FAILURE)
-	{
-		free_two_dimensional_array(env);
-		printf("Error in Variables\n");
-		return (EXIT_FAILURE);
-	}
 	if (is_substr_first_word(command_str, "echo"))
 	{
 		tree->type = EXEC;

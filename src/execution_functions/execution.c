@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 12:52:40 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 13:06:40 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_getenv(t_env **env_lst, char *name)
 	t_env	*tmp;
 
 	tmp = *env_lst;
-	while(tmp)
+	while (tmp)
 	{
 		if (ft_strncmp(tmp->name, name, ft_strlen(name)) == 0)
 			return (tmp->value);
