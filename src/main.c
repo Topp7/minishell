@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 15:59:40 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 12:48:25 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ t_env	**init_env_list(char **envp)
 	if (!env_lst)
 		return (NULL);
 	i++;
+	*env_lst = NULL;
 	while (envp[i])
 	{
 		env = init_node(envp[i]);
@@ -92,9 +93,7 @@ int	main(int argc, char **argv, char **envp)
 	t_tree	*parse_tree;
 	int		debug_mode;
 	t_env	**env_lst;
-	int		i;
 
-	i = 0;
 	command = NULL;
 	(void)argc;
 	(void)argv;
@@ -103,12 +102,7 @@ int	main(int argc, char **argv, char **envp)
 	signal(SIGQUIT, SIG_IGN);
 	env_lst = init_env_list(envp);
 	if (!env_lst)
-		return(1);
-	// print_list(*env_lst);
-	// printf("\n\n\n");
-	// while (envp[i])
-	// 	printf("%s\n", envp[i++]);
-	// return (0);
+		return (1);
 	while (1)
 	{
 		command = readline("\033[32mminishell> \033[0m");
@@ -130,44 +124,16 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		}
 		add_history(command);
-		parse_tree = parse_command(command, envp);
+		parse_tree = parse_command(command, env_lst);
 		free(command);
 		if (parse_tree == NULL)
 			continue ;
 		if (debug_mode)
 			print_parse_tree(parse_tree);
-		execute_command(parse_tree, env_lst);
-		free_tree(parse_tree);
+		execute_command(parse_tree);
+		free_tree(parse_tree, 0);
 	}
+	free_env_list(env_lst);
 	clear_history();
 	return (0);
 }
-
-//char	*args[MAX_ARGS];
-
-	//command[strcspn(command, "\n")] = '\0';
-	//g_history[g_history_count++] = strdup(command);
-	//if (args[0] == NULL)
-	//{
-	//	continue ;
-	//}
-	//if (strcmp(args[0], "exit") == 0)
-	//{
-	//	break ;
-	//}
-	//if (strcmp(args[0], "history") == 0)
-	//{
-	//	while (i < g_history_count)
-	//	{
-	//		printf("%d: %s\n", i + 1, g_history[i]);
-	//		i++;
-	//	}
-	//	continue ;
-	//}
-	//execute_command(args);
-
-//while (i < g_history_count)
-//{
-//	free(g_history[i]);
-//	i++;
-//}

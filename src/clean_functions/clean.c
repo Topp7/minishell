@@ -6,14 +6,37 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 10:49:29 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/04/26 19:37:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 10:58:36 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
+void	free_env_list(t_env **env_list)
+{
+	t_env	*current;
+	t_env	*next;
+
+	if (!env_list || !(*env_list))
+		return ;
+	current = *env_list;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current->name);
+		current->name = NULL;
+		free(current->value);
+		current->value = NULL;
+		free(current);
+		current = next;
+	}
+	*env_list = NULL;
+	free(env_list);
+	env_list = NULL;
+}
+
 //	function to free the entire parsing tree
-void	free_tree(t_tree *parse_tree)
+void	free_tree(t_tree *parse_tree, int env)
 {
 	if (!parse_tree)
 		return ;
@@ -30,8 +53,13 @@ void	free_tree(t_tree *parse_tree)
 	{
 		free_two_dimensional_array(parse_tree->arguments);
 	}
+	if (env == 1 && parse_tree->env)
+	{
+		free_env_list(parse_tree->env);
+		parse_tree->env = NULL;
+	}
 	if (parse_tree->child_pipe)
-		free_tree(parse_tree->child_pipe);
+		free_tree(parse_tree->child_pipe, 0);
 	free(parse_tree);
 	parse_tree = NULL;
 }

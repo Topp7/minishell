@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/14 09:23:59 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 11:39:09 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,9 +221,10 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 //}
 
 //	function to split the commands into the components
-int	split_command(t_tree *tree, char *command_str, char **envp)
+int	split_command(t_tree *tree, char *command_str, t_env **env_lst)
 {
-	(void)envp;
+	char	**env;
+
 	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE)
 	{
 		printf("undisclosed quotes in first word\n");
@@ -234,8 +235,10 @@ int	split_command(t_tree *tree, char *command_str, char **envp)
 		printf("Error in arguments\n");
 		return (EXIT_FAILURE);
 	}
-	if (export_dollar_sign(tree->arguments, envp) == EXIT_FAILURE)
+	env = create_env_array(*env_lst);
+	if (export_dollar_sign(tree->arguments, env) == EXIT_FAILURE)
 	{
+		free_two_dimensional_array(env);
 		printf("Error in Variables\n");
 		return (EXIT_FAILURE);
 	}
@@ -259,7 +262,7 @@ int	split_command(t_tree *tree, char *command_str, char **envp)
 }
 
 //	function to seperate the pipes into the arguments and assign everything
-int	build_command_tree(t_tree **tree, char *command_str, char **envp)
+int	build_command_tree(t_tree **tree, char *command_str, t_env **env_lst)
 {
 	int		pipe_num;
 	char	**pipes;
@@ -276,8 +279,8 @@ int	build_command_tree(t_tree **tree, char *command_str, char **envp)
 			temp = (t_tree *)malloc(sizeof(t_tree));
 			if (!temp)
 				return (pipes_error("error malloc", temp, pipes));
-			initiliaze_command_tree(temp, pipe_num);
-			if (split_command(temp, pipes[pipe_num++], envp) == EXIT_FAILURE)
+			initiliaze_command_tree(temp, pipe_num, env_lst);
+			if (split_command(temp, pipes[pipe_num++], env_lst) == EXIT_FAILURE)
 				return (pipes_error("error split_command", temp, pipes));
 			ft_treeadd_back(tree, temp, &parent);
 		}

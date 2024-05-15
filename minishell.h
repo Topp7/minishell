@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/13 18:32:51 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 10:54:51 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,12 @@
 
 /* -------------------------------- STRUCTS --------------------------------- */
 
-//	maybe not necessary
+//	linked list for a env copy
 typedef struct s_env
 {
-	char		*name;
-	char		*value;
-	struct s_env		*next;
+	char			*name;
+	char			*value;
+	struct s_env	*next;
 }	t_env;
 
 //	main struct, if there is a pipe, it will be in child_pipe
@@ -85,7 +85,7 @@ typedef struct s_parse_tree
 	struct s_parse_tree	*child_pipe;	// NULL if there is no children
 	int					output;			// output we dont need right?
 	int					pipes_num;		// number of pipes, starting with one
-	t_env				*env;			// env linked-list
+	t_env				**env;			// env linked-list
 }	t_tree;
 
 /*
@@ -102,8 +102,9 @@ void	ft_pwd(t_tree *tree);
 //----------------------------- clean functions --------------------------------
 
 //	clean.c
-void	free_tree(t_tree *parse_tree);
+void	free_tree(t_tree *parse_tree, int env);
 void	ft_free(char **split, int words);
+void	free_env_list(t_env **env_list);
 
 //---------------------------- command functions -------------------------------
 
@@ -116,7 +117,8 @@ int		pipes_error(char *errorstr, t_tree *tree, char **array);
 //--------------------------- execution functions ------------------------------
 
 //	execute.c
-void    execute_command(t_tree *tree, t_env **env_lst);
+void    execute_command(t_tree *tree);
+char	**create_env_array(t_env *env_lst);
 
 //----------------------------- helper functions -------------------------------
 
@@ -130,19 +132,19 @@ void	ft_treeadd_back(t_tree **lst, t_tree *new, t_tree **parent);
 //int		count_flags(const char *str, int start, char c);
 //int		check_for_flag(t_tree *tree, char *cmd_str, int start);
 //	parsing.c
-void	initiliaze_command_tree(t_tree *tree, int i);
-t_tree	*parse_command(char *command, char **envp);
+void	initiliaze_command_tree(t_tree *tree, int i, t_env **env_lst);
+t_tree	*parse_command(char *command, t_env **env_lst);
 //	process_arg_str.c
 char	*ft_fgets(void);
 int		adapt_and_count_arguments(t_tree *tree, char *command_str);
-int		split_command(t_tree *tree, char *command_str, char **envp);
-int		build_command_tree(t_tree **tree, char *command_str, char **envp);
+int		split_command(t_tree *tree, char *command_str, t_env **env_lst);
+int		build_command_tree(t_tree **tree, char *command_str, t_env **env_lst);
 //	quote_check.c
 int		check_for_quotes_and_slash(char *command_str);
 int		check_for_open_quotes(char letter, int *s_quote, int *d_quote);
 int		det_and_rem_quotes_first_word(char *command_str);
 //	replace_variable.c
-int		export_dollar_sign(char **args, char **envp);
+int		export_dollar_sign(char **args, char **env);
 //	split_pipes.c
 void	count_pipes(char const *s, char pipe, int *pipe_num);
 int		quote_check(const char *s, int *pipe_len, char pipe, int *i);
