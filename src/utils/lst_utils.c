@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/15 12:26:06 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/15 16:27:57 by fkeitel          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2024/05/15 17:50:35 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../minishell.h"
 
@@ -68,10 +69,13 @@ t_env	**init_env_list(char **envp)
 	i++;
 	while (envp[i])
 	{
-		env = init_node(envp[i]);
-		if (!env)
-			return (NULL);
-		lstadd_back_env(env_lst, env);
+		if (ft_strncmp(envp[i], "OLDPWD=", 7) != 0)
+		{
+			env = init_node(envp[i]);
+			if (!env)
+				return (NULL);
+			lstadd_back_env(env_lst, env);
+		}
 		i++;
 	}
 	return (env_lst);

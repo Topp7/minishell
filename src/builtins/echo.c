@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:45:53 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/13 13:01:23 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/15 16:57:36 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	ft_echo(t_tree *tree)
 	if (!tree->arguments[i])
 	{
 		printf("\n");
-		exit (0);
+		return ;
 	}
 	while (ft_strncmp(tree->arguments[i], "-n", 2) == 0)
 	{
@@ -37,5 +37,5 @@ void	ft_echo(t_tree *tree)
 	}
 	if (!n_chk)
 		printf("\n");
-	exit (0);
+	return ;
 }
