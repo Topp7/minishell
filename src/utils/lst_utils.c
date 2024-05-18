@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/15 17:50:35 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/18 19:52:02 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ t_env	**init_env_list(char **envp)
 	return (env_lst);
 }
 
-// void	print_list(t_env *env_list)
-// {
-// 	while (env_list)
-// 	{
-// 		printf("%s=%s\n", env_list->name, env_list->value);
-// 		env_list = env_list->next;
-// 	}
-// }
+void	print_list(t_env *env_list)
+{
+	while (env_list->next)
+	{
+		printf("%s=%s\n", env_list->name, env_list->value);
+		env_list = env_list->next;
+	}
+}

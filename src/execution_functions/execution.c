@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 17:49:45 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/18 19:56:47 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	*ft_getenv(t_env **env_lst, char *name)
+char	*ft_getenv(t_env *env_lst, char *name)
 {
 	t_env	*tmp;
 
-	tmp = *env_lst;
-	while (tmp)
+	tmp = env_lst;
+	ft_printf("1\n");
+	while (tmp->next)
 	{
-		if (ft_strncmp(tmp->name, name, ft_strlen(name)) == 0)
+		if (ft_strncmp(tmp->name, name, ft_strlen(tmp->name)) == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}
@@ -33,7 +34,7 @@ char	**get_paths(t_env **env_lst)
 	char	**paths;
 
 	i = 0;
-	path = ft_getenv(env_lst, "PATH");
+	path = ft_getenv(*env_lst, "PATH");
 	if (path)
 	{
 		paths = ft_split(path, ':');

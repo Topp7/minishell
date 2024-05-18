@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/15 17:23:53 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/16 15:00:07 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	handle_builtins(t_tree *tree, t_env **env_lst)
 	if (tree->command == CD)
 		ft_chdir(tree, env_lst);
 	if (booli)
+	{
 		dup2(fd[0], STDIN_FILENO);
-	close (fd[0]);
+		close (fd[0]);
+	}
 }
