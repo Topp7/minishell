@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 17:58:23 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/20 18:34:51 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,10 +164,12 @@ void	execute_command(t_tree *tree)
 	t_tree	*tmp;
 	int		stdin2;
 	int		stdout2;
+	int busy = 0;
 
 	tmp = tree;
 	stdin2 = dup(STDIN_FILENO);
 	stdout2 = dup(STDOUT_FILENO);
+	busy =1;
 	while (tmp)
 	{
 		if (tmp->command)
@@ -180,5 +182,6 @@ void	execute_command(t_tree *tree)
 	}
 	dup2(stdin2, STDIN_FILENO);
 	wait(NULL);
+	busy = 0;
 	return ;
 }

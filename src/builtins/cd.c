@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/20 18:10:09 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/20 19:08:32 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	export(t_tree *tree, char *new_env)
 
 void	change_to_parent(t_tree *tree)
 {
-	export(tree, ft_strjoin("OLDPWD=", getcwd(NULL, 0)));
+	export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 	chdir("..");
 	export(tree, ft_strjoin("PWD=", getcwd(NULL, 0)));
 	return ;
@@ -50,7 +50,7 @@ void	change_to_previous(t_tree *tree)
 	t_env	*oldwd;
 
 	oldwd = *tree->env;
-	while (oldwd->next)
+	while (oldwd)
 	{
 		if (ft_strncmp(oldwd->name, "OLDPWD", 7) == 0)
 			break ;
@@ -60,8 +60,8 @@ void	change_to_previous(t_tree *tree)
 		ft_printf("OLDPWD not set\n");
 	else
 	{
-		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 		chdir(oldwd->value);
+		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 		export(tree, ft_strjoin("PWD=", oldwd->value));
 	}
 }
