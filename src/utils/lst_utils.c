@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/20 17:49:22 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/20 18:10:56 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ t_env	**init_env_list(char **envp)
 	if (!env_lst)
 		return (NULL);
 	i++;
+	*env_lst = NULL;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "OLDPWD=", 7) != 0)
