@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/18 23:53:53 by flo              ###   ########.fr       */
+/*   Updated: 2024/05/20 17:47:06 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	ft_chdir(t_tree *tree, t_env **env_lst);
 void	free_tree(t_tree *parse_tree);
 void	ft_free(char **split, int words);
 void	free_env_list(t_env **env_list);
+void	print_list(t_env *env_list);
 
 //---------------------------- command functions -------------------------------
 
@@ -128,6 +129,7 @@ int		pipes_error(char *errorstr, t_tree *tree, char **array);
 //	execute.c
 void	execute_command(t_tree *tree);
 char	**create_env_array(t_env *env_lst);
+char	*ft_getenv(t_env *env_lst, char *name);
 
 //----------------------------- helper functions -------------------------------
 
