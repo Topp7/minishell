@@ -1,6 +1,7 @@
 {
 	"files.associations": {
 		"libft.h": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"complex": "c"
 	}
 }

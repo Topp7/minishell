@@ -3,36 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 17:41:36 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/18 19:59:55 by flo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+int	prompt_loop(t_tree	**parse_tree)
 {
-	char	*command;
-	t_tree	*parse_tree;
 	int		debug_mode;
-	t_env	**env_lst;
+	char	*command;
 
-	command = NULL;
-	(void)argc;
-	(void)argv;
 	debug_mode = 0;
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
-	env_lst = init_env_list(envp);
-	if (!env_lst)
-		return (1);
+	command = NULL;
+	add_history(" echo hello | echo hello");
 	while (1)
 	{
 		command = readline("\033[32mminishell> \033[0m");
-		if (command == NULL)
-			break ;
+		if (command == NULL || !ft_strncmp(command, "exit", 4))
+		{
+			if (command)
+				free(command);
+			return (EXIT_SUCCESS);
+		}
 		if (command[0] == '\0')
 		{
 			free(command);
@@ -44,15 +40,37 @@ int	main(int argc, char **argv, char **envp)
 			free(command);
 			continue ;
 		}
-		parse_tree = parse_command(&command, env_lst);
-		if (parse_tree == NULL)
-			return (1);
+		if (parse_command(&command, parse_tree) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		if (debug_mode)
-			print_parse_tree(parse_tree);
-		execute_command(parse_tree);
-		free_tree(parse_tree, 0);
+			print_parse_tree(*parse_tree);
+		execute_command(*parse_tree);
+		free_tree(*parse_tree);
 	}
-	free_env_list(env_lst);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_tree	*parse_tree;
+	int		shell_status;
+
+	(void)argc;
+	(void)argv;
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+	parse_tree = (t_tree *)malloc(sizeof(t_tree));
+	if (!parse_tree)
+		return (1);
+	parse_tree->exit_status = 0;
+	parse_tree->env = init_env_list(envp);
+	parse_tree->parent_pipe = NULL;
+	if (!parse_tree->env)
+		return (free(parse_tree->env), 1);
+	shell_status = prompt_loop(&parse_tree);
+	free_env_list(parse_tree->env);
+	free(parse_tree);
 	clear_history();
+	if (shell_status == EXIT_FAILURE)
+		return (1);
 	return (0);
 }

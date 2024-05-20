@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/15 17:50:35 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/15 18:06:29 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ t_env	**init_env_list(char **envp)
 	if (!env_lst)
 		return (NULL);
 	i++;
+	*env_lst = NULL;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "OLDPWD=", 7) != 0)

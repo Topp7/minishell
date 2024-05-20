@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/15 17:49:01 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/16 15:26:25 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,20 @@ void	export(t_tree *tree, char *new_env)
 
 	tmp = *tree->env;
 	new = init_node(new_env);
+	free(new_env);
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->name, new->name, ft_strlen(new->name) == 0))
 		{
+			free(tmp->value);
 			tmp->value = new->value;
+			free(new->name);
+			free(new);
 			return ;
 		}
 		tmp = tmp->next;
 	}
-	printf("%s=%s\n", new->name, new->value);
-	lstadd_back_env(tree->env, tmp);
+	lstadd_back_env(tree->env, new);
 }
 
 void	change_to_parent(t_tree *tree)
@@ -53,9 +56,10 @@ void	change_to_parent(t_tree *tree)
 
 void	ft_chdir(t_tree *tree, t_env **env_lst)
 {
-	t_env	*tmp;
+	//t_env	*tmp;
 
-	tmp = *env_lst;
+	//tmp = *env_lst;
+	(void)env_lst;
 	if (tree->arguments[2] != NULL)
 		ft_printf("cd: string not in pwd: %s\n", tree->arguments[1]);
 	if (ft_strncmp(tree->arguments[1], "..", 3) == 0)
