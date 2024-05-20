@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/18 19:56:28 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/20 18:04:51 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@ void	export(t_tree *tree, char *new_env)
 	if (!new_env)
 		return ;
 	tmp = *(tree->env);
-	ft_printf("2\n");
 	new = init_node(new_env);
 	free(new_env);
-	while (tmp->next)
+	while (tmp)
 	{
 		if (ft_strncmp(tmp->name, new->name, ft_strlen(new->name)) == 0)
 		{
@@ -61,11 +60,10 @@ void	change_to_previous(t_tree *tree)
 		ft_printf("OLDPWD not set\n");
 	else
 	{
-		export(tree, ft_strjoin("OLDPWD=", getenv("OLDPWD")));
+		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 		chdir(oldwd->value);
 		export(tree, ft_strjoin("PWD=", oldwd->value));
 	}
-	ft_printf("%s=%s", oldwd->name, oldwd->value);
 }
 
 void	change_to_home(t_tree *tree)

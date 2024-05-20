@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/18 19:52:02 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/20 17:49:22 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_env	**init_env_list(char **envp)
 
 void	print_list(t_env *env_list)
 {
-	while (env_list->next)
+	while (env_list)
 	{
 		printf("%s=%s\n", env_list->name, env_list->value);
 		env_list = env_list->next;

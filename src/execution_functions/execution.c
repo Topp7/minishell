@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/18 19:56:47 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/20 17:58:23 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@ char	*ft_getenv(t_env *env_lst, char *name)
 	t_env	*tmp;
 
 	tmp = env_lst;
-	ft_printf("1\n");
-	while (tmp->next)
+	while (tmp)
 	{
 		if (ft_strncmp(tmp->name, name, ft_strlen(tmp->name)) == 0)
 			return (tmp->value);
