@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/20 18:10:00 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/21 17:35:27 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	handle_builtins(t_tree *tree, t_env **env_lst)
 {
 	int		fd[2];
 	int		booli;
+	char	*dup_ex;
 
 	booli = 0;
 	if (tree->child_pipe)
@@ -34,6 +35,13 @@ void	handle_builtins(t_tree *tree, t_env **env_lst)
 		ft_chdir(tree, env_lst);
 	if (tree->command == ENV)
 		print_env(tree);
+	if (tree->command == UNSET)
+		ft_unset(tree, tree->arguments[1]);
+	if (tree->command == EXPORT)
+	{
+		dup_ex = ft_strdup(tree->arguments[1]);
+		export(tree, dup_ex);
+	}
 	if (booli)
 	{
 		dup2(fd[0], STDIN_FILENO);

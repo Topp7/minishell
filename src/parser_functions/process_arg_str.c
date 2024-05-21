@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 18:09:28 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/21 17:05:25 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,17 @@ int	split_command(t_tree *tree, char *command_str)
 		== EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (is_substr_first_word(command_str, "echo"))
-	{
-		tree->type = EXEC;
 		tree->command = ECHO;
-	}
 	if (is_substr_first_word(command_str, "pwd"))
-	{
-		tree->type = EXEC;
 		tree->command = PWD;
-	}
 	if (is_substr_first_word(command_str, "cd"))
-	{
-		tree->type = EXEC;
 		tree->command = CD;
-	}
 	if (is_substr_first_word(command_str, "env"))
-	{
-		tree->type = EXEC;
 		tree->command = ENV;
-	}
+	if (is_substr_first_word(command_str, "unset"))
+		tree->command = UNSET;
+	if (is_substr_first_word(command_str, "export"))
+		tree->command = EXPORT;
 	tree->cmd_brch = ft_strdup(command_str);
 	if (!tree->cmd_brch)
 		return (pipes_error("Error in strdup\n", tree, NULL));

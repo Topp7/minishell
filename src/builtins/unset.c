@@ -1,42 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/09 15:18:52 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/21 17:34:24 by stopp            ###   ########.fr       */
+/*   Created: 2024/05/21 16:32:56 by stopp             #+#    #+#             */
+/*   Updated: 2024/05/21 16:48:21 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "../../minishell.h"
 
-char	*ft_strdup(const char *s1)
+void	ft_unset(t_tree *tree, char	*env)
 {
-	char	*s2;
-	size_t	counter;
+	t_env	*temp;
+	t_env	*un_env;
 
-	counter = 0;
-	s2 = malloc(ft_strlen(s1) + 1);
-	if (!s2)
-		return (NULL);
-	while (s1[counter] != '\0')
+	temp = *tree->env;
+	un_env = NULL;
+	while(temp->next)
 	{
-		s2[counter] = s1[counter];
-		counter++;
+		if(ft_strncmp(temp->next->name, env, ft_strlen(env)) == 0)
+		{
+			un_env = temp->next;
+			temp->next = un_env->next;
+			free(un_env->name);
+			free(un_env->value);
+			free(un_env);
+			return ;
+		}
+		temp = temp->next;
 	}
-	s2[counter] = '\0';
-	return (s2);
-}
 
-/*
-int main()
-{
-	char source[] = "lorem ipsum dolor sit amet";
-	char* target = ft_strdup(source);
-	printf("%s", target);
-	free(target);
-	return 0;
 }
-*/

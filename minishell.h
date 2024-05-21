@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 18:11:12 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/21 17:16:22 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,10 @@ void	ft_pwd(void);
 void	ft_chdir(t_tree *tree, t_env **env_lst);
 //env.c
 void	print_env(t_tree *tree);
+//unset.c
+void	ft_unset(t_tree *tree, char	*env);
+//export.c
+void	export(t_tree *tree, char *new_env);
 //----------------------------- clean functions --------------------------------
 
 //	clean.c

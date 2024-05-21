@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/20 18:10:56 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/21 17:16:49 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ t_env	*init_node(char *envp)
 		return (NULL);
 	while (envp[i] != '=' && envp[i])
 		i++;
+	if(envp[i] != '=')
+		return (NULL);
 	env->name = malloc(i + 1);
 	if (!env->name)
 		return (NULL);
