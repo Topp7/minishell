@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/22 15:26:51 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/22 19:16:54 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,52 @@ void	change_to_home(t_tree *tree, char c)
 	export(tree, ft_strjoin("PWD=", home_path));
 }
 
+int	check_dir(t_tree *tree, char *dir)
+{
+	struct stat	*buf;
+
+	buf = malloc(sizeof(struct stat));
+	if (!buf)
+		return (0);
+	if (stat(dir, buf) == -1)
+	{
+		ft_printf("cd: %s: No such file or directory\n", tree->arguments[1]);
+		return (0);
+	}
+	else if (!S_ISDIR(buf->st_mode))
+	{
+		ft_printf("cd: %s: Not a directory\n", tree->arguments[1]);
+		return (0);
+	}
+	return (1);
+}
+
+void	change_dir(t_tree *tree)
+{
+	char	*new_dir;
+
+	if (tree->arguments[1] == ft_strchr(tree->arguments[1], '/'))
+	{
+		if(!check_dir(tree, tree->arguments[1]))
+			return ;
+		export(tree, ft_strjoin("OLDPWD=", getcwd(NULL, 0)));
+		chdir(tree->arguments[1]);
+		export(tree, ft_strjoin("PWD=", getcwd(NULL, 0)));
+	}
+	else
+	{
+		new_dir = ft_strjoin(getcwd(NULL, 0), "/");
+		free(new_dir);
+		new_dir = ft_strjoin(new_dir, tree->arguments[1]);
+		if (!check_dir(tree, new_dir))
+			return (free(new_dir));
+		export(tree, ft_strjoin("OLDPWD=", getcwd(NULL, 0)));
+		chdir(new_dir);
+		export(tree, ft_strjoin("PWD=", getcwd(NULL, 0)));
+		free(new_dir);
+	}
+}
+
 void	ft_chdir(t_tree *tree, t_env **env_lst)
 {
 	(void)env_lst;
@@ -77,6 +123,6 @@ void	ft_chdir(t_tree *tree, t_env **env_lst)
 		return ;
 	else if (tree->arguments[2] != NULL)
 		ft_printf("cd: string not in pwd: %s\n", tree->arguments[1]);
-	// else
-	// 	change_dir;
+	else
+		change_dir(tree);
 }

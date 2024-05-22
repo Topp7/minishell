@@ -20,10 +20,8 @@ exit:
 128+n	Fatal error signal “n”
 130	Bash script terminated by Control-C
 255*	Exit status out of range
-
+~ expanden
 
 mumber (* n) (+ al) = 1 (too many arguments);
 
 al (* n) + (number (+ al (* n)))= exit 255 (numeric argument required);
-
-

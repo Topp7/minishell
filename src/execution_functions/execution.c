@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 16:54:19 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 18:28:02 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	**get_paths(t_env **env_lst)
 		return (NULL);
 }
 
-char	*get_cmdpath(char *cmd, t_env **env_lst)
+char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 {
 	int		i;
 	char	*cmd_path;
@@ -65,8 +65,16 @@ char	*get_cmdpath(char *cmd, t_env **env_lst)
 	while (paths[i])
 	{
 		cmd_path = ft_strjoin(paths[i], cmd);
-		if (access(cmd_path, F_OK | X_OK) == 0)
-			return (cmd_path);
+		if (access(cmd_path, F_OK) == 0)
+		{
+			if(access(cmd_path, X_OK) == 0)
+				return (cmd_path);
+			else
+			{
+				ft_printf("%s: Permission denied\n", tree->arguments[0]);
+				exit (126);
+			}
+		}
 		free(cmd_path);
 		i++;
 	}
@@ -115,37 +123,50 @@ char	**create_env_array(t_env *env_lst)
 	return (env_array);
 }
 
-void	exec_cmd(t_tree *tmp, t_env **env_lst)
+void	absolute_path(t_tree *tmp, char **env_array)
 {
-	char	*cmdpath;
-	char	**env_array;
 	DIR		*dir;
-
-	env_array = create_env_array(*env_lst);
-	if (!env_array)
-		exit (1);
-	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/'))
+	
+	dir = opendir(tmp->arguments[0]);
+	if (!dir)
 	{
-		dir = opendir(tmp->arguments[0]);
-		if (!dir)
+		if(access(tmp->arguments[0], X_OK) == 0)
 			execve(tmp->arguments[0], tmp->arguments, env_array);
 		else
 		{
-			closedir(dir);
-			ft_printf("%s: is a directory\n", tmp->arguments[0]);
-			exit(0);
+			ft_printf("%s: Permission denied\n", tmp->arguments[0]);
+			exit (126);
 		}
 	}
 	else
 	{
-		cmdpath = get_cmdpath(tmp->arguments[0], env_lst);
+		closedir(dir);
+		ft_printf("%s: is a directory\n", tmp->arguments[0]);
+		exit(0);
+	}
+}
+
+void	exec_cmd(t_tree *tmp, t_env **env_lst)
+{
+	char	*cmdpath;
+	char	**env_array;
+
+	env_array = create_env_array(*env_lst);
+	if (!env_array)
+		exit (1);
+	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/')
+		|| ft_strncmp(tmp->arguments[0], "./", 2) == 0)
+		absolute_path(tmp, env_array);
+	else
+	{
+		cmdpath = get_cmdpath(tmp->arguments[0], env_lst, tmp);
 		if(!cmdpath)
 		{
 			printf("%s: command not found\n", tmp->arguments[0]);
+			exit (127);
 		}
 		execve(cmdpath, tmp->arguments, env_array);
 	}
-	exit (1);
 }
 
 int	pipe_cmds(t_tree *tmp, t_env **env_lst)
@@ -187,6 +208,7 @@ void	execute_command(t_tree *tree)
 		return ;
 	stdin2 = dup(STDIN_FILENO);
 	stdout2 = dup(STDOUT_FILENO);
+	pid = 0;
 	while (tmp)
 	{
 		if (tmp->command)
@@ -199,5 +221,8 @@ void	execute_command(t_tree *tree)
 	}
 	dup2(stdin2, STDIN_FILENO);
 	waitpid(pid, &tree->exit_status, 0);
+	if (WIFEXITED(tree->exit_status))
+		tree->exit_status = WEXITSTATUS(tree->exit_status);
+	ft_printf("%i\n", tree->exit_status);
 	return ;
 }

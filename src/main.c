@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 16:50:01 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/22 19:39:20 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	prompt_loop(t_tree	**parse_tree)
 
 	debug_mode = 0;
 	command = NULL;
-	add_history(" echo hello | echo hello");
+	add_history("fjvegfuy ");
 	while (!(*parse_tree)->signal_exit)
 	{
 		command = readline("\033[32mminishell> \033[0m");
