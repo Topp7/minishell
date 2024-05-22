@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/21 17:16:22 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 15:52:20 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <dirent.h>
 //	private	libraries
 # include "libft/libft.h"
 

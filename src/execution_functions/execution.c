@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 18:34:51 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 16:52:23 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,16 +119,32 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 {
 	char	*cmdpath;
 	char	**env_array;
+	DIR		*dir;
 
-	cmdpath = get_cmdpath(tmp->arguments[0], env_lst);
 	env_array = create_env_array(*env_lst);
 	if (!env_array)
 		exit (1);
 	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/'))
-		execve(tmp->arguments[0], tmp->arguments, env_array);
+	{
+		dir = opendir(tmp->arguments[0]);
+		if (!dir)
+			execve(tmp->arguments[0], tmp->arguments, env_array);
+		else
+		{
+			closedir(dir);
+			ft_printf("%s: is a directory\n", tmp->arguments[0]);
+			exit(0);
+		}
+	}
 	else
+	{
+		cmdpath = get_cmdpath(tmp->arguments[0], env_lst);
+		if(!cmdpath)
+		{
+			printf("%s: command not found\n", tmp->arguments[0]);
+		}
 		execve(cmdpath, tmp->arguments, env_array);
-	perror("execution failed");
+	}
 	exit (1);
 }
 
@@ -156,7 +172,7 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}
-	return (1);
+	return (pid);
 }
 
 void	execute_command(t_tree *tree)
@@ -164,24 +180,22 @@ void	execute_command(t_tree *tree)
 	t_tree	*tmp;
 	int		stdin2;
 	int		stdout2;
-	int busy = 0;
+	pid_t	pid;
 
 	tmp = tree;
 	stdin2 = dup(STDIN_FILENO);
 	stdout2 = dup(STDOUT_FILENO);
-	busy =1;
 	while (tmp)
 	{
 		if (tmp->command)
 			handle_builtins(tmp, tmp->env);
 		else
-			pipe_cmds(tmp, tmp->env);
+			pid = pipe_cmds(tmp, tmp->env);
 		if (tmp->child_pipe)
 			dup2(stdout2, STDOUT_FILENO);
 		tmp = tmp->child_pipe;
 	}
 	dup2(stdin2, STDIN_FILENO);
-	wait(NULL);
-	busy = 0;
+	waitpid(pid, &tree->exit_status, 0);
 	return ;
 }
