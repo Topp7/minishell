@@ -3,14 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/21 17:35:27 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 14:37:48 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+int	exit_handler(t_tree *tree)
+{
+	int	i;
+
+	i = 0;
+	tree->command = EXIT;
+	if (tree->pipes_num == 1)
+		printf("exit\n");
+	if (tree->arguments[1])
+	{
+		while (tree->arguments[1][i])
+		{
+			if (tree->arguments[1][0] != '-'
+				&& !ft_isdigit(tree->arguments[1][i]))
+			{
+				return (printf("bash: exit: %s: numeric argument required\n", tree->arguments[1]), 255);
+			}
+			i++;
+		}
+		if (tree->arguments[2])
+		{
+			tree->command = 0;
+			printf("bash: exit: too many arguments\n");
+			return (1);
+		}
+		tree->exit_status = ft_atoi(tree->arguments[1]) % 256;
+	}
+	return (tree->exit_status);
+}
 
 void	handle_builtins(t_tree *tree, t_env **env_lst)
 {
@@ -41,6 +71,12 @@ void	handle_builtins(t_tree *tree, t_env **env_lst)
 	{
 		dup_ex = ft_strdup(tree->arguments[1]);
 		export(tree, dup_ex);
+	}
+	if (tree->command == EXIT)
+	{
+		tree->exit_status = exit_handler(tree);
+		if (tree->command == EXIT && !tree->child_pipe && !tree->parent_pipe)
+			tree->signal_exit = 1;
 	}
 	if (booli)
 	{

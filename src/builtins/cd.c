@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/21 17:06:45 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 15:26:51 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	change_to_previous(t_tree *tree)
 		ft_printf("OLDPWD not set\n");
 	else
 	{
+		printf("%s\n", oldwd->value);
 		chdir(oldwd->value);
 		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 		export(tree, ft_strjoin("PWD=", oldwd->value));

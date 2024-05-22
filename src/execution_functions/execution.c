@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 18:34:51 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 14:23:53 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,9 +167,11 @@ void	execute_command(t_tree *tree)
 	int busy = 0;
 
 	tmp = tree;
+	if (tmp->signal_exit)
+		return ;
 	stdin2 = dup(STDIN_FILENO);
 	stdout2 = dup(STDOUT_FILENO);
-	busy =1;
+	busy = 1;
 	while (tmp)
 	{
 		if (tmp->command)
