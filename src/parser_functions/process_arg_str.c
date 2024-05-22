@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/21 17:05:25 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 14:33:04 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,9 @@ int	handle_here_doc(t_tree *tree)
 int	split_command(t_tree *tree, char *command_str)
 {
 	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE
-		|| adapt_and_count_arguments(tree, command_str) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (expander(tree->arguments, tree->env, tree->exit_status)
-		== EXIT_FAILURE)
+		|| adapt_and_count_arguments(tree, command_str) == EXIT_FAILURE
+		|| expander(tree->arguments, tree->env, tree->exit_status
+			== EXIT_FAILURE))
 		return (EXIT_FAILURE);
 	if (is_substr_first_word(command_str, "echo"))
 		tree->command = ECHO;
@@ -61,6 +60,8 @@ int	split_command(t_tree *tree, char *command_str)
 		tree->command = UNSET;
 	if (is_substr_first_word(command_str, "export"))
 		tree->command = EXPORT;
+	if (is_substr_first_word(command_str, "exit"))
+		tree->command = EXIT;
 	tree->cmd_brch = ft_strdup(command_str);
 	if (!tree->cmd_brch)
 		return (pipes_error("Error in strdup\n", tree, NULL));
@@ -102,5 +103,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 		pipe_num++;
 	}
 	free_two_dimensional_array(pipes);
+	if (!(*tree)->child_pipe && (*tree)->command == EXIT)
+		return (EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
 }

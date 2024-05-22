@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 15:52:20 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 16:55:10 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_parse_tree
 	int					output;
 	int					pipes_num;
 	int					exit_status;
+	int					signal_exit;
 	t_env				**env;
 }	t_tree;
 

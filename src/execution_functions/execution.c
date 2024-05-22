@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 16:52:23 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 16:54:19 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,8 @@ void	execute_command(t_tree *tree)
 	pid_t	pid;
 
 	tmp = tree;
+	if (tmp->signal_exit)
+		return ;
 	stdin2 = dup(STDIN_FILENO);
 	stdout2 = dup(STDOUT_FILENO);
 	while (tmp)

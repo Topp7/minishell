@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 18:56:04 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/22 16:50:01 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ int	prompt_loop(t_tree	**parse_tree)
 	debug_mode = 0;
 	command = NULL;
 	add_history(" echo hello | echo hello");
-	while (1)
+	while (!(*parse_tree)->signal_exit)
 	{
 		command = readline("\033[32mminishell> \033[0m");
-		if (command == NULL || !ft_strncmp(command, "exit", 4))
+		if (command == NULL || (*parse_tree)->signal_exit)
 		{
 			if (command)
 				free(command);
-			return (EXIT_SUCCESS);
+			return ((*parse_tree)->exit_status);
 		}
 		if (command[0] == '\0')
 		{
@@ -40,13 +40,15 @@ int	prompt_loop(t_tree	**parse_tree)
 			free(command);
 			continue ;
 		}
+		//printf("exit status: %d\n", (*parse_tree)->exit_status);
 		if (parse_command(&command, parse_tree) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+			exit ((*parse_tree)->exit_status);
 		if (debug_mode)
 			print_parse_tree(*parse_tree);
 		execute_command(*parse_tree);
 		free_tree(*parse_tree);
 	}
+	return ((*parse_tree)->exit_status);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -62,6 +64,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!parse_tree)
 		return (1);
 	parse_tree->exit_status = 0;
+	parse_tree->signal_exit = 0;
 	parse_tree->env = init_env_list(envp);
 	parse_tree->parent_pipe = NULL;
 	if (!parse_tree->env)
@@ -70,7 +73,5 @@ int	main(int argc, char **argv, char **envp)
 	free_env_list(parse_tree->env);
 	free(parse_tree);
 	clear_history();
-	if (shell_status == EXIT_FAILURE)
-		return (1);
-	return (0);
+	return (shell_status);
 }

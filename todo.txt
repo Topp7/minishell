@@ -2,3 +2,28 @@ implement linked list for env
 
 stuff for later:
 quotes here_doc
+
+
+builtins:
+
+cd:
+
+zeige ordner an bei cd -
+
+exit:
+
+1	Catchall for general errors
+2	Misuse of shell builtins (according to Bash documentation)
+126	Command invoked cannot execute
+127	Command not found
+128	Invalid argument to exit command
+128+n	Fatal error signal “n”
+130	Bash script terminated by Control-C
+255*	Exit status out of range
+
+
+mumber (* n) (+ al) = 1 (too many arguments);
+
+al (* n) + (number (+ al (* n)))= exit 255 (numeric argument required);
+
+
