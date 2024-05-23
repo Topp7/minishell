@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/22 19:16:54 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/23 15:08:59 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	change_to_previous(t_tree *tree)
 		printf("%s\n", oldwd->value);
 		chdir(oldwd->value);
 		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
-		export(tree, ft_strjoin("PWD=", oldwd->value));
+		export(tree, ft_strjoin("PWD=", getcwd(NULL, 0)));
 	}
 }
 

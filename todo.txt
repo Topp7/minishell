@@ -1,14 +1,6 @@
-implement linked list for env
-
 stuff for later:
 quotes here_doc
 
-
-builtins:
-
-cd:
-
-zeige ordner an bei cd -
 
 exit:
 
@@ -25,3 +17,15 @@ exit:
 mumber (* n) (+ al) = 1 (too many arguments);
 
 al (* n) + (number (+ al (* n)))= exit 255 (numeric argument required);
+
+
+Redirections :
+
+command << delimiter =  command kann ein beliebiger command sein, << bedeuted dass ein heredoc startet und delimiter ist ein string der genauso
+						auftreten muss um das here_doc zu beenden.
+command >> outfile   = command wie oben, >> sagt dass der output au dem vorherigen command an das folgende file angehaengt(append) werden soll
+						outfile ist die datei besagte datei
+command > outfile    = das gleiche wie vorher aber alles aus der datei wird ersetzt mit dem output aus dem command
+command < infile     = der command hat als input das infile.
+
+
