@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 10:23:06 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 17:51:50 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,15 +199,11 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 void	execute_command(t_tree *tree)
 {
 	t_tree	*tmp;
-	int		stdin2;
-	int		stdout2;
 	pid_t	pid;
 
 	tmp = tree;
 	if (tmp->signal_exit)
 		return ;
-	stdin2 = dup(STDIN_FILENO);
-	stdout2 = dup(STDOUT_FILENO);
 	pid = 0;
 	while (tmp)
 	{
@@ -216,10 +212,10 @@ void	execute_command(t_tree *tree)
 		else
 			pid = pipe_cmds(tmp, tmp->env);
 		if (tmp->child_pipe)
-			dup2(stdout2, STDOUT_FILENO);
+			dup2(tree->stdoutput, STDOUT_FILENO);
 		tmp = tmp->child_pipe;
 	}
-	dup2(stdin2, STDIN_FILENO);
+	dup2(tree->stdinput, STDIN_FILENO);
 	waitpid(pid, &tree->exit_status, 0);
 	if (WIFEXITED(tree->exit_status))
 		tree->exit_status = WEXITSTATUS(tree->exit_status);

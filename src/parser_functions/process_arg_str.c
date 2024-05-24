@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 16:43:28 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/24 19:53:53 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,55 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 	return (EXIT_SUCCESS);
 }
 
-void	create_heredoc(char **str, char **cmd_str, int *pos)
+void	skip_here(int *i, char *str, char *here_doc)
 {
-	int		fd[2];
+	*i += 2;
+	while (str[*i] == ' ')
+		*i += 1;
+	*i += ft_strlen(here_doc);
+}
+
+char	*create_str(char *str, char *here_doc)
+{
 	int		i;
-	char	*buf;
-	char	*temp;
+	int		j;
+	char	*new_str;
 
 	i = 0;
-	temp = NULL;
-	(void)cmd_str;
-	(void)pos;
+	j = 0;
+	while (str[i])
+	{
+		if (ft_strncmp(&str[i], "<<", 2) == 0)
+			skip_here(&i, str, here_doc);
+		j++;
+		i++;
+	}
+	new_str = malloc(j + 1);
+	new_str[j] = '\0';
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (ft_strncmp(&str[i], "<<", 2) == 0)
+			skip_here(&i, str, here_doc);
+		new_str[j++] = str[i++];
+	}
+	free (str);
+	return (new_str);
+}
+
+char	*create_heredoc(char *str, char *cmd_str)
+{
+	int		fd[2];
+	char	*buf;
+	char	*new_cmdstr;
+
 	if (pipe(fd) == -1)
-		return ;
+		return (NULL);
 	while (1)
 	{
 		buf = get_next_line(STDIN_FILENO);
-		if (ft_strncmp(buf, *str, ft_strlen(buf)) == 10)
+		if (ft_strncmp(buf, str, ft_strlen(buf)) == 10)
 			break ;
 		write(fd[1], buf, ft_strlen(buf));
 		free(buf);
@@ -58,13 +90,12 @@ void	create_heredoc(char **str, char **cmd_str, int *pos)
 	close(fd[1]);
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);
-	temp = ft_strdup(" ");
-	int test = *pos;
-	replace_substr(cmd_str, str, temp, &test);
+	new_cmdstr = create_str(cmd_str, str);
+	return (new_cmdstr);
 }
 
 //	function to save the heredoc input in a string
-int	handle_here_doc(t_tree *tree, char *cmd_str)
+char	*handle_heredoc(char *cmd_str)
 {
 	char	*here_str;
 	int i;
@@ -72,27 +103,50 @@ int	handle_here_doc(t_tree *tree, char *cmd_str)
 
 	i = 0;
 	j = 0;
-	(void)tree;
 	while (cmd_str[i])
 	{
 		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<<", 2) == 0
 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
 		{
-			i+= 2;
+			i += 2;
 			while (cmd_str[i] && cmd_str[i] == ' ')
 				i++;
 			while ((cmd_str[i + j] && cmd_str[i + j] != ' '))
 				j++;
 			here_str = malloc(sizeof(char) * j);
 			if (!here_str)
-				return (EXIT_FAILURE);
+				return (NULL);
 			ft_strlcpy(here_str, cmd_str + i, j + 1);
-			create_heredoc(&here_str, &cmd_str, &i);
+			cmd_str = create_heredoc(here_str, cmd_str);
 		}
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (cmd_str);
 }
+
+// char	*handle_redirects(char *cmd_str)
+// {
+// 	int i;
+// 	int	j;
+
+// 	i = 0;
+// 	j = 0;
+// 	while (cmd_str[i])
+// 	{
+// 		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<<", 2) == 0
+// 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+// 			handle_heredoc(cmd_str);
+// 		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), ">>", 2) == 0
+// 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+// 			handle_append(cmd_str);
+// 		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<", 2) == 0
+// 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+// 			handle_trunc(cmd_str);
+// 		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), ">", 2) == 0
+// 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+// 			handle_outfile(cmd_str);
+// 	}
+// }
 
 //	function to split the commands into the components
 int	split_command(t_tree *tree, char *command_str, int ex_st)
@@ -132,7 +186,8 @@ int	build_command_tree(t_tree **tree, char *command_str)
 
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
-	handle_here_doc(*tree, command_str);
+	command_str = handle_heredoc(command_str);
+	ft_printf("%s\n", command_str);
 	pipes = split_pipes(command_str, '|', &pipe_num);
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));
@@ -159,6 +214,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 		pipe_num++;
 	}
 	free_two_dimensional_array(pipes);
+	free(command_str);
 	if (!(*tree)->child_pipe && (*tree)->command == EXIT)
 		return (EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
