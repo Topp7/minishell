@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 12:42:32 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:09:55 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	tilde_expander(char **arg, int *j)
 		var = ft_strdup("~");
 		if (!var)
 			return (EXIT_FAILURE);
-		replace = ft_strdup("/Users/fkeitel");
+		replace = ft_strdup(getenv("HOME"));
 		if (!var)
 			return (free(var), EXIT_FAILURE);
 		if (replace_substr(arg, &var, replace, j) == -1)

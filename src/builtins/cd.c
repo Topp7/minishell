@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/24 11:35:38 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 15:12:32 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,15 @@ void	change_to_previous(t_tree *tree)
 	}
 }
 
-void	change_to_home(t_tree *tree, char c)
+void	change_to_home(t_tree *tree)
 {
 	char	*home_path;
 
-	if (c == '~')
-		home_path = getenv("HOME");
-	else
+	home_path = ft_getenv(*tree->env, "HOME");
+	if (!home_path)
 	{
-		home_path = ft_getenv(*tree->env, "HOME");
-		if (!home_path)
-		{
-			ft_printf("cd: HOME not set\n");
-			return ;
-		}
+		ft_printf("cd: HOME not set\n");
+		return ;
 	}
 	export(tree, ft_strjoin("OLDPWD=", getcwd(NULL, 0)));
 	chdir(home_path);
@@ -113,13 +108,11 @@ void	ft_chdir(t_tree *tree, t_env **env_lst)
 {
 	(void)env_lst;
 	if (!tree->arguments[1])
-		change_to_home(tree, 0);
+		change_to_home(tree);
 	else if (ft_strncmp(tree->arguments[1], "..", 3) == 0)
 		change_to_parent(tree);
 	else if (ft_strncmp(tree->arguments[1], "-", 2) == 0)
 		change_to_previous(tree);
-	else if (ft_strncmp(tree->arguments[1], "~", 2) == 0)
-		change_to_home(tree, '~');
 	else if (ft_strncmp(tree->arguments[1], ".", 2) == 0)
 		return ;
 	else if (tree->arguments[2] != NULL)

@@ -29,4 +29,4 @@ command >> outfile   = command wie oben, >> sagt dass der output au dem vorherig
 command > outfile    = das gleiche wie vorher aber alles aus der datei wird ersetzt mit dem output aus dem command
 command < infile     = der command hat als input das infile.
 
-
+exit status fuer absolute paths 

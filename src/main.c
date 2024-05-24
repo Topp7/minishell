@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 12:42:49 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 16:25:58 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	parse_tree->exit_status = 0;
 	parse_tree->signal_exit = 0;
+	parse_tree->stdinput = dup(STDIN_FILENO);
+	parse_tree->stdoutput = dup(STDOUT_FILENO);
 	parse_tree->env = init_env_list(envp);
 	parse_tree->parent_pipe = NULL;
 	if (!parse_tree->env)

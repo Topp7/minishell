@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 12:42:38 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 16:43:28 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,64 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 	return (EXIT_SUCCESS);
 }
 
-//	function to save the heredoc input in a string
-int	handle_here_doc(t_tree *tree)
+void	create_heredoc(char **str, char **cmd_str, int *pos)
 {
+	int		fd[2];
+	int		i;
+	char	*buf;
+	char	*temp;
+
+	i = 0;
+	temp = NULL;
+	(void)cmd_str;
+	(void)pos;
+	if (pipe(fd) == -1)
+		return ;
+	while (1)
+	{
+		buf = get_next_line(STDIN_FILENO);
+		if (ft_strncmp(buf, *str, ft_strlen(buf)) == 10)
+			break ;
+		write(fd[1], buf, ft_strlen(buf));
+		free(buf);
+	}
+	free(buf);
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
+	temp = ft_strdup(" ");
+	int test = *pos;
+	replace_substr(cmd_str, str, temp, &test);
+}
+
+//	function to save the heredoc input in a string
+int	handle_here_doc(t_tree *tree, char *cmd_str)
+{
+	char	*here_str;
+	int i;
+	int	j;
+
+	i = 0;
+	j = 0;
 	(void)tree;
+	while (cmd_str[i])
+	{
+		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<<", 2) == 0
+			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+		{
+			i+= 2;
+			while (cmd_str[i] && cmd_str[i] == ' ')
+				i++;
+			while ((cmd_str[i + j] && cmd_str[i + j] != ' '))
+				j++;
+			here_str = malloc(sizeof(char) * j);
+			if (!here_str)
+				return (EXIT_FAILURE);
+			ft_strlcpy(here_str, cmd_str + i, j + 1);
+			create_heredoc(&here_str, &cmd_str, &i);
+		}
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -78,6 +132,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
+	handle_here_doc(*tree, command_str);
 	pipes = split_pipes(command_str, '|', &pipe_num);
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));

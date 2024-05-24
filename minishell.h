@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 12:37:31 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 16:22:36 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ typedef struct s_parse_tree
 	int					pipes_num;
 	int					exit_status;
 	int					signal_exit;
+	int					stdinput;
+	int					stdoutput;
 	t_env				**env;
 }	t_tree;
 
