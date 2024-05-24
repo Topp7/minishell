@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 18:52:32 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/24 12:37:31 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,13 +158,15 @@ int		parse_command(char **command, t_tree **tree);
 //	process_arg_str.c
 char	*ft_fgets(void);
 int		adapt_and_count_arguments(t_tree *tree, char *command_str);
-int		split_command(t_tree *tree, char *command_str);
+int		split_command(t_tree *tree, char *command_str, int ex_st);
 int		build_command_tree(t_tree **tree, char *command_str);
 //	quote_check.c
 int		check_for_quotes_and_slash(char *command_str);
 int		check_for_open_quotes(char letter, int *s_quote, int *d_quote);
 int		det_and_rem_quotes_first_word(char *command_str);
+int		both_quote_checker(char *arg, int j);
 int		quote_checker(char *arg, int j);
+void	remove_quotes(char **args, int i, int j);
 //	replace_variable.c
 int		expander(char **args, t_env **env_lst, int exit_status);
 //	split_pipes.c
@@ -173,6 +175,7 @@ int		quote_check(const char *s, int *pipe_len, char pipe, int *i);
 int		assign_pipes(char const *s, char pipe, char **split, int pipes);
 char	**split_pipes(char const *s, char c, int *pipe_num);
 
+int		expander(char **args, t_env **env_lst, int ex_st);
 //---------------------------- signal functions -------------------------------
 
 //	signal.c

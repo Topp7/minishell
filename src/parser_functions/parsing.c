@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 10:24:05 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 12:11:29 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	initiliaze_command_tree(t_tree *tree, int i)
 //	function to parse the argument into parsing struct for cmd_exec funciton
 int	parse_command(char **command_str, t_tree **tree)
 {
-
 	add_history(*command_str);
 	if (*command_str && !(*tree)->signal_exit)
 	{

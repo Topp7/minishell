@@ -1,7 +1,6 @@
 stuff for later:
 quotes here_doc
 
-
 exit:
 
 1	Catchall for general errors
@@ -12,12 +11,14 @@ exit:
 128+n	Fatal error signal “n”
 130	Bash script terminated by Control-C
 255*	Exit status out of range
-~ expanden
+
+~ expanden nur pfad noch auslesen
 
 mumber (* n) (+ al) = 1 (too many arguments);
 
 al (* n) + (number (+ al (* n)))= exit 255 (numeric argument required);
 
+signal executen prozess nicht, nur neue line
 
 Redirections :
 

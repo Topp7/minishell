@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 18:28:02 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/24 10:23:06 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char	**create_env_array(t_env *env_lst)
 void	absolute_path(t_tree *tmp, char **env_array)
 {
 	DIR		*dir;
-	
+
 	dir = opendir(tmp->arguments[0]);
 	if (!dir)
 	{
@@ -223,6 +223,5 @@ void	execute_command(t_tree *tree)
 	waitpid(pid, &tree->exit_status, 0);
 	if (WIFEXITED(tree->exit_status))
 		tree->exit_status = WEXITSTATUS(tree->exit_status);
-	ft_printf("%i\n", tree->exit_status);
 	return ;
 }

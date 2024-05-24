@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:40:02 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/16 16:26:51 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 11:38:17 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,30 @@ int	check_for_quotes_and_slash(char *command_str)
 	if (single_quote_counter % 2 != 0 || double_quote_counter % 2 != 0)
 		return (printf("undisclosed quote in command\n"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
+}
+
+//	checks, if string is in single or in double quote, returns 1 if not
+int	both_quote_checker(char *arg, int j)
+{
+	static int	single_quote = 0;
+	static int	double_quote = 0;
+
+	if (j == 0)
+	{
+		single_quote = 0;
+		double_quote = 0;
+	}
+	if (arg[j] && arg[j] == '\'' && !(double_quote))
+	{
+		single_quote = !(single_quote);
+	}
+	else if (arg[j] && arg[j] == '\"' && !(single_quote))
+	{
+		double_quote = !(double_quote);
+	}
+	if (single_quote || double_quote)
+		return (0);
+	return (1);
 }
 
 //	check if there are open quotes
@@ -91,4 +115,21 @@ int	det_and_rem_quotes_first_word(char *command_str)
 		remove_char(command_str, '\"', 0, &i);
 	}
 	return (EXIT_SUCCESS);
+}
+
+//	function to remove single or double quotes form the arg string
+void	remove_quotes(char **args, int i, int j)
+{
+	if (args[i][j - 1])
+	{
+		if (args[i] && args[i][j - 1] == '\'')
+			remove_char(args[i], '\'', j - 1, &j);
+		else if (args[i] && args[i][j - 1] == '\"')
+			remove_char(args[i], '\"', j - 1, &j);
+	}
+	j = 1;
+	if (args[i] && args[i][0] == '\'')
+		remove_char(args[i], '\'', 0, &j);
+	else if (args[i] && args[i][0] == '\"')
+		remove_char(args[i], '\"', 0, &j);
 }

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 17:27:15 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 12:42:32 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,31 +74,15 @@ int	find_var_in_env(char **replace, t_env *envp, char *arg, char **var)
 	return (1);
 }
 
-//	function to remove single or double quotes form the arg string
-void	remove_quotes(char **args, int i, int j)
-{
-	if (args[i][j - 1])
-	{
-		if (args[i] && args[i][j - 1] == '\'')
-			remove_char(args[i], '\'', j - 1, &j);
-		else if (args[i] && args[i][j - 1] == '\"')
-			remove_char(args[i], '\"', j - 1, &j);
-	}
-	j = 1;
-	if (args[i] && args[i][0] == '\'')
-		remove_char(args[i], '\'', 0, &j);
-	else if (args[i] && args[i][0] == '\"')
-		remove_char(args[i], '\"', 0, &j);
-}
-
-int	exit_expand(char **arg, int *j, int exit_status)
+//	expand the exit status when argument is $?
+int	exit_expander(char **arg, int *j, int ex_st)
 {
 	char	*exit_string;
 	char	*dollar;
 
 	if ((*arg)[(*j) + 1] && (*arg)[*j] == '$' && (*arg)[(*j) + 1] == '?')
 	{
-		exit_string = ft_itoa(exit_status);
+		exit_string = ft_itoa(ex_st);
 		if (!exit_string)
 			return (EXIT_FAILURE);
 		dollar = ft_strdup("$?");
@@ -110,8 +94,33 @@ int	exit_expand(char **arg, int *j, int exit_status)
 	return (EXIT_SUCCESS);
 }
 
+//	function to expand the tilde symbol, when not in quotes
+int	tilde_expander(char **arg, int *j)
+{
+	char	*var;
+	char	*replace;
+
+	if (both_quote_checker(*arg, *j) && (*arg)[*j] == '~'
+		&& (!(*arg)[*j + 1] || ((*arg)[*j + 1]) == ' '))
+	{
+		var = ft_strdup("~");
+		if (!var)
+			return (EXIT_FAILURE);
+		replace = ft_strdup("/Users/fkeitel");
+		if (!var)
+			return (free(var), EXIT_FAILURE);
+		if (replace_substr(arg, &var, replace, j) == -1)
+		{
+			free(var);
+			free(replace);
+			return (EXIT_FAILURE);
+		}
+	}
+	return (EXIT_SUCCESS);
+}
+
 //	function to convert the argument into the string
-int	expander(char **args, t_env **env_lst, int exit_status)
+int	expander(char **args, t_env **env_lst, int ex_st)
 {
 	char	*var;
 	char	*replace;
@@ -125,10 +134,11 @@ int	expander(char **args, t_env **env_lst, int exit_status)
 		j = 0;
 		while (args[i][j] != '\0')
 		{
-			if (quote_checker(args[i], j) && args[i][j] == '$'
-				&& (exit_expand(&args[i], &j, exit_status) == EXIT_FAILURE
+			if (tilde_expander(&args[i], &j) == EXIT_FAILURE
+				|| (quote_checker(args[i], j) && args[i][j] == '$'
+				&& (exit_expander(&args[i], &j, ex_st) == EXIT_FAILURE
 				|| find_var_in_env(&replace, *env_lst, args[i] + j, &var) == -1
-				|| replace_substr(&args[i], &var, replace, &j) == -1))
+				|| replace_substr(&args[i], &var, replace, &j) == -1)))
 				return (EXIT_FAILURE);
 			j++;
 		}

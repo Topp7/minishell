@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/22 19:39:20 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/24 12:42:49 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, SIG_IGN);
 	parse_tree = (t_tree *)malloc(sizeof(t_tree));
 	if (!parse_tree)
 		return (1);
@@ -69,6 +67,8 @@ int	main(int argc, char **argv, char **envp)
 	parse_tree->parent_pipe = NULL;
 	if (!parse_tree->env)
 		return (free(parse_tree->env), 1);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 	shell_status = prompt_loop(&parse_tree);
 	free_env_list(parse_tree->env);
 	free(parse_tree);

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:19 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/12 08:07:16 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/24 12:01:47 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	assign_pipes(char const *s, char pipe, char **split, int pipes)
 	return (EXIT_SUCCESS);
 }
 
+//	function to split the pipes in the command string including quotes
 char	**split_pipes(char const *s, char c, int *pipe_num)
 {
 	char	**split;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/23 15:08:59 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/24 11:35:38 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	change_dir(t_tree *tree)
 	{
 		new_dir = ft_strjoin(getcwd(NULL, 0), "/");
 		free(new_dir);
+		new_dir = NULL;
 		new_dir = ft_strjoin(new_dir, tree->arguments[1]);
 		if (!check_dir(tree, new_dir))
 			return (free(new_dir));
