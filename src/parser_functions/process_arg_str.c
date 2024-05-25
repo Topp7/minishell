@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 13:56:11 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/25 14:33:32 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,18 @@ int	adapt_and_count_arguments(t_tree *tree, char *command_str)
 	return (EXIT_SUCCESS);
 }
 
-void	skip_here(int *i, char *str, char *here_doc)
+int	skip_here(int *i, char *str, char *here_doc)
 {
-	*i += 2;
-	while (str[*i] == ' ')
-		*i += 1;
-	*i += ft_strlen(here_doc) - 1;
+	if (ft_strncmp(&str[*i], "<<", 2) == 0)
+	{
+		*i += 2;
+		while (str[*i] == ' ')
+			*i += 1;
+		*i += ft_strlen(here_doc);
+		return (1);
+	}
+	else
+		return (0);
 }
 
 char	*create_str(char *str, char *here_doc)
@@ -51,10 +57,11 @@ char	*create_str(char *str, char *here_doc)
 	j = 0;
 	while (str[i])
 	{
-		if (ft_strncmp(&str[i], "<<", 2) == 0)
-			skip_here(&i, str, here_doc);
-		j++;
-		i++;
+		if (skip_here(&i, str, here_doc) == 0)
+		{
+			j++;
+			i++;
+		}
 	}
 	new_str = malloc(j + 1);
 	new_str[j] = '\0';
@@ -62,9 +69,8 @@ char	*create_str(char *str, char *here_doc)
 	j = 0;
 	while (str[i])
 	{
-		if (ft_strncmp(&str[i], "<<", 2) == 0)
-			skip_here(&i, str, here_doc);
-		new_str[j++] = str[i++];
+		if (skip_here(&i, str, here_doc) == 0)
+			new_str[j++] = str[i++];
 	}
 	free (str);
 	return (new_str);

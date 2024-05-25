@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 16:57:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 11:49:08 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 14:00:28 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,5 @@ int		ft_putchar(int c, int counter);
 
 //get_next_line functions:
 char	*get_next_line(int fd);
-char	*double_bufsize_fill_with_null(char const *s1);
-void	*extract_line(char **line, char **buf, int *end);
-size_t	ft_strlen(const char *c);
-int		read_buf(int fd, char **buf, int *end);
-char	*ft_check_if_newline(char *s);
-void	*ft_calloc(size_t count, size_t size);
-char	*ft_strncpy(char *dest, const char *src, size_t n);
-int		ft_count_new_line(char **buf);
 
 #endif

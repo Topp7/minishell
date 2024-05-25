@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   insert_char_at_pos.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 10:53:27 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/19 11:10:41 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 14:02:05 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*insert_char_at_position(char *s, char c, size_t len, size_t pos)
 		perror("malloc");
 		return (NULL);
 	}
-	ft_strncpy(new_s, s, pos);
+	ft_strlcpy(new_s, s, pos);
 	new_s[pos] = c;
 	strcpy(new_s + pos + 1, s + pos);
 	return (new_s);
