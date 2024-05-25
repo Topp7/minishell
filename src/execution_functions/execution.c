@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 17:51:50 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/25 15:00:41 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 		if (access(cmd_path, F_OK) == 0)
 		{
 			if(access(cmd_path, X_OK) == 0)
-				return (cmd_path);
+				return (free_two_dimensional_array(paths), cmd_path);
 			else
 			{
 				ft_printf("%s: Permission denied\n", tree->arguments[0]);
@@ -78,6 +78,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 		free(cmd_path);
 		i++;
 	}
+	free_two_dimensional_array(paths);
 	return (NULL);
 }
 

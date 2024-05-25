@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 10:49:29 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/17 19:37:31 by flo              ###   ########.fr       */
+/*   Updated: 2024/05/25 14:49:22 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,13 @@ void	free_tree(t_tree *parse_tree)
 		free_two_dimensional_array(parse_tree->arguments);
 	}
 	if (parse_tree->child_pipe)
+	{
 		free_tree(parse_tree->child_pipe);
+	}
+	if (parse_tree->parent_pipe)
+	{
+		free(parse_tree);
+	}
 }
 
 //	function to free an two dimensional array
