@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:40:02 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 11:38:17 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 13:00:45 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,18 +118,25 @@ int	det_and_rem_quotes_first_word(char *command_str)
 }
 
 //	function to remove single or double quotes form the arg string
-void	remove_quotes(char **args, int i, int j)
+void	remove_quotes(char **args, int i, int *j)
 {
-	if (args[i][j - 1])
+	int	z;
+
+	*j = 1;
+	while ((*args)[*j])
 	{
-		if (args[i] && args[i][j - 1] == '\'')
-			remove_char(args[i], '\'', j - 1, &j);
-		else if (args[i] && args[i][j - 1] == '\"')
-			remove_char(args[i], '\"', j - 1, &j);
+		if (args[i][(*j) - 1])
+		{
+			if (args[i] && args[i][(*j) - 1] == '\'')
+				remove_char(args[i], '\'', (*j), j);
+			else if (args[i] && args[i][(*j) - 1] == '\"')
+				remove_char(args[i], '\"', (*j), j);
+		}
+		z = 1;
+		if (args[i] && args[i][0] == '\'')
+			remove_char(args[i], '\'', 0, &z);
+		else if (args[i] && args[i][0] == '\"')
+			remove_char(args[i], '\"', 0, &z);
+		(*j)++;
 	}
-	j = 1;
-	if (args[i] && args[i][0] == '\'')
-		remove_char(args[i], '\'', 0, &j);
-	else if (args[i] && args[i][0] == '\"')
-		remove_char(args[i], '\"', 0, &j);
 }

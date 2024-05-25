@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: flo <flo@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 11:42:50 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/03/27 14:53:35 by flo              ###   ########.fr       */
+/*   Updated: 2024/05/25 11:18:53 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	*double_bufsize_fill_with_null(const char *s1)
 	if (!conc_str)
 		return (NULL);
 	ft_strncpy(conc_str, s1, old_size);
+	conc_str[old_size] = '\0';
 	return (conc_str);
 }
 

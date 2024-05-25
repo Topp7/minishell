@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 15:09:55 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/25 13:08:45 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,12 @@ int	find_var_in_env(char **replace, t_env *envp, char *arg, char **var)
 }
 
 //	expand the exit status when argument is $?
-int	exit_expander(char **arg, int *j, int ex_st)
+int	exit_expander(char **arg, int j, int ex_st)
 {
 	char	*exit_string;
 	char	*dollar;
 
-	if ((*arg)[(*j) + 1] && (*arg)[*j] == '$' && (*arg)[(*j) + 1] == '?')
+	if ((*arg)[j + 1] && (*arg)[j] == '$' && (*arg)[j + 1] == '?')
 	{
 		exit_string = ft_itoa(ex_st);
 		if (!exit_string)
@@ -95,13 +95,13 @@ int	exit_expander(char **arg, int *j, int ex_st)
 }
 
 //	function to expand the tilde symbol, when not in quotes
-int	tilde_expander(char **arg, int *j)
+int	tilde_expander(char **arg, int j)
 {
 	char	*var;
 	char	*replace;
 
-	if (both_quote_checker(*arg, *j) && (*arg)[*j] == '~'
-		&& (!(*arg)[*j + 1] || ((*arg)[*j + 1]) == ' '))
+	if (both_quote_checker(*arg, j) && (*arg)[j] == '~'
+		&& (!(*arg)[j + 1] || ((*arg)[j + 1]) == ' '))
 	{
 		var = ft_strdup("~");
 		if (!var)
@@ -116,6 +116,8 @@ int	tilde_expander(char **arg, int *j)
 			return (EXIT_FAILURE);
 		}
 	}
+	int i = 0;
+	both_quote_checker(" ", i);
 	return (EXIT_SUCCESS);
 }
 
@@ -134,15 +136,15 @@ int	expander(char **args, t_env **env_lst, int ex_st)
 		j = 0;
 		while (args[i][j] != '\0')
 		{
-			if (tilde_expander(&args[i], &j) == EXIT_FAILURE
+			if (tilde_expander(&args[i], j) == EXIT_FAILURE
 				|| (quote_checker(args[i], j) && args[i][j] == '$'
-				&& (exit_expander(&args[i], &j, ex_st) == EXIT_FAILURE
+				&& (exit_expander(&args[i], j, ex_st) == EXIT_FAILURE
 				|| find_var_in_env(&replace, *env_lst, args[i] + j, &var) == -1
-				|| replace_substr(&args[i], &var, replace, &j) == -1)))
+				|| replace_substr(&args[i], &var, replace, j) == -1)))
 				return (EXIT_FAILURE);
 			j++;
 		}
-		remove_quotes(args, i, j);
+		remove_quotes(args, i, &j);
 		i++;
 	}
 	return (EXIT_SUCCESS);

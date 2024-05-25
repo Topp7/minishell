@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   replace_substr.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 10:18:03 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 17:04:54 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/25 11:47:59 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	alloc_string(char **s, int result_len)
 }
 
 //	this function replaces in the str s the sub_str with the new_str
-int	replace_substr(char **s, char **sub_str, char *new_str, int *position)
+int	replace_substr(char **s, char **sub_str, char *new_str, int position)
 {
 	char	*substr_pos;
 	int		rep_len;
@@ -50,7 +50,7 @@ int	replace_substr(char **s, char **sub_str, char *new_str, int *position)
 		free(new_str);
 		return (-1);
 	}
-	substr_pos = *s + *position;
+	substr_pos = *s + position;
 	if (!substr_pos || substr_pos < *s)
 		return (0);
 	ft_memmove(substr_pos + len_new_st, substr_pos + rep_len,

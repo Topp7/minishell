@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 16:57:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/19 10:54:44 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 11:49:08 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <stdarg.h>
 # include <fcntl.h>
+#include <stdint.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
@@ -81,7 +82,7 @@ int		append_int(int a, int b);
 char	bits_to_char(const int bits[8]);
 int		is_substr_first_word(const char *str, const char *sub_str);
 void	remove_char(char *str, char char_to_remove, int old_len, int *end);
-int		replace_substr(char **s, char **sub_str, char *new_str, int *position);
+int		replace_substr(char **s, char **sub_str, char *new_str, int position);
 int		alloc_string(char **s, int result_len);
 char	*insert_char_at_position(char *s, char c, size_t len, size_t pos);
 
