@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 12:40:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/04/29 11:53:38 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 11:19:04 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	read_buf(int fd, char **buf, int *end)
 
 char	*get_next_line(int fd)
 {
-	static char	*buf;
+	static char	*buf = NULL;
 	char		*line;
 	static int	i = 0;
 
@@ -79,7 +79,7 @@ char	*get_next_line(int fd)
 		return (buf = NULL, NULL);
 	}
 	if (!buf)
-		buf = ft_calloc(BUFFER_SIZE, 1);
+		buf = ft_calloc(BUFFER_SIZE + 1, 1);
 	if (!buf)
 		return (NULL);
 	if (read_buf(fd, &buf, &i) == -1 || extract_line(&line, &buf, &i) == NULL)

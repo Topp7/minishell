@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 20:08:54 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/25 13:56:11 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,14 @@ char	*create_heredoc(char *str, char *cmd_str)
 	char	*buf;
 	char	*new_cmdstr;
 
+	buf = NULL;
 	if (pipe(fd) == -1)
 		return (NULL);
 	while (1)
 	{
 		buf = get_next_line(STDIN_FILENO);
+		if (buf == NULL)
+			break ;
 		if (ft_strncmp(buf, str, ft_strlen(buf)) == 10)
 			break ;
 		write(fd[1], buf, ft_strlen(buf));
@@ -98,14 +101,15 @@ char	*create_heredoc(char *str, char *cmd_str)
 char	*handle_heredoc(char *cmd_str)
 {
 	char	*here_str;
-	int i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
 	while (cmd_str[i])
 	{
-		if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<<", 2) == 0
+		if (both_quote_checker(cmd_str, i) == 1
+			&& ft_strncmp((cmd_str + i), "<<", 2) == 0
 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
 		{
 			i += 2;
@@ -113,14 +117,18 @@ char	*handle_heredoc(char *cmd_str)
 				i++;
 			while ((cmd_str[i + j] && cmd_str[i + j] != ' '))
 				j++;
-			here_str = malloc(sizeof(char) * j);
+			here_str = malloc(sizeof(char) * (j + 1));
 			if (!here_str)
 				return (NULL);
 			ft_strlcpy(here_str, cmd_str + i, j + 1);
 			cmd_str = create_heredoc(here_str, cmd_str);
+			i = 0;
+			free(here_str);
 		}
 		i++;
 	}
+	i = 0;
+	both_quote_checker(" ", i);
 	return (cmd_str);
 }
 
@@ -187,7 +195,6 @@ int	build_command_tree(t_tree **tree, char *command_str)
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
 	command_str = handle_heredoc(command_str);
-	ft_printf("%s\n", command_str);
 	pipes = split_pipes(command_str, '|', &pipe_num);
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));
