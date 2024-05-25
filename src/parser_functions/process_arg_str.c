@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 19:53:53 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/24 20:08:54 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	skip_here(int *i, char *str, char *here_doc)
 	*i += 2;
 	while (str[*i] == ' ')
 		*i += 1;
-	*i += ft_strlen(here_doc);
+	*i += ft_strlen(here_doc) - 1;
 }
 
 char	*create_str(char *str, char *here_doc)
