@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 15:37:27 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 16:09:17 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,13 @@ void	ft_free(char **split, int words);
 void	free_env_list(t_env **env_list);
 void	print_list(t_env *env_list);
 
-//---------------------------- command functions -------------------------------
+//---------------------------- redirect functions ------------------------------
 
-//	command.c
+//	here_doc.c
+int		skip_here(int *i, char *str, char *here_doc);
+char	*create_str(char *str, char *here_doc);
+char	*create_heredoc(char *str, char *cmd_str);
+char	*handle_heredoc(char *cmd_str);
 
 //------------------------------ util functions --------------------------------
 
