@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 14:43:57 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 15:41:26 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,10 +226,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 		}
 		pipe_num++;
 	}
-	printf("pipe: %d\n", pipe_num);
 	free_two_dimensional_array(pipes);
 	free(command_str);
-	if (!(*tree)->child_pipe && (*tree)->command == EXIT)
-		return (EXIT_SUCCESS);
 	return (EXIT_SUCCESS);
 }

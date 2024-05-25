@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 13:08:45 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/25 15:40:26 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_for_quotes(char **replace, t_env *envp, char **var, char *arg)
 	while (envp->name[j] && *arg && arg[j] && envp->name[j] == arg[j])
 		(j)++;
 	if (!envp->name[j] && (!arg[j] || (arg[j] && (arg[j] == ' '
-		|| arg[j] == '\'' || arg[j] == '\"' || arg[j] == '$'))))
+					|| arg[j] == '\'' || arg[j] == '\"' || arg[j] == '$'))))
 	{
 		*var = malloc(sizeof(char) * (ft_strlen(envp->name) + 2));
 		if (!(*var))
@@ -116,16 +116,14 @@ int	tilde_expander(char **arg, int j)
 			return (EXIT_FAILURE);
 		}
 	}
-	int i = 0;
-	both_quote_checker(" ", i);
 	return (EXIT_SUCCESS);
 }
 
 //	function to convert the argument into the string
-int	expander(char **args, t_env **env_lst, int ex_st)
+int	expander(char **args, t_env **env, int ex_st)
 {
 	char	*var;
-	char	*replace;
+	char	*rep;
 	int		i;
 	int		j;
 
@@ -139,12 +137,13 @@ int	expander(char **args, t_env **env_lst, int ex_st)
 			if (tilde_expander(&args[i], j) == EXIT_FAILURE
 				|| (quote_checker(args[i], j) && args[i][j] == '$'
 				&& (exit_expander(&args[i], j, ex_st) == EXIT_FAILURE
-				|| find_var_in_env(&replace, *env_lst, args[i] + j, &var) == -1
-				|| replace_substr(&args[i], &var, replace, j) == -1)))
+					|| find_var_in_env(&rep, *env, args[i] + j, &var) == -1
+					|| replace_substr(&args[i], &var, rep, j) == -1)))
 				return (EXIT_FAILURE);
 			j++;
 		}
-		remove_quotes(args, i, &j);
+		if (remove_quotes(args, i) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		i++;
 	}
 	return (EXIT_SUCCESS);
