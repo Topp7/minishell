@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 16:48:53 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/25 17:06:04 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,26 +107,17 @@ int	build_command_tree(t_tree **tree, char *command_str)
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));
 	pipe_num = 0;
+	if (init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	while (pipes[pipe_num])
 	{
-		if (pipe_num == 0)
-		{
-			initiliaze_command_tree(*tree, pipe_num);
-			if (split_command(*tree, pipes[pipe_num], ex_st) == EXIT_FAILURE)
-				return (pipes_error("error split_command", *tree, pipes));
-		}
-		else
-		{
-			temp = (t_tree *)malloc(sizeof(t_tree));
-			if (!temp)
-				return (pipes_error("error malloc", temp, pipes));
-			temp->parent_pipe = parent;
-			initiliaze_command_tree(temp, pipe_num);
-			if (split_command(temp, pipes[pipe_num], ex_st) == EXIT_FAILURE)
-				return (pipes_error("error split_command", temp, pipes));
-			ft_treeadd_back(tree, temp, &parent);
-		}
-		pipe_num++;
+		temp = (t_tree *)malloc(sizeof(t_tree));
+		if (!temp)
+			return (pipes_error("error malloc", temp, pipes));
+		temp->parent_pipe = parent;
+		if (init_tree(temp, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
+		ft_treeadd_back(tree, temp, &parent);
 	}
 	free_two_dimensional_array(pipes);
 	free(command_str);

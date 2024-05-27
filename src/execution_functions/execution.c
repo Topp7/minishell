@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 15:00:41 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 13:11:00 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 		cmd_path = ft_strjoin(paths[i], cmd);
 		if (access(cmd_path, F_OK) == 0)
 		{
-			if(access(cmd_path, X_OK) == 0)
+			if (access(cmd_path, X_OK) == 0)
 				return (free_two_dimensional_array(paths), cmd_path);
 			else
 			{
@@ -131,7 +131,7 @@ void	absolute_path(t_tree *tmp, char **env_array)
 	dir = opendir(tmp->arguments[0]);
 	if (!dir)
 	{
-		if(access(tmp->arguments[0], X_OK) == 0)
+		if (access(tmp->arguments[0], X_OK) == 0)
 			execve(tmp->arguments[0], tmp->arguments, env_array);
 		else
 		{
@@ -161,7 +161,7 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	else
 	{
 		cmdpath = get_cmdpath(tmp->arguments[0], env_lst, tmp);
-		if(!cmdpath)
+		if (!cmdpath)
 		{
 			printf("%s: command not found\n", tmp->arguments[0]);
 			exit (127);
@@ -197,28 +197,59 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 	return (pid);
 }
 
-void	execute_command(t_tree *tree)
+
+// Signal handler for SIGINT (Ctrl-C)
+void	signal_handler(int signo)
+{
+	g_sig_num = signo;
+}
+
+
+// Restore default signal handlers
+void setup_signal_handlers(void)
+{
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
+}
+
+//	execution function
+void execute_command(t_tree *tree)
 {
 	t_tree	*tmp;
 	pid_t	pid;
+	int		signal_received;
 
+	signal_received = 0;
 	tmp = tree;
 	if (tmp->signal_exit)
 		return ;
 	pid = 0;
+	setup_signal_handlers();
 	while (tmp)
 	{
 		if (tmp->command)
 			handle_builtins(tmp, tmp->env);
 		else
+		{
 			pid = pipe_cmds(tmp, tmp->env);
+		}
 		if (tmp->child_pipe)
 			dup2(tree->stdoutput, STDOUT_FILENO);
 		tmp = tmp->child_pipe;
 	}
+	while (waitpid(pid, &tmp->exit_status, WNOHANG) == 0)
+	{
+		if (g_sig_num == SIGINT || g_sig_num == SIGQUIT)
+		{
+			if (g_sig_num == SIGINT && pid != 0)
+			{
+				kill(pid, SIGINT);
+				printf("test\n");
+				break ;
+			}
+		}
+	}
 	dup2(tree->stdinput, STDIN_FILENO);
-	waitpid(pid, &tree->exit_status, 0);
 	if (WIFEXITED(tree->exit_status))
 		tree->exit_status = WEXITSTATUS(tree->exit_status);
-	return ;
 }

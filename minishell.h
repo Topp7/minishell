@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 16:09:17 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/26 18:50:21 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@
 # include "libft/libft.h"
 
 /* -------------------------------- VARIABLES ------------------------------- */
+
+extern volatile sig_atomic_t g_sig_num;
 
 /* -------------------------------- STRUCTS --------------------------------- */
 
@@ -159,7 +161,7 @@ int		alloc_string(char **s, int result_len);
 //int		count_flags(const char *str, int start, char c);
 //int		check_for_flag(t_tree *tree, char *cmd_str, int start);
 //	parsing.c
-void	initiliaze_command_tree(t_tree *tree, int i);
+int		init_tree(t_tree *tree, char **pipes, int ex_st, int i);
 int		parse_command(char **command, t_tree **tree);
 //	process_arg_str.c
 char	*ft_fgets(void);

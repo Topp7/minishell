@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:01:46 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/25 14:16:44 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 13:19:22 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../libft.h"
+#include "../../../minishell.h"
 
 char	*ft_strjoin_gnl(char *s1, char *s2)
 {
@@ -52,9 +53,12 @@ char	*rd_to_str(int fd, char *str)
 	if (buf == NULL)
 		return (NULL);
 	bytes = 1;
+	printf("%d\n", g_sig_num);
 	while (ft_strchr(str, '\n') == NULL && bytes != 0)
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
+		if (g_sig_num == SIGINT)
+			return (NULL);
 		if (bytes == -1)
 		{
 			free (buf);
