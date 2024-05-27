@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 12:11:05 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 14:28:14 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 //	initialize the command_tree struct
-void	initiliaze_command_tree(t_tree *tree, int i)
+int	init_tree(t_tree *tree, char **pipes, int ex_st, int i)
 {
 	tree->type = 0;
 	tree->command = 0;
@@ -32,6 +32,9 @@ void	initiliaze_command_tree(t_tree *tree, int i)
 		tree->exit_status = tree->parent_pipe->exit_status;
 		tree->env = tree->parent_pipe->env;
 	}
+	if (split_command(tree, pipes[i], ex_st) == EXIT_FAILURE)
+		return (pipes_error("error split_command", tree, pipes));
+	return (EXIT_SUCCESS);
 }
 
 //	function to parse the argument into parsing struct for cmd_exec funciton
