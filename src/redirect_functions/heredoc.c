@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/27 11:54:32 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 15:40:51 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,27 +54,39 @@ char	*create_str(char *str, char *here_doc)
 	free (str);
 	return (new_str);
 }
-
+void signal_handle(int signo)
+{
+	(void)signo;
+	exit (0);
+}
 char	*create_heredoc(char *str, char *cmd_str, t_tree *tree)
 {
 	int		fd[2];
+	int		pid;
 	char	*buf;
 	char	*new_cmdstr;
 
 	buf = NULL;
 	if (pipe(fd) == -1)
 		return (NULL);
-	while (1)
+	pid = fork();
+	if (pid == 0)
 	{
-		buf = get_next_line(STDIN_FILENO);
-		if (buf == NULL)
-			break ;
-		if (ft_strncmp(buf, str, ft_strlen(buf)) == 10)
-			break ;
-		write(fd[1], buf, ft_strlen(buf));
+		while (1)
+		{
+			buf = get_next_line(STDIN_FILENO);
+			if (buf == NULL)
+				break ;
+			if (ft_strncmp(buf, str, ft_strlen(buf)) == 10)
+				break ;
+			write(fd[1], buf, ft_strlen(buf));
+			signal(SIGINT, signal_handle);
+			free(buf);
+		}
 		free(buf);
+		exit (0);
 	}
-	free(buf);
+	wait (NULL);
 	close(fd[1]);
 	tree->in_fd = fd[0];
 	new_cmdstr = create_str(cmd_str, str);

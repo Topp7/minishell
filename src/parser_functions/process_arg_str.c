@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 12:29:39 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 15:42:27 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,27 @@ char	*handle_redirects(char *cmd_str, t_tree *tree)
 			cmd_str = handle_heredoc(cmd_str, tree);
 			i = 0;
 		}
-		if (both_quote_checker(cmd_str, i) == 1
+		else if (both_quote_checker(cmd_str, i) == 1
 			&& ft_strncmp((cmd_str + i), ">>", 2) == 0
 			&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
 		{
 			cmd_str = handle_append(cmd_str, tree);
 			i = 0;
 		}
-		// if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<", 2) == 0
-		// 	&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
-		// 	handle_trunc(cmd_str);
-		// if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), ">", 2) == 0
-		// 	&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
-		// 	handle_outfile(cmd_str);
+		else if (both_quote_checker(cmd_str, i) == 1
+			&& ft_strncmp((cmd_str + i), ">", 1) == 0
+			&& cmd_str[i + 1] && cmd_str[i + 1] != '>')
+		{
+			cmd_str = handle_trunc(cmd_str, tree);
+			i = 0;
+		}
+		else if (both_quote_checker(cmd_str, i) == 1
+			&& ft_strncmp((cmd_str + i), "<", 1) == 0
+			&& cmd_str[i + 1] && cmd_str[i + 1] != '<')
+		{
+			cmd_str = handle_infile(cmd_str, tree);
+			i = 0;
+		}
 		i++;
 	}
 	return (cmd_str);

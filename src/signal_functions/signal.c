@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/24 12:51:34 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 15:37:30 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@
 void	signal_handler(int sig)
 {
 	(void)sig;
-	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_replace_line("", 1);
+	rl_on_new_line();
 	rl_redisplay();
-	ft_putstr_fd("\n\033[32mminishell> \033[0m", 1);
+	return ;
 }

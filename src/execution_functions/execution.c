@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 12:11:14 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 15:10:24 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,6 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	char	**env_array;
 
 	env_array = create_env_array(*env_lst);
-	open_close_fds(tmp);
 	if (!env_array)
 		exit (1);
 	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/')
@@ -175,11 +174,12 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	else
 	{
 		cmdpath = get_cmdpath(tmp->arguments[0], env_lst, tmp);
-		if(!cmdpath)
+		if (!cmdpath)
 		{
 			printf("%s: command not found\n", tmp->arguments[0]);
 			exit (127);
 		}
+		open_close_fds(tmp);
 		execve(cmdpath, tmp->arguments, env_array);
 	}
 }

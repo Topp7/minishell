@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 17:30:28 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 15:39:17 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	prompt_loop(t_tree	**parse_tree)
 	add_history("fjvegfuy ");
 	while (!(*parse_tree)->signal_exit)
 	{
+		signal(SIGINT, SIG_IGN);
 		command = readline("\033[32mminishell> \033[0m");
 		if (command == NULL || (*parse_tree)->signal_exit)
 		{
@@ -70,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 	parse_tree->out_fd = parse_tree->stdoutput;
 	if (!parse_tree->env)
 		return (free(parse_tree->env), 1);
-	signal(SIGINT, signal_handler);
+	//signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	shell_status = prompt_loop(&parse_tree);
 	free_env_list(parse_tree->env);
