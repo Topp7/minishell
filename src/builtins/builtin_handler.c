@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/22 14:37:48 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 13:02:34 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,16 @@ int	exit_handler(t_tree *tree)
 	int	i;
 
 	i = 0;
-	tree->command = EXIT;
 	if (tree->pipes_num == 1)
 		printf("exit\n");
 	if (tree->arguments[1])
 	{
 		while (tree->arguments[1][i])
 		{
-			if (tree->arguments[1][0] != '-'
-				&& !ft_isdigit(tree->arguments[1][i]))
+			if (*tree->arguments[1] != 45 && !ft_isdigit(tree->arguments[1][i]))
 			{
-				return (printf("bash: exit: %s: numeric argument required\n", tree->arguments[1]), 255);
+				return (printf("bash: exit: %s: numeric argument required\n",
+						tree->arguments[1]), 255);
 			}
 			i++;
 		}
@@ -42,21 +41,10 @@ int	exit_handler(t_tree *tree)
 	return (tree->exit_status);
 }
 
-void	handle_builtins(t_tree *tree, t_env **env_lst)
+void	execute_builtin(t_tree *tree, t_env **env_lst)
 {
-	int		fd[2];
-	int		booli;
 	char	*dup_ex;
 
-	booli = 0;
-	if (tree->child_pipe)
-	{
-		if (pipe(fd) == -1)
-			return ;
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		booli = 1;
-	}
 	if (tree->command == ECHO)
 		ft_echo(tree);
 	if (tree->command == PWD)
@@ -78,9 +66,28 @@ void	handle_builtins(t_tree *tree, t_env **env_lst)
 		if (tree->command == EXIT && !tree->child_pipe && !tree->parent_pipe)
 			tree->signal_exit = 1;
 	}
-	if (booli)
+}
+
+void	handle_builtins(t_tree *tree, t_env **env_lst)
+{
+	int		fd[2];
+	int		pipebool;
+
+	pipebool = 0;
+	if (tree->child_pipe)
+	{
+		if (pipe(fd) == -1)
+			return ;
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		pipebool = 1;
+	}
+	open_close_fds(tree);
+	execute_builtin(tree, env_lst);
+	if (pipebool == 1)
 	{
 		dup2(fd[0], STDIN_FILENO);
 		close (fd[0]);
 	}
+	dup2(tree->stdoutput, STDOUT_FILENO);
 }

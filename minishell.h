@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 16:09:17 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 12:39:13 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ typedef struct s_parse_tree
 	int					signal_exit;
 	int					stdinput;
 	int					stdoutput;
+	int					out_fd;
+	int					in_fd;
 	t_env				**env;
 }	t_tree;
 
@@ -125,8 +127,10 @@ void	print_list(t_env *env_list);
 //	here_doc.c
 int		skip_here(int *i, char *str, char *here_doc);
 char	*create_str(char *str, char *here_doc);
-char	*create_heredoc(char *str, char *cmd_str);
-char	*handle_heredoc(char *cmd_str);
+char	*create_heredoc(char *str, char *cmd_str, t_tree *tree);
+char	*handle_heredoc(char *cmd_str, t_tree *tree);
+//	append.c
+char	*handle_append(char *cmdstr, t_tree *tree);
 
 //------------------------------ util functions --------------------------------
 
@@ -145,6 +149,7 @@ int		pipes_error(char *errorstr, t_tree *tree, char **array);
 void	execute_command(t_tree *tree);
 char	**create_env_array(t_env *env_lst);
 char	*ft_getenv(t_env *env_lst, char *name);
+void	open_close_fds(t_tree *tree);
 
 //----------------------------- helper functions -------------------------------
 
@@ -163,9 +168,10 @@ void	initiliaze_command_tree(t_tree *tree, int i);
 int		parse_command(char **command, t_tree **tree);
 //	process_arg_str.c
 char	*ft_fgets(void);
-int		adapt_and_count_arguments(t_tree *tree, char *command_str);
+int		adapt_and_count_arguments(t_tree *tree, char **command_str);
 int		split_command(t_tree *tree, char *command_str, int ex_st);
 int		build_command_tree(t_tree **tree, char *command_str);
+char	*handle_redirects(char *cmd_str, t_tree *tree);
 //	quote_check.c
 int		check_for_quotes_and_slash(char *command_str);
 int		check_for_open_quotes(char letter, int *s_quote, int *d_quote);

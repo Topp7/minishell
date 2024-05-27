@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 15:00:41 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 12:11:14 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,19 @@ void	absolute_path(t_tree *tmp, char **env_array)
 		exit(0);
 	}
 }
+void	open_close_fds(t_tree *tree)
+{
+	if (tree->out_fd != 0)
+	{
+		dup2(tree->out_fd, STDOUT_FILENO);
+		close (tree->out_fd);
+	}
+	if (tree->in_fd != 0)
+	{
+		dup2(tree->in_fd, STDIN_FILENO);
+		close (tree->in_fd);
+	}
+}
 
 void	exec_cmd(t_tree *tmp, t_env **env_lst)
 {
@@ -153,6 +166,7 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	char	**env_array;
 
 	env_array = create_env_array(*env_lst);
+	open_close_fds(tmp);
 	if (!env_array)
 		exit (1);
 	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 15:40:52 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 12:11:05 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	initiliaze_command_tree(t_tree *tree, int i)
 	tree->pipes_num = 0;
 	tree->output = 0;
 	tree->args_num = 0;
+	tree->in_fd = 0;
+	tree->out_fd = 0;
 	tree->pipes_num = i + 1;
 	if (tree->parent_pipe)
 	{

@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/25 16:38:29 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 11:54:32 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*create_str(char *str, char *here_doc)
 	return (new_str);
 }
 
-char	*create_heredoc(char *str, char *cmd_str)
+char	*create_heredoc(char *str, char *cmd_str, t_tree *tree)
 {
 	int		fd[2];
 	char	*buf;
@@ -76,14 +76,13 @@ char	*create_heredoc(char *str, char *cmd_str)
 	}
 	free(buf);
 	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
+	tree->in_fd = fd[0];
 	new_cmdstr = create_str(cmd_str, str);
 	return (new_cmdstr);
 }
 
 //	function to save the heredoc input in a string
-char	*handle_heredoc(char *cmd_str)
+char	*handle_heredoc(char *cmd_str, t_tree *tree)
 {
 	char	*here_str;
 	int		i;
@@ -104,7 +103,7 @@ char	*handle_heredoc(char *cmd_str)
 			if (!here_str)
 				return (NULL);
 			ft_strlcpy(here_str, &cmd_str[i], j + 1);
-			cmd_str = create_heredoc(here_str, cmd_str);
+			cmd_str = create_heredoc(here_str, cmd_str, tree);
 			free(here_str);
 		}
 		i++;
