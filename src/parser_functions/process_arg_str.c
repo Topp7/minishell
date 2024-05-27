@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 17:06:04 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 14:28:31 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,20 @@
 #define ESCAPE_SEQUENCE "\x1b"
 
 //	count_arguments and remove quotes
-int	adapt_and_count_arguments(t_tree *tree, char *command_str)
+int	adapt_and_count_arguments(t_tree *tree, char **command_str)
 {
 	int	i;
 
 	i = 1;
-	tree->arguments = split_pipes(command_str, ' ', &i);
+	*command_str = handle_redirects(*command_str, tree);
+	tree->arguments = split_pipes(*command_str, ' ', &i);
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
 	tree->args_num = i;
 	return (EXIT_SUCCESS);
 }
 
-char	*handle_redirects(char *cmd_str)
+char	*handle_redirects(char *cmd_str, t_tree *tree)
 {
 	int	i;
 	int	j;
@@ -46,13 +47,16 @@ char	*handle_redirects(char *cmd_str)
 			&& ft_strncmp(&cmd_str[i], "<<", 2) == 0
 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
 		{
-			cmd_str = handle_heredoc(cmd_str);
+			cmd_str = handle_heredoc(cmd_str, tree);
 			i = 0;
 		}
-		// if (both_quote_checker(cmd_str, i) == 1
-		// 	&& ft_strncmp((cmd_str + i), ">>", 2) == 0
-		// 	&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
-		// 	handle_append(cmd_str);
+		if (both_quote_checker(cmd_str, i) == 1
+			&& ft_strncmp((cmd_str + i), ">>", 2) == 0
+			&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
+		{
+			cmd_str = handle_append(cmd_str, tree);
+			i = 0;
+		}
 		// if (both_quote_checker(cmd_str, i) == 1 && ft_strncmp((cmd_str + i), "<", 2) == 0
 		// 	&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
 		// 	handle_trunc(cmd_str);
@@ -68,7 +72,7 @@ char	*handle_redirects(char *cmd_str)
 int	split_command(t_tree *tree, char *command_str, int ex_st)
 {
 	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE
-		|| adapt_and_count_arguments(tree, command_str) == EXIT_FAILURE
+		|| adapt_and_count_arguments(tree, &command_str) == EXIT_FAILURE
 		|| expander(tree->arguments, tree->env, ex_st) == EXIT_FAILURE)
 		return (printf("error in parsing!\n"), EXIT_FAILURE);
 	if (is_substr_first_word(command_str, "echo"))
@@ -102,7 +106,6 @@ int	build_command_tree(t_tree **tree, char *command_str)
 
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
-	command_str = handle_redirects(command_str);
 	pipes = split_pipes(command_str, '|', &pipe_num);
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));
@@ -119,7 +122,6 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			return (EXIT_FAILURE);
 		ft_treeadd_back(tree, temp, &parent);
 	}
-	free_two_dimensional_array(pipes);
 	free(command_str);
 	return (EXIT_SUCCESS);
 }

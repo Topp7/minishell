@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 13:12:08 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 14:26:45 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	parse_tree->stdoutput = dup(STDOUT_FILENO);
 	parse_tree->env = init_env_list(envp);
 	parse_tree->parent_pipe = NULL;
+	parse_tree->out_fd = parse_tree->stdoutput;
 	if (!parse_tree->env)
 		return (free(parse_tree->env), 1);
 	shell_status = prompt_loop(&parse_tree);
