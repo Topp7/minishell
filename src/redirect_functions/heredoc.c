@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 14:31:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/28 15:43:06 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,25 +68,24 @@ char	*create_heredoc(char *str, char *cmd_str, t_tree *tree, int *ex_st)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, signal_handle);
 		while (1)
 		{
+			signal(SIGQUIT, SIG_IGN);
 			buf = get_next_line(STDIN_FILENO);
 			if (buf == NULL)
 				break ;
 			if (ft_strncmp(buf, str, ft_strlen(buf)) == 10)
 				break ;
-			write(fd[1], buf, ft_strlen(buf));
 			free(buf);
-			signal(SIGQUIT, SIG_IGN);
-			//signal(SIGINT, signal_handle);
 		}
 		free(buf);
 		exit (tree->exit_status);
 	}
-	waitpid(pid, ex_st, WEXITED);
-	if (WIFEXITED(*ex_st))
-		*ex_st = WEXITSTATUS(*ex_st);
-	//printf("ex: %d\n", 0);
+	waitpid(pid, &tree->exit_status, 0);
+	if (WIFEXITED(tree->exit_status))
+		tree->exit_status = WEXITSTATUS(tree->exit_status);
+	printf("tree: %d ex: %d\n", tree->exit_status, *ex_st);
 	close(fd[1]);
 	tree->in_fd = fd[0];
 	new_cmdstr = create_str(cmd_str, str);

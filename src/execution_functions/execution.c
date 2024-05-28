@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 14:47:09 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 15:52:48 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 		}
 		open_close_fds(tmp);
 		execve(cmdpath, tmp->arguments, env_array);
+		exit(123);
 	}
 }
 
@@ -196,6 +197,8 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 		return (0);
 	if (pid == 0)
 	{
+		signal(SIGINT, signal_handle);
+		signal(SIGQUIT, signal_handle);
 		close(fd[0]);
 		if (tmp->child_pipe)
 			dup2(fd[1], STDOUT_FILENO);
@@ -236,12 +239,11 @@ void execute_command(t_tree *tree)
 		}
 		tmp = tmp->child_pipe;
 	}
-	while (waitpid(pid, &tmp->exit_status, WNOHANG) == 0)
-	{
-		signal(SIGQUIT, signal_handle);
-		continue ;
-	}
+	waitpid(pid, &tree->exit_status, 0);
 	dup2(tree->stdinput, STDIN_FILENO);
-	//if (WIFEXITED(tree->exit_status))
-	//	tree->exit_status = WEXITSTATUS(tree->exit_status);
+	if (WIFEXITED(tree->exit_status))
+		tree->exit_status = WEXITSTATUS(tree->exit_status);
+	if (tree->exit_status != 0)
+		tree->exit_status += 128;
+	signal(SIGINT, signal_handler);
 }

@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 14:47:58 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 15:22:13 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	prompt_loop(t_tree	**parse_tree)
 				free(command);
 			return ((*parse_tree)->exit_status);
 		}
-		if (command[0] == '\0' || is_empty(command) == 0)
+		if (command[0] == '\0')
 		{
 			free(command);
 			continue ;
