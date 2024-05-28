@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 16:10:13 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 11:53:16 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,8 @@ void	print_list(t_env *env_list);
 //	here_doc.c
 int		skip_here(int *i, char *str, char *here_doc);
 char	*create_str(char *str, char *here_doc);
-char	*create_heredoc(char *str, char *cmd_str, t_tree *tree);
-char	*handle_heredoc(char *cmd_str, t_tree *tree);
+char	*create_heredoc(char *str, char *cmd_str, t_tree *tree, int *ex_st);
+char	*handle_heredoc(char *cmd_str, t_tree *tree, int *ex_st);
 //	append.c
 char	*handle_append(char *cmdstr, t_tree *tree);
 //	trunc.c
@@ -174,10 +174,10 @@ int		init_tree(t_tree *tree, char **pipes, int ex_st, int i);
 int		parse_command(char **command, t_tree **tree);
 //	process_arg_str.c
 char	*ft_fgets(void);
-int		adapt_and_count_arguments(t_tree *tree, char **command_str);
+int		adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st);
 int		split_command(t_tree *tree, char *command_str, int ex_st);
 int		build_command_tree(t_tree **tree, char *command_str);
-char	*handle_redirects(char *cmd_str, t_tree *tree);
+char	*handle_redirects(char *cmd_str, t_tree *tree, int *ex_st);
 //	quote_check.c
 int		check_for_quotes_and_slash(char *command_str);
 int		check_for_open_quotes(char letter, int *s_quote, int *d_quote);
@@ -197,6 +197,7 @@ int		expander(char **args, t_env **env_lst, int ex_st);
 //---------------------------- signal functions -------------------------------
 
 //	signal.c
+void 	signal_handle(int signo);
 void	signal_handler(int sig);
 
 //---------------------------- debugging functions ----------------------------

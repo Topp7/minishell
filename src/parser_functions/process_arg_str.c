@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 17:05:24 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 14:49:24 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@
 #define ESCAPE_SEQUENCE "\x1b"
 
 //	count_arguments and remove quotes
-int	adapt_and_count_arguments(t_tree *tree, char **command_str)
+int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 {
 	int	i;
 
 	i = 1;
-	*command_str = handle_redirects(*command_str, tree);
+	*command_str = handle_redirects(*command_str, tree, ex_st);
 	tree->arguments = split_pipes(*command_str, ' ', &i);
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
@@ -34,20 +34,20 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str)
 	return (EXIT_SUCCESS);
 }
 
-char	*handle_redirects(char *cmd_str, t_tree *tree)
+char	*handle_redirects(char *cmd_str, t_tree *tree, int *ex_st)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
+	if (!cmd_str)
+		return (NULL);
 	while (cmd_str[i])
 	{
 		if (both_quote_checker(cmd_str, i) == 1
 			&& ft_strncmp(&cmd_str[i], "<<", 2) == 0
 			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
 		{
-			cmd_str = handle_heredoc(cmd_str, tree);
+			cmd_str = handle_heredoc(cmd_str, tree, ex_st);
 			i = 0;
 		}
 		else if (both_quote_checker(cmd_str, i) == 1
@@ -76,25 +76,25 @@ char	*handle_redirects(char *cmd_str, t_tree *tree)
 	return (cmd_str);
 }
 
-int	str_empty(char *cmd_str)
+int	null_term_string(char **command_str)
 {
-	int	i;
-
-	i = 0;
-	while (cmd_str[i])
+	if (!(*command_str))
 	{
-		if (cmd_str[i] != ' ' && cmd_str[i] != '\n')
-			return (1);
-		i++;
+		*command_str = malloc(sizeof(char));
+		if (!(*command_str))
+			return (EXIT_FAILURE);
+		(*command_str)[0] = '\0';
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
 
 //	function to split the commands into the components
 int	split_command(t_tree *tree, char *command_str, int ex_st)
 {
+	if (null_term_string(&command_str) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE
-		|| adapt_and_count_arguments(tree, &command_str) == EXIT_FAILURE
+		|| adapt_and_count_arguments(tree, &command_str, &ex_st) == EXIT_FAILURE
 		|| expander(tree->arguments, tree->env, ex_st) == EXIT_FAILURE)
 		return (printf("error in parsing!\n"), EXIT_FAILURE);
 	if (is_substr_first_word(command_str, "echo"))

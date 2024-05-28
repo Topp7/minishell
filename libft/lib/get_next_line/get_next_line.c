@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/03 15:01:46 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/27 13:19:22 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 16:27:14 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,9 @@ char	*rd_to_str(int fd, char *str)
 	if (buf == NULL)
 		return (NULL);
 	bytes = 1;
-	printf("%d\n", g_sig_num);
 	while (ft_strchr(str, '\n') == NULL && bytes != 0)
 	{
 		bytes = read(fd, buf, BUFFER_SIZE);
-		if (g_sig_num == SIGINT)
-			return (NULL);
 		if (bytes == -1)
 		{
 			free (buf);
