@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 14:49:24 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 17:33:29 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 	int	i;
 
 	i = 1;
+	//(void)ex_st;
 	*command_str = handle_redirects(*command_str, tree, ex_st);
 	tree->arguments = split_pipes(*command_str, ' ', &i);
 	if (tree->arguments == NULL)
@@ -89,29 +90,29 @@ int	null_term_string(char **command_str)
 }
 
 //	function to split the commands into the components
-int	split_command(t_tree *tree, char *command_str, int ex_st)
+int	split_command(t_tree *tree, char **command_str, int ex_st)
 {
-	if (null_term_string(&command_str) == EXIT_FAILURE)
+	if (null_term_string(command_str) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	if (det_and_rem_quotes_first_word(command_str) == EXIT_FAILURE
-		|| adapt_and_count_arguments(tree, &command_str, &ex_st) == EXIT_FAILURE
+	if (det_and_rem_quotes_first_word(*command_str) == EXIT_FAILURE
+		|| adapt_and_count_arguments(tree, command_str, &ex_st) == EXIT_FAILURE
 		|| expander(tree->arguments, tree->env, ex_st) == EXIT_FAILURE)
 		return (printf("error in parsing!\n"), EXIT_FAILURE);
-	if (is_substr_first_word(command_str, "echo"))
+	if (is_substr_first_word(*command_str, "echo"))
 		tree->command = ECHO;
-	else if (is_substr_first_word(command_str, "pwd"))
+	else if (is_substr_first_word(*command_str, "pwd"))
 		tree->command = PWD;
-	else if (is_substr_first_word(command_str, "cd"))
+	else if (is_substr_first_word(*command_str, "cd"))
 		tree->command = CD;
-	else if (is_substr_first_word(command_str, "env"))
+	else if (is_substr_first_word(*command_str, "env"))
 		tree->command = ENV;
-	else if (is_substr_first_word(command_str, "unset"))
+	else if (is_substr_first_word(*command_str, "unset"))
 		tree->command = UNSET;
-	else if (is_substr_first_word(command_str, "export"))
+	else if (is_substr_first_word(*command_str, "export"))
 		tree->command = EXPORT;
-	else if (is_substr_first_word(command_str, "exit"))
+	else if (is_substr_first_word(*command_str, "exit"))
 		tree->command = EXIT;
-	tree->cmd_brch = ft_strdup(command_str);
+	tree->cmd_brch = ft_strdup(*command_str);
 	if (!tree->cmd_brch)
 		return (pipes_error("Error in strdup\n", tree, NULL));
 	return (EXIT_SUCCESS);
@@ -129,6 +130,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
 	pipes = split_pipes(command_str, '|', &pipe_num);
+	free(command_str);
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));
 	pipe_num = 0;
@@ -144,6 +146,6 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			return (EXIT_FAILURE);
 		ft_treeadd_back(tree, temp, &parent);
 	}
-	free(command_str);
+	free_two_dimensional_array(pipes);
 	return (EXIT_SUCCESS);
 }

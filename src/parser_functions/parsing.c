@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 14:49:11 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 17:34:22 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	init_tree(t_tree *tree, char **pipes, int ex_st, int i)
 		tree->exit_status = ex_st;
 		tree->env = tree->parent_pipe->env;
 	}
-	if (split_command(tree, pipes[i], ex_st) == EXIT_FAILURE)
+	if (split_command(tree, &pipes[i], ex_st) == EXIT_FAILURE)
 		return (pipes_error("error split_command", tree, pipes));
 	return (EXIT_SUCCESS);
 }
