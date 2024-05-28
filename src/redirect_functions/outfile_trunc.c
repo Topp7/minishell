@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_trunc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:56:51 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 18:04:13 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/28 19:17:24 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ char	*open_outfile_trunc(t_tree *tree, char *cmdstr, char *outfile)
 
 	i = 0;
 	j = 0;
+	if (validate_outfile(outfile) == 0)
+		return (free(outfile), empty_str());
 	tree->out_fd = open(outfile, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (!tree->out_fd)
 		return (NULL);

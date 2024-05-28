@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 17:35:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/28 19:17:08 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,10 +133,12 @@ char	*create_heredoc(char *str, char *cmd_str, t_tree *tree, int *ex_st);
 char	*handle_heredoc(char *cmd_str, t_tree *tree, int *ex_st);
 //	append.c
 char	*handle_append(char *cmdstr, t_tree *tree);
+int		validate_outfile(char *outfile);
 //	trunc.c
 char	*handle_trunc(char *cmdstr, t_tree *tree);
 //	infile.c
 char	*handle_infile(char *cmd_str, t_tree *tree);
+char	*empty_str(void);
 
 //------------------------------ util functions --------------------------------
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_append.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 18:04:00 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/28 19:15:03 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,27 @@ char	*update_cmdstr(char *cmdstr, int skip_len)
 	return (new_cmdstr);
 }
 
+int	validate_outfile(char *outfile)
+{
+	struct stat	*buf;
+
+	buf = malloc(sizeof(struct stat));
+	if (!buf)
+		return (0);
+	if (stat(outfile, buf) == -1)
+	{
+		ft_printf("%s: No such file or directory\n", outfile);
+		return (0);
+	}
+	else if (access(outfile, W_OK) != 0)
+	{
+		ft_printf("%s: Permission denied\n", outfile);
+		return (0);
+	}
+	free(buf);
+	return (1);
+}
+
 char	*open_outfile(t_tree *tree, char *cmdstr, char *outfile)
 {
 	int		i;
@@ -45,6 +66,8 @@ char	*open_outfile(t_tree *tree, char *cmdstr, char *outfile)
 
 	i = 0;
 	j = 0;
+	if (validate_outfile(outfile) == 0)
+		return (free(outfile), empty_str());
 	tree->out_fd = open(outfile, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (!tree->out_fd)
 		return (NULL);
