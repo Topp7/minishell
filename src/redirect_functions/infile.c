@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 19:12:26 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 19:22:12 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,10 @@ char	*open_infile(t_tree *tree, char *cmdstr, char *infile)
 
 	i = 0;
 	j = 0;
+	if (validate_infile(infile) == 0)
+		return (free(infile), free(cmdstr), empty_str());
+	else
+		tree->in_fd = open(infile, O_RDONLY);
 	while (cmdstr[i])
 	{
 		if (ft_strncmp(&cmdstr[i], "<", 1) == 0)
@@ -86,10 +90,6 @@ char	*open_infile(t_tree *tree, char *cmdstr, char *infile)
 		}
 		i++;
 	}
-	if (validate_infile(infile) == 0)
-		return (free(infile), empty_str());
-	else
-		tree->in_fd = open(infile, O_RDONLY);
 	return (free(infile), update_cmdstr_in(cmdstr, j));
 }
 
