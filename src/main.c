@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 16:12:36 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 17:24:05 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ void handle_sigint(int signo)
 		ft_putstr_fd("\n\033[32mminishell> \033[0m", 1);
 	}
 	(void)signo;
+}
+
+int	is_empty(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] != ' ' && cmd[i] != '\n')
+			return (1);
+		i++;
+	}
+	if (i > 0)
+		add_history(cmd);
+	return (0);
 }
 
 int	prompt_loop(t_tree	**parse_tree)
@@ -49,7 +65,7 @@ int	prompt_loop(t_tree	**parse_tree)
 				free(command);
 			return ((*parse_tree)->exit_status);
 		}
-		if (command[0] == '\0')
+		if (command[0] == '\0' || is_empty(command) == 0)
 		{
 			free(command);
 			continue ;
@@ -60,7 +76,7 @@ int	prompt_loop(t_tree	**parse_tree)
 			free(command);
 			continue ;
 		}
-		if (parse_command(&command, parse_tree) == EXIT_FAILURE)
+		if (parse_command(&command, parse_tree) == EXIT_SUCCESS)
 			exit ((*parse_tree)->exit_status);
 		if (debug_mode)
 			print_parse_tree(*parse_tree);

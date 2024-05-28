@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 16:09:41 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/27 17:05:24 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,20 @@ char	*handle_redirects(char *cmd_str, t_tree *tree)
 		i++;
 	}
 	return (cmd_str);
+}
+
+int	str_empty(char *cmd_str)
+{
+	int	i;
+
+	i = 0;
+	while (cmd_str[i])
+	{
+		if (cmd_str[i] != ' ' && cmd_str[i] != '\n')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 //	function to split the commands into the components
