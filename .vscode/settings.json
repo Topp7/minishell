@@ -5,6 +5,7 @@
 		"complex": "c",
 		"cstdio": "c",
 		"algorithm": "c",
-		"string": "c"
+		"string": "c",
+		"minishell.h": "c"
 	}
 }

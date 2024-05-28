@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/27 14:28:14 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/27 17:07:42 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	init_tree(t_tree *tree, char **pipes, int ex_st, int i)
 	tree->pipes_num = i + 1;
 	if (tree->parent_pipe)
 	{
-		tree->exit_status = tree->parent_pipe->exit_status;
+		tree->exit_status = ex_st;
 		tree->env = tree->parent_pipe->env;
 	}
 	if (split_command(tree, pipes[i], ex_st) == EXIT_FAILURE)

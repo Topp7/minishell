@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/27 14:27:54 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/28 12:14:32 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	exit_handler(t_tree *tree)
 		{
 			if (*tree->arguments[1] != 45 && !ft_isdigit(tree->arguments[1][i]))
 			{
-				return (printf("bash: exit: %s: numeric argument required\n",
+				return (printf("exit: %s: numeric argument required\n",
 						tree->arguments[1]), 255);
 			}
 			i++;
@@ -33,7 +33,7 @@ int	exit_handler(t_tree *tree)
 		if (tree->arguments[2])
 		{
 			tree->command = 0;
-			printf("bash: exit: too many arguments\n");
+			printf("exit: too many arguments\n");
 			return (1);
 		}
 		tree->exit_status = ft_atoi(tree->arguments[1]) % 256;

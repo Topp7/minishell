@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/27 16:11:01 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 14:31:56 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,8 @@ char	*create_str(char *str, char *here_doc)
 	free (str);
 	return (new_str);
 }
-void signal_handle(int signo)
-{
-	(void)signo;
-	exit (0);
-}
-char	*create_heredoc(char *str, char *cmd_str, t_tree *tree)
+
+char	*create_heredoc(char *str, char *cmd_str, t_tree *tree, int *ex_st)
 {
 	int		fd[2];
 	int		pid;
@@ -80,13 +76,17 @@ char	*create_heredoc(char *str, char *cmd_str, t_tree *tree)
 			if (ft_strncmp(buf, str, ft_strlen(buf)) == 10)
 				break ;
 			write(fd[1], buf, ft_strlen(buf));
-			signal(SIGINT, signal_handle);
 			free(buf);
+			signal(SIGQUIT, SIG_IGN);
+			//signal(SIGINT, signal_handle);
 		}
 		free(buf);
-		exit (0);
+		exit (tree->exit_status);
 	}
-	wait (NULL);
+	waitpid(pid, ex_st, WEXITED);
+	if (WIFEXITED(*ex_st))
+		*ex_st = WEXITSTATUS(*ex_st);
+	//printf("ex: %d\n", 0);
 	close(fd[1]);
 	tree->in_fd = fd[0];
 	new_cmdstr = create_str(cmd_str, str);
@@ -94,7 +94,7 @@ char	*create_heredoc(char *str, char *cmd_str, t_tree *tree)
 }
 
 //	function to save the heredoc input in a string
-char	*handle_heredoc(char *cmd_str, t_tree *tree)
+char	*handle_heredoc(char *cmd_str, t_tree *tree, int *ex_st)
 {
 	char	*here_str;
 	int		i;
@@ -115,8 +115,9 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 			if (!here_str)
 				return (NULL);
 			ft_strlcpy(here_str, &cmd_str[i], j + 1);
-			cmd_str = create_heredoc(here_str, cmd_str, tree);
+			cmd_str = create_heredoc(here_str, cmd_str, tree, ex_st);
 			free(here_str);
+			i = 0;
 		}
 		i++;
 	}
