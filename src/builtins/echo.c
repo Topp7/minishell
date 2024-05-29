@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 14:45:53 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/27 15:12:55 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 11:38:32 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_echo(t_tree *tree)
 	{
 		ft_printf("%s", tree->arguments[i]);
 		if (tree->arguments[++i])
-			printf(" ");
+			ft_printf(" ");
 	}
 	if (!n_chk)
 		ft_printf("\n");

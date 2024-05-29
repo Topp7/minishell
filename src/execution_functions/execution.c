@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 11:01:16 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:15:21 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	execute_command(t_tree *tree)
 	dup2(tree->stdinput, STDIN_FILENO);
 	if (WIFEXITED(tree->exit_status))
 		tree->exit_status = WEXITSTATUS(tree->exit_status);
-	if (tree->exit_status != 0)
+	if (tree->exit_status > 1 && !tree->signal_exit)
 		tree->exit_status += 128;
 	signal(SIGINT, signal_handler);
 }
