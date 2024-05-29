@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:45:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 13:06:54 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 
 	i = 1;
 	(void)ex_st;
-	*command_str = handle_redirects(*command_str, tree);
 	tree->arguments = split_with_quotes(command_str, ' ', &i);
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
@@ -45,10 +44,17 @@ char	*exec_cmd_funct(char **cmd_str, t_tree *tree, int *i, t_cmd_func func)
 }
 
 //	function to handle all redirecton cases from the command string
-char	*handle_redirects(char *cmd_str, t_tree *tree)
+char	*handle_redirects(char **args, t_tree *tree)
 {
 	int	i;
+	char *cmd_str;
 
+	i = 0;
+	while (args[i] && args[i + 1])
+	{
+		cmd_str = ft_strjoin(args[i], args[i + 1]);
+		i++;
+	}
 	i = 0;
 	while (cmd_str && cmd_str[i])
 	{
@@ -79,7 +85,7 @@ int	split_command(t_tree *tree, char **command_str, int ex_st)
 	if (null_term_string(command_str) == EXIT_FAILURE
 		|| det_and_rem_quotes_first_word(*command_str) == EXIT_FAILURE
 		|| adapt_and_count_arguments(tree, command_str, &ex_st) == EXIT_FAILURE
-		|| expander(tree->arguments, tree->env, ex_st) == EXIT_FAILURE)
+		|| expander(tree->arguments, tree->env, ex_st, tree) == EXIT_FAILURE)
 		return (printf("error in parsing!\n"), EXIT_FAILURE);
 	if (is_substr_first_word(*command_str, "echo"))
 		tree->command = ECHO;

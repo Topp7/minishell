@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 11:01:34 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:54:26 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,14 +188,13 @@ int		both_quote_checker(char *arg, int j);
 int		quote_checker(char *arg, int j);
 int		remove_quotes(char **args, int i);
 //	replace_variable.c
-int		expander(char **args, t_env **env_lst, int exit_status);
+int		expander(char **args, t_env **env, int ex_st, t_tree *tree);
 //	split_pipes.c
 void	count_pipes(char const *s, char pipe, int *pipe_num);
 int		quote_check(const char *s, int *pipe_len, char pipe, int *i);
 int		assign_pipes(char const *s, char pipe, char **split, int pipes);
 char	**split_with_quotes(char **s, char c, int *pipe_num);
 
-int		expander(char **args, t_env **env_lst, int ex_st);
 //---------------------------- signal functions -------------------------------
 
 //	signal.c

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 12:14:32 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:06:18 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	exit_handler(t_tree *tree)
 	{
 		while (tree->arguments[1][i])
 		{
-			if (*tree->arguments[1] != 45 && !ft_isdigit(tree->arguments[1][i]))
+			if (*tree->arguments[1] != 45 && (!ft_isdigit(tree->arguments[1][i])
+				))
 			{
 				return (printf("exit: %s: numeric argument required\n",
 						tree->arguments[1]), 255);
