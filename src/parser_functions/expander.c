@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:16:01 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 13:03:57 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	find_var_in_env(char **replace, t_env *envp, char *arg, char **var)
 
 	*var = NULL;
 	j = 1;
-	if (!arg || (arg && arg[0] != '$'))
+	if (!arg || (arg && arg[0] != '$')
+		|| (arg[1] && (arg[1] == ' ' || arg[1] == '\"')) || !arg[1])
 		return (0);
 	temp = envp;
 	while (temp)
@@ -109,7 +110,7 @@ int	tilde_expander(char **arg, int j)
 }
 
 //	function to convert the argument into the string
-int	expander(char **args, t_env **env, int ex_st)
+int	expander(char **args, t_env **env, int ex_st, t_tree *tree)
 {
 	char	*var;
 	char	*rep;
@@ -133,6 +134,7 @@ int	expander(char **args, t_env **env, int ex_st)
 		}
 		if (remove_quotes(args, i) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
+		handle_redirects(args, tree);
 		i++;
 	}
 	return (EXIT_SUCCESS);

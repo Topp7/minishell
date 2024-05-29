@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 19:28:21 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 12:36:26 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,11 @@ char	*handle_infile(char *cmd_str, t_tree *tree)
 		if (ft_strncmp(&cmd_str[i], "<", 1) == 0)
 		{
 			i += 1;
+			if (cmd_str[i] && cmd_str[i] == '\"')
+				i++;
 			while (cmd_str[i] && cmd_str[i] == ' ')
 				i++;
-			while (cmd_str[i + j] && cmd_str[i + j] != ' ')
+			while (cmd_str[i + j] && cmd_str[i + j] != ' ' && cmd_str[i + j] != '\"')
 				j++;
 			infile = malloc(sizeof(char) * (j + 1));
 			if (!infile)
