@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 14:41:27 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 18:50:01 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int	name_check(char *tmp, t_tree *tree)
 	char	*name;
 
 	name = tmp;
+	if (tree->child_pipe)
+		return (0);
 	if (ft_isalpha(*name) == 1 || *name == '_')
 		name++;
 	else
