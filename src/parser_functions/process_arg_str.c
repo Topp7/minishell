@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 13:06:54 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 17:42:40 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,40 +43,98 @@ char	*exec_cmd_funct(char **cmd_str, t_tree *tree, int *i, t_cmd_func func)
 	return (*cmd_str);
 }
 
-//	function to handle all redirecton cases from the command string
-char	*handle_redirects(char **args, t_tree *tree)
+char	**cpy_args(char **new, char **args)
 {
 	int	i;
-	char *cmd_str;
+	int	j;
 
 	i = 0;
-	while (args[i] && args[i + 1])
+	j = 0;
+	while (args[i])
 	{
-		cmd_str = ft_strjoin(args[i], args[i + 1]);
+		if (args[i][0] != '\0')
+			new[j++] = ft_strdup(args[i]);
 		i++;
 	}
+	free_two_dimensional_array(args);
+	return (new);
+}
+
+char	**update_args(char **args)
+{
+	char	**new;
+	int		count;
+	int		i;
+
+	count = 0;
 	i = 0;
-	while (cmd_str && cmd_str[i])
+	new = args;
+	while (new[i])
 	{
-		if (both_quote_checker(cmd_str, i) == 1)
+		if (new[i] && new[i][0] != '\0')
+			count++;
+		i++;
+	}
+	new = malloc(sizeof(char *) * count + 1);
+	if (!new)
+		return (NULL);
+	new[count] = NULL;
+	cpy_args(new, args);
+	return (new);
+}
+
+int	prep_heredoc(char ***args1, int i, int j, t_tree *tree)
+{
+	char	*to_free;
+	char	**args;
+
+	to_free = NULL;
+	args = *args1;
+	if (args[i][j + 2])
+		args[i] = handle_heredoc(args[i], tree);
+	else
+	{
+		to_free = args[i];
+		args[i] = ft_strjoin(args[i], args[i + 1]);
+		args[i + 1][0] = '\0';
+		free(to_free);
+		args[i] = handle_heredoc(args[i], tree);
+	}
+	*args1 = update_args(args);
+	return (0);
+}
+
+//	function to handle all redirecton cases from the command string
+char	**handle_redirects(char **args, t_tree *tree)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (args[i])
+	{
+		j = 0;
+		while (args[i][j])
 		{
-			if (ft_strncmp(&cmd_str[i], "<<", 2) == 0
-				&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
-				exec_cmd_funct(&cmd_str, tree, &i, handle_heredoc);
-			else if (ft_strncmp((cmd_str + i), ">>", 2) == 0
-				&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
-				exec_cmd_funct(&cmd_str, tree, &i, handle_append);
-			else if (ft_strncmp((cmd_str + i), ">", 1) == 0
-				&& cmd_str[i + 1] && cmd_str[i + 1] != '>')
-				exec_cmd_funct(&cmd_str, tree, &i, handle_trunc);
-			else if (ft_strncmp((cmd_str + i), "<", 1) == 0
-				&& cmd_str[i + 1] && cmd_str[i + 1] != '<')
-				exec_cmd_funct(&cmd_str, tree, &i, handle_infile);
+			if (ft_strncmp(&args[i][j], "<<", 2) == 0
+				&& args[i][j + 2] != '<' && (args[i][j + 2] || args[i + 1]))
+				i = prep_heredoc(&args, i, j, tree);
+			// else if (ft_strncmp((cmd_str + i), ">>", 2) == 0
+			// 	&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
+			// 	exec_cmd_funct(&cmd_str, tree, &i, handle_append);
+			// else if (ft_strncmp((cmd_str + i), ">", 1) == 0
+			// 	&& cmd_str[i + 1] && cmd_str[i + 1] != '>')
+			// 	exec_cmd_funct(&cmd_str, tree, &i, handle_trunc);
+			// else if (ft_strncmp((cmd_str + i), "<", 1) == 0
+			// 	&& cmd_str[i + 1] && cmd_str[i + 1] != '<')
+			// 	exec_cmd_funct(&cmd_str, tree, &i, handle_infile);
+			j++;
 		}
-		if (cmd_str[i])
+		if (args[i])
 			i++;
 	}
-	return (cmd_str);
+	return(args);
 }
 
 //	function to split the commands into the components

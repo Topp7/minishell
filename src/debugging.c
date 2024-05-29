@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debugging.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/21 14:36:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/15 16:31:57 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 17:09:02 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,13 @@ void	print_2d_array(char **array)
 	while (array[i] != NULL)
 	{
 		j = 0;
-		printf("%d: [", i);
+		ft_printf("%d: [", i);
 		while (array[i][j] != '\0')
 		{
-			printf("%c", array[i][j]);
+			ft_printf("%c", array[i][j]);
 			j++;
 		}
-		printf("] ");
+		ft_printf("] ");
 		i++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 10:56:11 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 16:57:38 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ void	here_doc_loop(char	*str, int *fd)
 		write(fd[1], buf, ft_strlen(buf));
 		free(buf);
 	}
-	free(buf);
+	if (buf)
+		free(buf);
 }
 
 char	*create_heredoc(char **str, char *cmd_str, t_tree *tree)
@@ -88,7 +89,7 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree)
 	{
 		here_doc_loop(*str, fd);
 		free_tree(tree);
-		free(cmd_str);
+		// free(cmd_str);
 		exit (tree->exit_status);
 	}
 	waitpid(pid, &tree->exit_status, 0);
