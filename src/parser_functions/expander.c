@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 13:03:57 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 14:08:21 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,9 @@ int	expander(char **args, t_env **env, int ex_st, t_tree *tree)
 		}
 		if (remove_quotes(args, i) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		handle_redirects(args, tree);
 		i++;
 	}
+	(void)tree;
+	//handle_redirects(args, tree);
 	return (EXIT_SUCCESS);
 }

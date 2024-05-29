@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 14:41:18 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 15:50:45 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,12 @@ int	pipes_error(char *errorstr, t_tree *tree, char **array)
 	free_two_dimensional_array(array);
 	free_tree(tree);
 	return (EXIT_FAILURE);
+}
+
+int	print_str_return_exit(char *str, int exit_code)
+{
+	dup2(2, 1);
+	ft_printf(" %s", str);
+	dup2(1, 1);
+	return (exit_code);
 }

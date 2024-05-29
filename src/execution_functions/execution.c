@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 13:23:38 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 16:45:04 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 		cmdpath = get_cmdpath(tmp->arguments[0], env_lst, tmp);
 		if (!cmdpath)
 		{
-			printf("%s: command not found\n", tmp->arguments[0]);
+			dup2(2, 1);
+			ft_printf("%s: command not found\n", tmp->arguments[0]);
+			dup2(1, 1);
 			exit (127);
 		}
 		open_close_fds(tmp);
@@ -79,7 +81,7 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	}
 }
 
-int	pipe_cmds(t_tree *tmp, t_env **env_lst)
+int	pipe_cmds(t_tree *tmp, t_env **env_lst, int *exec_exit)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -97,6 +99,7 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst)
 		if (tmp->child_pipe)
 			dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
+		*exec_exit = 1;
 		exec_cmd(tmp, env_lst);
 	}
 	else
@@ -113,9 +116,11 @@ void	execute_command(t_tree *tree)
 {
 	t_tree	*tmp;
 	pid_t	pid;
+	int		exec_exit;
 
 	tmp = tree;
 	pid = 0;
+	exec_exit = 0;
 	while (tmp)
 	{
 		if (tmp->arguments[0])
@@ -123,7 +128,7 @@ void	execute_command(t_tree *tree)
 			if (tmp->command)
 				handle_builtins(tmp, tmp->env);
 			else
-				pid = pipe_cmds(tmp, tmp->env);
+				pid = pipe_cmds(tmp, tmp->env, &exec_exit);
 			if (tmp->child_pipe)
 				dup2(tree->stdoutput, STDOUT_FILENO);
 		}
@@ -133,7 +138,7 @@ void	execute_command(t_tree *tree)
 	dup2(tree->stdinput, STDIN_FILENO);
 	if (WIFEXITED(tree->exit_status))
 		tree->exit_status = WEXITSTATUS(tree->exit_status);
-	if (tree->exit_status > 1 && !tree->signal_exit)
+	if (tree->exit_status > 1 && !tree->signal_exit && exec_exit != 0)
 		tree->exit_status += 128;
 	signal(SIGINT, signal_handler);
 }

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 16:57:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:13:02 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 17:04:28 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int		replace_substr(char **s, char **sub_str, char *new_str, int position);
 int		alloc_string(char **s, int result_len);
 char	*insert_char_at_position(char *s, char c, size_t len, size_t pos);
 int		null_term_string(char **command_str);
-char	*strjoin_free(char const *s1, char *s2);
+char	*strjoin_free(char *s1, char *s2, int num);
 void	rem_char(char *str, int pos);
 
 // printf_functions:

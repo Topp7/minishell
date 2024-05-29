@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:33:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:23:37 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 14:36:01 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,3 +146,12 @@
 //	printf("%s\n", s);
 //	free(s);
 //}
+
+#include <stdio.h>
+
+int main(int argc, char *argv[]) {
+    // argc contains the number of arguments passed, including the program name
+    printf("Number of arguments: %d\n", argc - 1);
+
+    return 0;
+}

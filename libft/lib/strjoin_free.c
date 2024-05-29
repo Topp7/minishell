@@ -6,14 +6,14 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:01:59 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:02:43 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 17:04:06 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
 //	strjoin function, which frees the second string s2
-char	*strjoin_free(char const *s1, char *s2)
+char	*strjoin_free(char *s1, char *s2, int num)
 {
 	char	*conc_str;
 	int		counter;
@@ -37,6 +37,9 @@ char	*strjoin_free(char const *s1, char *s2)
 		counter_2++;
 	}
 	conc_str[counter + counter_2] = '\0';
-	free(s2);
+	if (num == 1 || num == 0)
+		free(s1);
+	else if (num == 2 || num == 0)
+		free(s2);
 	return (conc_str);
 }
