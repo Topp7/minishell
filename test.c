@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 16:33:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/20 17:34:55 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:23:37 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@
 //	return (dst);
 //}
 
-////	this function allocates the new substring for the string replace in a string
+////	this function allocates the new substring for the string
 //int	alloc_string(char **s, int result_len)
 //{
 //	char	*temp;
@@ -133,16 +133,16 @@
 //	return (1);
 //}
 
-#include <string.h>
+//#include <string.h>
 
-int	main(void)
-{
-	char *s = strdup("echo $PWD sr");
-	char *sub_str = strdup("$PWD");
-	char *new_str = strdup("0dgjkg");
-	int i = 5;
-	if (replace_substr(&s, &sub_str, new_str, &i) == -1)
-		return (-1);
-	printf("%s\n", s);
-	free(s);
-}
+//int	main(void)
+//{
+//	char *s = strdup("echo $PWD sr");
+//	char *sub_str = strdup("$PWD");
+//	char *new_str = strdup("0dgjkg");
+//	int i = 5;
+//	if (replace_substr(&s, &sub_str, new_str, &i) == -1)
+//		return (-1);
+//	printf("%s\n", s);
+//	free(s);
+//}

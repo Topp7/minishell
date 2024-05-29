@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_append.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 19:21:29 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 19:28:07 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,12 @@ int	validate_outfile(char *outfile)
 	if (stat(outfile, buf) == -1)
 	{
 		ft_printf("%s: No such file or directory\n", outfile);
-		return (0);
+		return (free(buf), 0);
 	}
 	else if (access(outfile, W_OK) != 0)
 	{
 		ft_printf("%s: Permission denied\n", outfile);
-		return (0);
+		return (free(buf), 0);
 	}
 	free(buf);
 	return (1);

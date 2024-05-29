@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/26 14:49:14 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:16:01 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,18 +59,7 @@ int	find_var_in_env(char **replace, t_env *envp, char *arg, char **var)
 		&& arg[j] != '\"' && arg[j] != '\'')
 		j++;
 	if (j > 0)
-	{
-		*var = malloc(sizeof(char) * (j + 1));
-		if (!var)
-			return (-1);
-		(*var)[0] = '$';
-		ft_strlcpy(*var + 1, arg, j);
-		*(replace) = malloc(sizeof(char));
-		if (!(*replace))
-			return (free(*var), -1);
-		(*replace)[0] = '\0';
-		return (1);
-	}
+		return (create_var_and_rep_str(var, replace, arg, j));
 	return (1);
 }
 

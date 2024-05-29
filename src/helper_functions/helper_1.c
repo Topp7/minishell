@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:19 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/19 10:20:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:09:48 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,20 @@ int	quote_checker(char *arg, int j)
 	}
 	if (single_quote)
 		return (0);
+	return (1);
+}
+
+//	function to create the variable and the replace string for the env search
+int	create_var_and_rep_str(char **var, char	**replace, char *arg, int j)
+{
+	*var = malloc(sizeof(char) * (j + 1));
+	if (!var)
+		return (-1);
+	(*var)[0] = '$';
+	ft_strlcpy(*var + 1, arg, j);
+	*(replace) = malloc(sizeof(char));
+	if (!(*replace))
+		return (free(*var), -1);
+	(*replace)[0] = '\0';
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 19:17:08 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 11:01:34 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,6 @@
 # include <sys/stat.h>
 //	private	libraries
 # include "libft/libft.h"
-
-/* -------------------------------- VARIABLES ------------------------------- */
-
-extern volatile sig_atomic_t g_sig_num;
 
 /* -------------------------------- STRUCTS --------------------------------- */
 
@@ -129,8 +125,8 @@ void	print_list(t_env *env_list);
 //	here_doc.c
 int		skip_here(int *i, char *str, char *here_doc);
 char	*create_str(char *str, char *here_doc);
-char	*create_heredoc(char *str, char *cmd_str, t_tree *tree, int *ex_st);
-char	*handle_heredoc(char *cmd_str, t_tree *tree, int *ex_st);
+char	*create_heredoc(char **str, char *cmd_str, t_tree *tree);
+char	*handle_heredoc(char *cmd_str, t_tree *tree);
 //	append.c
 char	*handle_append(char *cmdstr, t_tree *tree);
 int		validate_outfile(char *outfile);
@@ -158,6 +154,12 @@ void	execute_command(t_tree *tree);
 char	**create_env_array(t_env *env_lst);
 char	*ft_getenv(t_env *env_lst, char *name);
 void	open_close_fds(t_tree *tree);
+//	get_path_functions.c
+char	*ft_getenv(t_env *env_lst, char *name);
+char	**get_paths(t_env **env_lst);
+char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree);
+int		join_name_value(t_env *env_node, char **env_array, int i);
+void	absolute_path(t_tree *tmp, char **env_array);
 
 //----------------------------- helper functions -------------------------------
 
@@ -165,12 +167,10 @@ void	open_close_fds(t_tree *tree);
 void	remove_char(char *str, char char_to_remove, int start, int *end);
 void	ft_treeadd_back(t_tree **lst, t_tree *new, t_tree **parent);
 int		alloc_string(char **s, int result_len);
+int		create_var_and_rep_str(char **var, char	**replace, char *arg, int j);
 
 //---------------------------- parsing functions -------------------------------
 
-//	flag_checker.c
-//int		count_flags(const char *str, int start, char c);
-//int		check_for_flag(t_tree *tree, char *cmd_str, int start);
 //	parsing.c
 int		init_tree(t_tree *tree, char **pipes, int ex_st, int i);
 int		parse_command(char **command, t_tree **tree);
@@ -179,7 +179,7 @@ char	*ft_fgets(void);
 int		adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st);
 int		split_command(t_tree *tree, char **command_str, int ex_st);
 int		build_command_tree(t_tree **tree, char *command_str);
-char	*handle_redirects(char *cmd_str, t_tree *tree, int *ex_st);
+char	*handle_redirects(char *cmd_str, t_tree *tree);
 //	quote_check.c
 int		check_for_quotes_and_slash(char *command_str);
 int		check_for_open_quotes(char letter, int *s_quote, int *d_quote);
@@ -193,13 +193,13 @@ int		expander(char **args, t_env **env_lst, int exit_status);
 void	count_pipes(char const *s, char pipe, int *pipe_num);
 int		quote_check(const char *s, int *pipe_len, char pipe, int *i);
 int		assign_pipes(char const *s, char pipe, char **split, int pipes);
-char	**split_pipes(char const *s, char c, int *pipe_num);
+char	**split_with_quotes(char **s, char c, int *pipe_num);
 
 int		expander(char **args, t_env **env_lst, int ex_st);
 //---------------------------- signal functions -------------------------------
 
 //	signal.c
-void 	signal_handle(int signo);
+void	signal_handle(int signo);
 void	signal_handler(int sig);
 
 //---------------------------- debugging functions ----------------------------

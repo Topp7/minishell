@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:32:56 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/21 16:48:21 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 10:24:25 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ void	ft_unset(t_tree *tree, char	*env)
 
 	temp = *tree->env;
 	un_env = NULL;
-	while(temp->next)
+	while (temp->next)
 	{
-		if(ft_strncmp(temp->next->name, env, ft_strlen(env)) == 0)
+		if (ft_strncmp(temp->next->name, env, ft_strlen(env)) == 0)
 		{
 			un_env = temp->next;
 			temp->next = un_env->next;
@@ -32,5 +32,4 @@ void	ft_unset(t_tree *tree, char	*env)
 		}
 		temp = temp->next;
 	}
-
 }

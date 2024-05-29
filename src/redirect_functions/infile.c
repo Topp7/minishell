@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 19:22:12 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/28 19:28:21 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ int	validate_infile(char *infile)
 	if (stat(infile, buf) == -1)
 	{
 		ft_printf("%s: No such file or directory\n", infile);
-		return (0);
+		return (free(buf), 0);
 	}
 	if (access(infile, R_OK) != 0)
 	{
 		ft_printf("%s: Permission denied\n", infile);
-		return (0);
+		return (free(buf), 0);
 	}
 	free(buf);
 	return (1);

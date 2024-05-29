@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/05/21 17:16:49 by stopp            ###   ########.fr       */
+/*   Created: 2024/05/29 10:26:23 by fkeitel           #+#    #+#             */
+/*   Updated: 2024/05/29 10:26:32 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../minishell.h"
 
@@ -25,7 +24,7 @@ t_env	*init_node(char *envp)
 		return (NULL);
 	while (envp[i] != '=' && envp[i])
 		i++;
-	if(envp[i] != '=')
+	if (envp[i] != '=')
 		return (NULL);
 	env->name = malloc(i + 1);
 	if (!env->name)

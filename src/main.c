@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 15:22:13 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 10:51:23 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,6 @@ int	prompt_loop(t_tree	**parse_tree)
 			if (command)
 				free(command);
 			return ((*parse_tree)->exit_status);
-		}
-		if (command[0] == '\0')
-		{
-			free(command);
-			continue ;
 		}
 		if (strcmp(command, "deb") == 0)
 		{

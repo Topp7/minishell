@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 16:57:56 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/25 14:00:28 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/29 10:13:02 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 # include <stdarg.h>
 # include <fcntl.h>
-#include <stdint.h>
+# include <stdint.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
@@ -85,6 +85,9 @@ void	remove_char(char *str, char char_to_remove, int old_len, int *end);
 int		replace_substr(char **s, char **sub_str, char *new_str, int position);
 int		alloc_string(char **s, int result_len);
 char	*insert_char_at_position(char *s, char c, size_t len, size_t pos);
+int		null_term_string(char **command_str);
+char	*strjoin_free(char const *s1, char *s2);
+void	rem_char(char *str, int pos);
 
 // printf_functions:
 

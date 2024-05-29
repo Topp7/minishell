@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 17:33:29 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:45:56 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,75 +26,58 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 	int	i;
 
 	i = 1;
-	//(void)ex_st;
-	*command_str = handle_redirects(*command_str, tree, ex_st);
-	tree->arguments = split_pipes(*command_str, ' ', &i);
+	(void)ex_st;
+	*command_str = handle_redirects(*command_str, tree);
+	tree->arguments = split_with_quotes(command_str, ' ', &i);
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
 	tree->args_num = i;
 	return (EXIT_SUCCESS);
 }
 
-char	*handle_redirects(char *cmd_str, t_tree *tree, int *ex_st)
+typedef char	*(*t_cmd_func)(char *cmd_str, t_tree *tree);
+
+char	*exec_cmd_funct(char **cmd_str, t_tree *tree, int *i, t_cmd_func func)
+{
+	*cmd_str = func(*cmd_str, tree);
+	*i = 0;
+	return (*cmd_str);
+}
+
+//	function to handle all redirecton cases from the command string
+char	*handle_redirects(char *cmd_str, t_tree *tree)
 {
 	int	i;
 
 	i = 0;
-	if (!cmd_str)
-		return (NULL);
-	while (cmd_str[i])
+	while (cmd_str && cmd_str[i])
 	{
-		if (both_quote_checker(cmd_str, i) == 1
-			&& ft_strncmp(&cmd_str[i], "<<", 2) == 0
-			&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+		if (both_quote_checker(cmd_str, i) == 1)
 		{
-			cmd_str = handle_heredoc(cmd_str, tree, ex_st);
-			i = 0;
+			if (ft_strncmp(&cmd_str[i], "<<", 2) == 0
+				&& cmd_str[i + 2] && cmd_str[i + 2] != '<')
+				exec_cmd_funct(&cmd_str, tree, &i, handle_heredoc);
+			else if (ft_strncmp((cmd_str + i), ">>", 2) == 0
+				&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
+				exec_cmd_funct(&cmd_str, tree, &i, handle_append);
+			else if (ft_strncmp((cmd_str + i), ">", 1) == 0
+				&& cmd_str[i + 1] && cmd_str[i + 1] != '>')
+				exec_cmd_funct(&cmd_str, tree, &i, handle_trunc);
+			else if (ft_strncmp((cmd_str + i), "<", 1) == 0
+				&& cmd_str[i + 1] && cmd_str[i + 1] != '<')
+				exec_cmd_funct(&cmd_str, tree, &i, handle_infile);
 		}
-		else if (both_quote_checker(cmd_str, i) == 1
-			&& ft_strncmp((cmd_str + i), ">>", 2) == 0
-			&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
-		{
-			cmd_str = handle_append(cmd_str, tree);
-			i = 0;
-		}
-		else if (both_quote_checker(cmd_str, i) == 1
-			&& ft_strncmp((cmd_str + i), ">", 1) == 0
-			&& cmd_str[i + 1] && cmd_str[i + 1] != '>')
-		{
-			cmd_str = handle_trunc(cmd_str, tree);
-			i = 0;
-		}
-		else if (both_quote_checker(cmd_str, i) == 1
-			&& ft_strncmp((cmd_str + i), "<", 1) == 0
-			&& cmd_str[i + 1] && cmd_str[i + 1] != '<')
-		{
-			cmd_str = handle_infile(cmd_str, tree);
-			i = 0;
-		}
-		i++;
+		if (cmd_str[i])
+			i++;
 	}
 	return (cmd_str);
-}
-
-int	null_term_string(char **command_str)
-{
-	if (!(*command_str))
-	{
-		*command_str = malloc(sizeof(char));
-		if (!(*command_str))
-			return (EXIT_FAILURE);
-		(*command_str)[0] = '\0';
-	}
-	return (EXIT_SUCCESS);
 }
 
 //	function to split the commands into the components
 int	split_command(t_tree *tree, char **command_str, int ex_st)
 {
-	if (null_term_string(command_str) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	if (det_and_rem_quotes_first_word(*command_str) == EXIT_FAILURE
+	if (null_term_string(command_str) == EXIT_FAILURE
+		|| det_and_rem_quotes_first_word(*command_str) == EXIT_FAILURE
 		|| adapt_and_count_arguments(tree, command_str, &ex_st) == EXIT_FAILURE
 		|| expander(tree->arguments, tree->env, ex_st) == EXIT_FAILURE)
 		return (printf("error in parsing!\n"), EXIT_FAILURE);
@@ -129,8 +112,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
-	pipes = split_pipes(command_str, '|', &pipe_num);
-	free(command_str);
+	pipes = split_with_quotes(&command_str, '|', &pipe_num);
 	if (!pipes)
 		return (pipes_error("error split", NULL, pipes));
 	pipe_num = 0;
@@ -146,6 +128,5 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			return (EXIT_FAILURE);
 		ft_treeadd_back(tree, temp, &parent);
 	}
-	free_two_dimensional_array(pipes);
-	return (EXIT_SUCCESS);
+	return (free(command_str), free_two_dimensional_array(pipes), EXIT_SUCCESS);
 }

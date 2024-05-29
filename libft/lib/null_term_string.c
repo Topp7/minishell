@@ -1,36 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   null_term_string.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:25:28 by fkeitel          ###   ########.fr       */
+/*   Created: 2024/05/29 09:59:46 by fkeitel           #+#    #+#             */
+/*   Updated: 2024/05/29 10:00:28 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../libft.h"
 
-void	signal_handle(int signo)
+//	Function to create an empty string, returning EXIT_FAILURE if error occurs
+int	null_term_string(char **command_str)
 {
-	(void)signo;
-	if (signo == SIGQUIT)
+	if (!(*command_str))
 	{
-		ft_printf("QUIT: 3\n");
-		exit(131);
+		*command_str = malloc(sizeof(char));
+		if (!(*command_str))
+			return (EXIT_FAILURE);
+		(*command_str)[0] = '\0';
 	}
-	if (signo == SIGINT)
-		exit(130);
-}
-
-//	^C clears current input line, redraws prompt, and moves cursor to a new line
-void	signal_handler(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 1);
-	rl_on_new_line();
-	rl_redisplay();
-	return ;
+	return (EXIT_SUCCESS);
 }

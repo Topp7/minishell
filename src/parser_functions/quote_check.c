@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:40:02 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/28 14:44:43 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/29 10:12:32 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,20 +115,6 @@ int	det_and_rem_quotes_first_word(char *command_str)
 		remove_char(command_str, '\"', 0, &i);
 	}
 	return (EXIT_SUCCESS);
-}
-
-void	rem_char(char *str, int pos)
-{
-	int	len;
-	int	i;
-
-	len = strlen(str);
-	i = pos;
-	while (i < len)
-	{
-		str[i] = str[i + 1];
-		i++;
-	}
 }
 
 //	function to remove single or double quotes form the arg string
