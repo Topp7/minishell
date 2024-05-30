@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   strjoin_free.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:01:59 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 17:04:06 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 11:37:56 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
+
+void	free_str(char *s1, char *s2, int num)
+{
+	if (num == 1 || num == 0)
+		free(s1);
+	if (num == 2 || num == 0)
+		free(s2);
+}
 
 //	strjoin function, which frees the second string s2
 char	*strjoin_free(char *s1, char *s2, int num)
@@ -37,9 +45,6 @@ char	*strjoin_free(char *s1, char *s2, int num)
 		counter_2++;
 	}
 	conc_str[counter + counter_2] = '\0';
-	if (num == 1 || num == 0)
-		free(s1);
-	else if (num == 2 || num == 0)
-		free(s2);
+	free_str(s1, s2, num);
 	return (conc_str);
 }

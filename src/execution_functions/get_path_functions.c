@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 09:23:25 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:39:56 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 			{
 				dup2(2, 1);
 				ft_printf("%s: Permission denied\n", tree->arguments[0]);
-				dup2(1, 1);
 				exit (126);
 			}
 		}
@@ -111,7 +110,6 @@ void	absolute_path(t_tree *tmp, char **env_array)
 		{
 			dup2(2, 1);
 			ft_printf("%s: Permission denied\n", tmp->arguments[0]);
-			dup2(1, 1);
 			exit (126);
 		}
 	}
@@ -120,7 +118,6 @@ void	absolute_path(t_tree *tmp, char **env_array)
 		closedir(dir);
 		dup2(2, 1);
 		ft_printf("%s: is a directory\n", tmp->arguments[0]);
-		dup2(1, 1);
-		exit(126);
+		exit(0);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 17:06:13 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 11:29:33 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	change_to_previous(t_tree *tree)
 	{
 		printf("%s\n", oldwd->value);
 		chdir(oldwd->value);
-		export(tree, strjoin_free("OLDPWD=", ft_getenv(*tree->env, "PWD"), 2));
+		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
 	}
 }
@@ -62,8 +62,6 @@ int	check_dir(t_tree *tree, char *dir)
 		ft_printf("cd: %s: No such file or directory\n", tree->arguments[1]);
 		dup2(1, 1);
 		free(buf);
-		tree->exit_status = 1;
-		tree->signal_exit = 1;
 		return (0);
 	}
 	else if (!S_ISDIR(buf->st_mode))
@@ -72,8 +70,6 @@ int	check_dir(t_tree *tree, char *dir)
 		ft_printf("cd: %s: Not a directory\n", tree->arguments[1]);
 		dup2(1, 1);
 		free(buf);
-		tree->exit_status = 1;
-		tree->signal_exit = 1;
 		return (0);
 	}
 	free(buf);
@@ -87,7 +83,11 @@ void	change_dir(t_tree *tree)
 	if (tree->arguments[1] == ft_strchr(tree->arguments[1], '/'))
 	{
 		if (!check_dir(tree, tree->arguments[1]))
+		{
+			tree->exit_status = 1;
+			tree->signal_exit = 1;
 			return ;
+		}
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
 		chdir(tree->arguments[1]);
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
@@ -112,7 +112,7 @@ void	ft_chdir(t_tree *tree, t_env **env_lst)
 		change_to_home(tree);
 	else if (ft_strncmp(tree->arguments[1], "..", 3) == 0)
 	{
-		export(tree, strjoin_free("OLDPWD=", ft_getenv(*tree->env, "PWD"), 2));
+		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
 		chdir("..");
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
 	}
@@ -120,12 +120,6 @@ void	ft_chdir(t_tree *tree, t_env **env_lst)
 		change_to_previous(tree);
 	else if (ft_strncmp(tree->arguments[1], ".", 2) == 0)
 		return ;
-	else if (tree->arguments[2] != NULL)
-	{
-		dup2(2, 1);
-		ft_printf("cd: string not in pwd: %s\n", tree->arguments[1]);
-		dup2(1, 1);
-	}
 	else
 		change_dir(tree);
 }

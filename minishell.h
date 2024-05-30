@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 14:44:58 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:42:32 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct s_parse_tree
 
 //builtin_handler.c
 void	handle_builtins(t_tree *tree, t_env **env_lst);
+void	update_exit(t_tree *tree, int exec_exit);
 //echo.c
 void	ft_echo(t_tree *tree);
 //pwd.c
@@ -130,7 +131,7 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree);
 char	*handle_heredoc(char *cmd_str, t_tree *tree);
 //	append.c
 char	*handle_append(char *cmdstr, t_tree *tree);
-int		validate_outfile(char *outfile);
+int		validate_outfile(char *outfile, t_tree *tree);
 //	trunc.c
 char	*handle_trunc(char *cmdstr, t_tree *tree);
 //	infile.c

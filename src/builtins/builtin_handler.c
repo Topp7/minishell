@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 15:50:39 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 11:46:24 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+void	update_exit(t_tree *tree, int exec_exit)
+{
+	if (WIFEXITED(tree->exit_status))
+		tree->exit_status = WEXITSTATUS(tree->exit_status);
+	if (tree->exit_status > 1 && !tree->signal_exit && exec_exit != 0)
+		tree->exit_status += 128;
+}
 
 int	exit_handler(t_tree *tree)
 {
@@ -26,7 +34,8 @@ int	exit_handler(t_tree *tree)
 			if (*tree->arguments[1] != 45 && (!ft_isdigit(tree->arguments[1][i])
 				&& tree->arguments[1][i] != '+'))
 			{
-				return (print_str_return_exit("numeric argument required\n", 255));
+				return (print_str_return_exit
+					("numeric argument required\n", 255));
 			}
 			i++;
 		}
