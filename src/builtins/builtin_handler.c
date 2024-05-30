@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 11:46:24 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:29:42 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	handle_builtins(t_tree *tree, t_env **env_lst)
 	int		pipebool;
 
 	pipebool = 0;
+	wait(NULL);
 	if (tree->child_pipe)
 	{
 		if (pipe(fd) == -1)
