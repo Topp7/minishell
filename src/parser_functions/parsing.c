@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 14:28:33 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:16:53 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	init_tree(t_tree *tree, char **pipes, int ex_st, int i)
 	}
 	if (split_command(tree, &pipes[i], ex_st) == EXIT_FAILURE)
 		return (pipes_error("error split_command", tree, pipes));
+	tree->arguments = handle_redirects(tree->arguments, tree);
 	return (EXIT_SUCCESS);
 }
 

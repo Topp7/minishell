@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 16:42:32 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:03:33 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,7 +191,7 @@ int		both_quote_checker(char *arg, int j);
 int		quote_checker(char *arg, int j);
 int		remove_quotes(char **args, int i);
 //	replace_variable.c
-int		expander(char **args, t_env **env, int ex_st, t_tree *tree);
+int		expander(char **args, t_env **env, int ex_st);
 //	split_pipes.c
 void	count_pipes(char const *s, char pipe, int *pipe_num);
 int		quote_check(const char *s, int *pipe_len, char pipe, int *i);

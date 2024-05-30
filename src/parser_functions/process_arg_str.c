@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 18:39:51 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 20:09:06 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,8 @@ char	**handle_redirects(char **args, t_tree *tree)
 				&& args[i][j + 1] != '<' && (args[i][j + 1] || args[i + 1])
 				&& prep_heredoc(&args[i--], j, tree, handle_infile))))
 				i = update_args(&args);
+			if (tree->out_fd < 0)
+				return (free_two_dimensional_array(args), NULL);
 		}
 		if (args[i])
 			i++;
@@ -199,7 +201,7 @@ int	split_command(t_tree *tree, char **command_str, int ex_st)
 	if (null_term_string(command_str) == EXIT_FAILURE
 		|| det_and_rem_quotes_first_word(*command_str) == EXIT_FAILURE
 		|| adapt_and_count_arguments(tree, command_str, &ex_st) == EXIT_FAILURE
-		|| expander(tree->arguments, tree->env, ex_st, tree) == EXIT_FAILURE)
+		|| expander(tree->arguments, tree->env, ex_st) == EXIT_FAILURE)
 		return (ft_printf("error in parsing!\n"), EXIT_FAILURE);
 	if (is_substr_first_word(*command_str, "echo"))
 		tree->command = ECHO;
@@ -238,15 +240,38 @@ int	build_command_tree(t_tree **tree, char *command_str)
 	pipe_num = 0;
 	if (init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	if ((*tree)->out_fd < 0 && !pipes[pipe_num])
+		return (EXIT_SUCCESS);
 	while (pipes[pipe_num])
 	{
-		temp = (t_tree *)malloc(sizeof(t_tree));
-		if (!temp)
-			return (pipes_error("error malloc", temp, pipes));
-		temp->parent_pipe = parent;
-		if (init_tree(temp, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-		ft_treeadd_back(tree, temp, &parent);
+		if(parent->out_fd < 0)
+		{
+			temp = (t_tree *)malloc(sizeof(t_tree));
+			if (!temp)
+				return (pipes_error("error malloc", temp, pipes));
+			temp->parent_pipe = parent->parent_pipe;
+			if (temp->parent_pipe)
+				temp->parent_pipe->child_pipe = temp;
+			free_tree(parent);
+			if (init_tree(temp, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+			if (temp->out_fd < 0)
+				free_tree(temp);
+			parent = temp;
+		}
+		else
+		{
+			temp = (t_tree *)malloc(sizeof(t_tree));
+			if (!temp)
+				return (pipes_error("error malloc", temp, pipes));
+			temp->parent_pipe = parent;
+			if (init_tree(temp, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+			if (temp->out_fd < 0)
+				free(temp);
+			else
+				ft_treeadd_back(tree, temp, &parent);
+		}
 	}
 	return (free(command_str), free_two_dimensional_array(pipes), EXIT_SUCCESS);
 }

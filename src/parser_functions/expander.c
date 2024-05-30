@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 16:43:30 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:03:16 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ int	tilde_expander(char **arg, int j)
 }
 
 //	function to convert the argument into the string
-int	expander(char **args, t_env **env, int ex_st, t_tree *tree)
+int	expander(char **args, t_env **env, int ex_st)
 {
 	char	*var;
 	char	*rep;
@@ -136,6 +136,5 @@ int	expander(char **args, t_env **env, int ex_st, t_tree *tree)
 		if (remove_quotes(args, i++) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	}
-	tree->arguments = handle_redirects(args, tree);
 	return (EXIT_SUCCESS);
 }

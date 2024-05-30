@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 18:15:00 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:25:29 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ int	prompt_loop(t_tree	**parse_tree)
 		signal(SIGINT, SIG_IGN);
 		if (parse_command(&command, parse_tree) == EXIT_FAILURE)
 			exit ((*parse_tree)->exit_status);
+		if ((*parse_tree)->out_fd < 0)
+		{
+			free_tree(*parse_tree);
+			continue ;
+		}
 		if (debug_mode)
 			print_parse_tree(*parse_tree);
 		execute_command(*parse_tree);
