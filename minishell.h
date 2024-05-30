@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 11:48:02 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:01:09 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree);
 char	*handle_heredoc(char *cmd_str, t_tree *tree);
 //	append.c
 char	*handle_append(char *cmdstr, t_tree *tree);
-int		validate_outfile(char *outfile);
+int		validate_outfile(char *outfile, t_tree *tree);
 //	trunc.c
 char	*handle_trunc(char *cmdstr, t_tree *tree);
 //	infile.c

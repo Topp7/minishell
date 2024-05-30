@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 13:36:27 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:13:47 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	**cpy_args(char **new, char **args)
 	return (new);
 }
 
-void	update_args(char ***args)
+int	update_args(char ***args)
 {
 	char	**new;
 	int		count;
@@ -105,10 +105,11 @@ void	update_args(char ***args)
 	}
 	new = malloc(sizeof(char *) * (count + 1));
 	if (!new)
-		return ;
+		return (0);
 	new[count] = NULL;
 	new = cpy_args(new, *args);
 	*args = new;
+	return (0);
 }
 
 typedef char    *(*t_cmd_func)(char *cmd_str, t_tree *tree);
@@ -118,7 +119,6 @@ int	prep_heredoc(char **args, int j, t_tree *tree, t_cmd_func func)
 	char	*to_free;
 
 	to_free = NULL;
-
 	if (args[0][j] == args[0][j + 1])
 	{
 		j++;
@@ -161,7 +161,7 @@ char	**handle_redirects(char **args, t_tree *tree)
 				|| (ft_strncmp(&args[i][j], "<", 1) == 0
 				&& args[i][j + 1] != '<' && (args[i][j + 1] || args[i + 1])
 				&& prep_heredoc(&args[i--], j, tree, handle_infile)))
-				update_args(&args);
+				i = update_args(&args);
 		}
 		if (args[i])
 			i++;

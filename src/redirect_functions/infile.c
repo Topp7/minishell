@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 12:36:26 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:40:59 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,32 @@ char	*update_cmdstr_in(char *cmdstr, int skip_len)
 {
 	int		i;
 	int		j;
+	int		del;
 	char	*new_cmdstr;
 
 	i = 0;
 	j = 0;
-	new_cmdstr = malloc(ft_strlen(cmdstr) - skip_len + 1);
+	del = 0;
+	new_cmdstr = malloc(ft_strlen(cmdstr) - j + 1);
 	if (!new_cmdstr)
 		return (NULL);
-	new_cmdstr[ft_strlen(cmdstr) - skip_len] = '\0';
+	new_cmdstr[ft_strlen(cmdstr) - j] = '\0';
 	while (cmdstr[j])
 	{
-		if (ft_strncmp(&cmdstr[j], "<", 1) == 0)
+		if (ft_strncmp(&cmdstr[j], "<", 1) == 0 && del == 0)
+		{
 			j += skip_len;
-		if (cmdstr[j])
+			new_cmdstr[i++] = cmdstr[j++];
+			del = 1;
+		}
+		else
 			new_cmdstr[i++] = cmdstr[j++];
 	}
 	free(cmdstr);
 	return (new_cmdstr);
 }
 
-int	validate_infile(char *infile)
+int	validate_infile(char *infile, t_tree *tree)
 {
 	struct stat	*buf;
 
@@ -45,11 +51,13 @@ int	validate_infile(char *infile)
 	if (stat(infile, buf) == -1)
 	{
 		ft_printf("%s: No such file or directory\n", infile);
+		tree->out_fd = -1;
 		return (free(buf), 0);
 	}
 	if (access(infile, R_OK) != 0)
 	{
 		ft_printf("%s: Permission denied\n", infile);
+		tree->out_fd = -1;
 		return (free(buf), 0);
 	}
 	free(buf);
@@ -74,7 +82,7 @@ char	*open_infile(t_tree *tree, char *cmdstr, char *infile)
 
 	i = 0;
 	j = 0;
-	if (validate_infile(infile) == 0)
+	if (validate_infile(infile, tree) == 0)
 		return (free(infile), free(cmdstr), empty_str());
 	else
 		tree->in_fd = open(infile, O_RDONLY);
@@ -90,7 +98,9 @@ char	*open_infile(t_tree *tree, char *cmdstr, char *infile)
 		}
 		i++;
 	}
-	return (free(infile), update_cmdstr_in(cmdstr, j));
+	cmdstr = update_cmdstr_in(cmdstr, j);
+	free(infile);
+	return (cmdstr);
 }
 
 char	*handle_infile(char *cmd_str, t_tree *tree)
@@ -106,11 +116,10 @@ char	*handle_infile(char *cmd_str, t_tree *tree)
 		if (ft_strncmp(&cmd_str[i], "<", 1) == 0)
 		{
 			i += 1;
-			if (cmd_str[i] && cmd_str[i] == '\"')
-				i++;
 			while (cmd_str[i] && cmd_str[i] == ' ')
 				i++;
-			while (cmd_str[i + j] && cmd_str[i + j] != ' ' && cmd_str[i + j] != '\"')
+			while (cmd_str[i + j] && cmd_str[i + j] != ' '
+				&& cmd_str[i + j] != '<' && cmd_str[i + j] != '>')
 				j++;
 			infile = malloc(sizeof(char) * (j + 1));
 			if (!infile)

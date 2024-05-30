@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_trunc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:56:51 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 12:42:55 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:14:10 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,20 +16,23 @@ char	*update_cmdstr_trunc(char *cmdstr, int skip_len)
 {
 	int		i;
 	int		j;
+	int		del;
 	char	*new_cmdstr;
 
 	i = 0;
 	j = 0;
+	del = 0;
 	new_cmdstr = malloc(ft_strlen(cmdstr) - j + 1);
 	if (!new_cmdstr)
 		return (NULL);
 	new_cmdstr[ft_strlen(cmdstr) - j] = '\0';
 	while (cmdstr[j])
 	{
-		if (ft_strncmp(&cmdstr[j], ">", 1) == 0)
+		if (ft_strncmp(&cmdstr[j], ">", 1) == 0 && del == 0)
 		{
 			j += skip_len;
-			new_cmdstr[i++] = cmdstr[j];
+			new_cmdstr[i++] = cmdstr[j++];
+			del = 1;
 		}
 		else
 			new_cmdstr[i++] = cmdstr[j++];
@@ -45,7 +48,7 @@ char	*open_outfile_trunc(t_tree *tree, char *cmdstr, char *outfile)
 
 	i = 0;
 	j = 0;
-	if (validate_outfile(outfile) == 0)
+	if (validate_outfile(outfile, tree) == 0)
 		return (free(outfile), free(cmdstr), empty_str());
 	tree->out_fd = open(outfile, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (!tree->out_fd)
@@ -82,7 +85,8 @@ char	*handle_trunc(char *cmdstr, t_tree *tree)
 			i += 1;
 			while (cmdstr[i] && cmdstr[i] == ' ')
 				i++;
-			while (cmdstr[i + j] && cmdstr[i + j] != ' ')
+			while (cmdstr[i + j] && cmdstr[i + j] != ' '
+				&& cmdstr[i + j] != '<' && cmdstr[i + j] != '>')
 				j++;
 			outfile = malloc(sizeof(char) * (j + 1));
 			if (!outfile)

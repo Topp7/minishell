@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 11:46:45 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 14:22:16 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	execute_command(t_tree *tree)
 	exec_exit = 0;
 	while (tmp)
 	{
-		if (tmp->arguments[0])
+		if (tmp->arguments[0] && tree->out_fd >= 0)
 		{
 			if (tmp->command)
 				handle_builtins(tmp, tmp->env);
