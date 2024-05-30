@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_trunc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:56:51 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/28 19:20:37 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 12:42:55 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*open_outfile_trunc(t_tree *tree, char *cmdstr, char *outfile)
 	{
 		if (ft_strncmp(&cmdstr[i], ">", 1) == 0)
 		{
-			j = 2;
+			j = 1;
 			while (cmdstr[i + j] && cmdstr[i + j] == ' ')
 				j++;
 			j += ft_strlen(outfile);

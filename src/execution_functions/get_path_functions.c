@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 16:27:17 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 09:23:25 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,6 @@ void	absolute_path(t_tree *tmp, char **env_array)
 		dup2(2, 1);
 		ft_printf("%s: is a directory\n", tmp->arguments[0]);
 		dup2(1, 1);
-		exit(0);
+		exit(126);
 	}
 }
