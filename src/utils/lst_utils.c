@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:26:23 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:26:32 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:07:09 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	print_list(t_env *env_list)
 {
 	while (env_list)
 	{
-		printf("%s=%s\n", env_list->name, env_list->value);
+		ft_printf("%s=%s\n", env_list->name, env_list->value);
 		env_list = env_list->next;
 	}
 }

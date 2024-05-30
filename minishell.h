@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 14:01:09 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 16:42:32 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_parse_tree
 	int					command;
 	char				*here_doc;
 	char				**arguments;
+	int					*arrow_quote;
 	int					args_num;
 	char				*cmd_brch;
 	struct s_parse_tree	*parent_pipe;

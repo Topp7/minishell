@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:40:02 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:12:32 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:07:02 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_for_quotes_and_slash(char *command_str)
 			remove_char(command_str, '\x1C', i, &i);
 	}
 	if (single_quote_counter % 2 != 0 || double_quote_counter % 2 != 0)
-		return (printf("undisclosed quote in command\n"), EXIT_FAILURE);
+		return (ft_printf("undisclosed quote in command\n"), EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
 

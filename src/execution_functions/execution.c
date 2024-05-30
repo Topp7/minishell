@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 17:03:15 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 18:39:45 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 		{
 			dup2(2, 1);
 			ft_printf("%s: command not found\n", tmp->arguments[0]);
-			dup2(1, 1);
 			exit (127);
 		}
 		open_close_fds(tmp);
@@ -121,7 +120,7 @@ void	execute_command(t_tree *tree)
 	tmp = tree;
 	pid = 0;
 	exec_exit = 0;
-	while (tmp)
+	while (tmp && tmp->signal_exit == 0)
 	{
 		if (tmp->arguments[0] && tree->out_fd >= 0)
 		{
