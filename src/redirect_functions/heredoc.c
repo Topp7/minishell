@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 16:57:38 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 12:16:51 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,9 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 			cmd_str = create_heredoc(&here_str, cmd_str, tree);
 			i = 0;
 		}
-		i++;
+		if (cmd_str[i])
+			i++;
 	}
 	return (cmd_str);
 }
+

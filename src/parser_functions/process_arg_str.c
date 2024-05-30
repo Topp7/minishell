@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 18:39:30 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 13:36:27 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,31 @@
 //	count_arguments and remove quotes
 int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 {
+	//int *quote;
 	int	i;
+	//int j;
+	//int z;
 
 	i = 1;
 	(void)ex_st;
 	tree->arguments = split_with_quotes(command_str, ' ', &i);
+	//j = 0;
+	//while (tree->arguments[i])
+	//	j++;
+	//if (j > 0)
+	//	quote = malloc(sizeof(int) * j);
+	//j = 0;
+	//while (tree->arguments[z])
+	//{
+	//	while (tree->arguments[z][j])
+	//	{
+	//		if (both_quote_checker(tree->arguments[1], j)
+	//			&& tree->arguments[1][j] == '>')
+	//			quote[i] == 1;
+	//		j++;
+	//	}
+	//	z++;
+	//}
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
 	tree->args_num = i;
@@ -53,14 +73,23 @@ char	**cpy_args(char **new, char **args)
 	while (args[i])
 	{
 		if (args[i][0] != '\0')
-			new[j++] = ft_strdup(args[i]);
+		{
+			new[j] = ft_strdup(args[i]);
+			if (!new[j])
+			{
+				free_two_dimensional_array(new);
+				return (NULL);
+			}
+			j++;
+		}
 		i++;
 	}
+	new[j] = NULL;
 	free_two_dimensional_array(args);
 	return (new);
 }
 
-char	**update_args(char **args)
+void	update_args(char ***args)
 {
 	char	**new;
 	int		count;
@@ -68,40 +97,43 @@ char	**update_args(char **args)
 
 	count = 0;
 	i = 0;
-	new = args;
-	while (new[i])
+	while ((*args)[i])
 	{
-		if (new[i] && new[i][0] != '\0')
+		if ((*args)[i][0] != '\0')
 			count++;
 		i++;
 	}
-	new = malloc(sizeof(char *) * count + 1);
+	new = malloc(sizeof(char *) * (count + 1));
 	if (!new)
-		return (NULL);
+		return ;
 	new[count] = NULL;
-	cpy_args(new, args);
-	return (new);
+	new = cpy_args(new, *args);
+	*args = new;
 }
 
-int	prep_heredoc(char ***args1, int i, int j, t_tree *tree)
+typedef char    *(*t_cmd_func)(char *cmd_str, t_tree *tree);
+
+int	prep_heredoc(char **args, int j, t_tree *tree, t_cmd_func func)
 {
 	char	*to_free;
-	char	**args;
 
 	to_free = NULL;
-	args = *args1;
-	if (args[i][j + 2])
-		args[i] = handle_heredoc(args[i], tree);
-	else
+
+	if (args[0][j] == args[0][j + 1])
 	{
-		to_free = args[i];
-		args[i] = ft_strjoin(args[i], args[i + 1]);
-		args[i + 1][0] = '\0';
-		free(to_free);
-		args[i] = handle_heredoc(args[i], tree);
+		j++;
 	}
-	*args1 = update_args(args);
-	return (0);
+	if (args && args[0] && args[0][j + 1])
+		args[0] = func(args[0], tree);
+	else if (args && args[0])
+	{
+		to_free = args[0];
+		args[0] = ft_strjoin(args[0], args[1]);
+		args[1][0] = '\0';
+		free(to_free);
+		args[0] = func(args[0], tree);
+	}
+	return (1);
 }
 
 //	function to handle all redirecton cases from the command string
@@ -114,28 +146,27 @@ char	**handle_redirects(char **args, t_tree *tree)
 	j = 0;
 	while (args[i])
 	{
-		j = 0;
-		while (args[i][j])
+		j = -1;
+		while (args[i][++j])
 		{
-			if (ft_strncmp(&args[i][j], "<<", 2) == 0
-				&& args[i][j + 2] != '<' && (args[i][j + 2] || args[i + 1]))
-				i = prep_heredoc(&args, i, j, tree);
-			// else if (ft_strncmp((cmd_str + i), ">>", 2) == 0
-			// 	&& cmd_str[i + 2] && cmd_str[i + 2] != '>')
-			// 	exec_cmd_funct(&cmd_str, tree, &i, handle_append);
-			// else if (ft_strncmp((cmd_str + i), ">", 1) == 0
-			// 	&& cmd_str[i + 1] && cmd_str[i + 1] != '>')
-			// 	exec_cmd_funct(&cmd_str, tree, &i, handle_trunc);
-			// else if (ft_strncmp((cmd_str + i), "<", 1) == 0
-			// 	&& cmd_str[i + 1] && cmd_str[i + 1] != '<')
-			// 	exec_cmd_funct(&cmd_str, tree, &i, handle_infile);
-			j++;
+			if ((ft_strncmp(&args[i][j], "<<", 2) == 0
+				&& args[i][j + 2] != '<' && (args[i][j + 2] || args[i + 1])
+				&& prep_heredoc(&args[i--], j, tree, handle_heredoc))
+				|| (ft_strncmp(&args[i][j], ">>", 2) == 0
+				&& args[i][j + 2] != '>' && (args[i][j + 2] || args[i + 1])
+				&& prep_heredoc(&args[i--], j, tree, handle_append))
+				|| (ft_strncmp(&args[i][j], ">", 1) == 0
+				&& args[i][j + 1] != '>' && (args[i][j + 1] || args[i + 1])
+				&& prep_heredoc(&args[i--], j, tree, handle_trunc))
+				|| (ft_strncmp(&args[i][j], "<", 1) == 0
+				&& args[i][j + 1] != '<' && (args[i][j + 1] || args[i + 1])
+				&& prep_heredoc(&args[i--], j, tree, handle_infile)))
+				update_args(&args);
 		}
 		if (args[i])
 			i++;
 	}
-	args = update_args(args);
-	return(args);
+	return (update_args(&args), args);
 }
 
 //	function to split the commands into the components
