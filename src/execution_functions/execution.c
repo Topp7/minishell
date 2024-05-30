@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 16:45:04 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 11:46:45 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	char	**env_array;
 
 	env_array = create_env_array(*env_lst);
+	signal(SIGINT, signal_handle);
+	signal(SIGQUIT, signal_handle);
 	if (!env_array)
 		exit (1);
 	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/')
@@ -77,7 +79,7 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 		}
 		open_close_fds(tmp);
 		execve(cmdpath, tmp->arguments, env_array);
-		exit(123);
+		exit(1);
 	}
 }
 
@@ -93,8 +95,6 @@ int	pipe_cmds(t_tree *tmp, t_env **env_lst, int *exec_exit)
 		return (0);
 	if (pid == 0)
 	{
-		signal(SIGINT, signal_handle);
-		signal(SIGQUIT, signal_handle);
 		close(fd[0]);
 		if (tmp->child_pipe)
 			dup2(fd[1], STDOUT_FILENO);
@@ -136,9 +136,6 @@ void	execute_command(t_tree *tree)
 	}
 	waitpid(pid, &tree->exit_status, 0);
 	dup2(tree->stdinput, STDIN_FILENO);
-	if (WIFEXITED(tree->exit_status))
-		tree->exit_status = WEXITSTATUS(tree->exit_status);
-	if (tree->exit_status > 1 && !tree->signal_exit && exec_exit != 0)
-		tree->exit_status += 128;
+	update_exit(tree, exec_exit);
 	signal(SIGINT, signal_handler);
 }

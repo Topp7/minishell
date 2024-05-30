@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/29 18:50:01 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 10:55:43 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int	name_check(char *tmp, t_tree *tree)
 
 	name = tmp;
 	if (tree->child_pipe)
+	{
+		write(1, "\0", 1);
 		return (0);
+	}
 	if (ft_isalpha(*name) == 1 || *name == '_')
 		name++;
 	else
@@ -54,7 +57,7 @@ void	export(t_tree *tree, char *new_env)
 		return ;
 	tmp = *(tree->env);
 	if (name_check(new_env, tree) == 0)
-		return ;
+		return (free(new_env));
 	new = init_node(new_env);
 	if (!new)
 		return ;

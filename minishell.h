@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 17:50:39 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 11:48:02 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_parse_tree
 
 //builtin_handler.c
 void	handle_builtins(t_tree *tree, t_env **env_lst);
+void	update_exit(t_tree *tree, int exec_exit);
 //echo.c
 void	ft_echo(t_tree *tree);
 //pwd.c
