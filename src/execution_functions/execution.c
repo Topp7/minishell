@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 14:22:16 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 18:37:43 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ char	**create_env_array(t_env *env_lst)
 
 void	open_close_fds(t_tree *tree)
 {
-	if (tree->out_fd != 0)
+	if (tree->out_fd > 0)
 	{
 		dup2(tree->out_fd, STDOUT_FILENO);
 		close (tree->out_fd);
 	}
-	if (tree->in_fd != 0)
+	if (tree->in_fd > 0)
 	{
 		dup2(tree->in_fd, STDIN_FILENO);
 		close (tree->in_fd);
@@ -74,7 +74,6 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 		{
 			dup2(2, 1);
 			ft_printf("%s: command not found\n", tmp->arguments[0]);
-			dup2(1, 1);
 			exit (127);
 		}
 		open_close_fds(tmp);
@@ -121,7 +120,7 @@ void	execute_command(t_tree *tree)
 	tmp = tree;
 	pid = 0;
 	exec_exit = 0;
-	while (tmp)
+	while (tmp && tmp->signal_exit == 0)
 	{
 		if (tmp->arguments[0] && tree->out_fd >= 0)
 		{

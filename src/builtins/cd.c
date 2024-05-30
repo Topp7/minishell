@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 11:29:33 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:39:35 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	change_to_previous(t_tree *tree)
 		ft_printf("OLDPWD not set\n");
 	else
 	{
-		printf("%s\n", oldwd->value);
+		ft_printf("%s\n", oldwd->value);
 		chdir(oldwd->value);
 		export(tree, ft_strjoin("OLDPWD=", ft_getenv(*tree->env, "PWD")));
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
@@ -60,7 +60,7 @@ int	check_dir(t_tree *tree, char *dir)
 	{
 		dup2(2, 1);
 		ft_printf("cd: %s: No such file or directory\n", tree->arguments[1]);
-		dup2(1, 1);
+		dup2(tree->stdinput, 1);;
 		free(buf);
 		return (0);
 	}
@@ -68,7 +68,7 @@ int	check_dir(t_tree *tree, char *dir)
 	{
 		dup2(2, 1);
 		ft_printf("cd: %s: Not a directory\n", tree->arguments[1]);
-		dup2(1, 1);
+		dup2(tree->stdinput, 1);;
 		free(buf);
 		return (0);
 	}

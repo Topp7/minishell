@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:51:23 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 18:15:00 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	prompt_loop(t_tree	**parse_tree)
 	add_history("cat << a");
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, signal_handler);
-	while (!(*parse_tree)->signal_exit)
+	while ((*parse_tree)->signal_exit == 0)
 	{
 		command = readline("\033[32mminishell> \033[0m");
 		if (command == NULL || (*parse_tree)->signal_exit)
@@ -72,5 +72,6 @@ int	main(int argc, char **argv, char **envp)
 	free_env_list(parse_tree->env);
 	free(parse_tree);
 	clear_history();
-	return (shell_status);
+	printf("%d\n", shell_status);
+	return(shell_status);
 }

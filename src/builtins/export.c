@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 10:55:43 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 17:39:37 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	export_err(char *name, t_tree *tree)
 	tree->exit_status = 1;
 	dup2(2, 1);
 	ft_printf("export : %s: not a valid identifier\n", name);
-	dup2(1, 1);
+	dup2(tree->stdinput, 1);;
 	free(name);
 	return (0);
 }

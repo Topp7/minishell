@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 16:43:13 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 17:07:21 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ char	**handle_redirects(char **args, t_tree *tree)
 				&& prep_heredoc(&args[i--], j, tree, handle_trunc))
 				|| (ft_strncmp(&args[i][j], "<", 1) == 0
 				&& args[i][j + 1] != '<' && (args[i][j + 1] || args[i + 1])
-				&& prep_heredoc(&args[i--], j, tree, handle_infile)))
+				&& prep_heredoc(&args[i--], j, tree, handle_infile))))
 				i = update_args(&args);
 		}
 		if (args[i])
@@ -200,7 +200,7 @@ int	split_command(t_tree *tree, char **command_str, int ex_st)
 		|| det_and_rem_quotes_first_word(*command_str) == EXIT_FAILURE
 		|| adapt_and_count_arguments(tree, command_str, &ex_st) == EXIT_FAILURE
 		|| expander(tree->arguments, tree->env, ex_st, tree) == EXIT_FAILURE)
-		return (printf("error in parsing!\n"), EXIT_FAILURE);
+		return (ft_printf("error in parsing!\n"), EXIT_FAILURE);
 	if (is_substr_first_word(*command_str, "echo"))
 		tree->command = ECHO;
 	else if (is_substr_first_word(*command_str, "pwd"))
