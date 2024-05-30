@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 13:36:27 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:34:23 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,31 +23,51 @@
 //	count_arguments and remove quotes
 int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 {
-	//int *quote;
+	int *quote;
 	int	i;
-	//int j;
-	//int z;
+	int j;
+	int z;
+	int y;
 
 	i = 1;
 	(void)ex_st;
+	quote = NULL;
 	tree->arguments = split_with_quotes(command_str, ' ', &i);
-	//j = 0;
-	//while (tree->arguments[i])
-	//	j++;
-	//if (j > 0)
-	//	quote = malloc(sizeof(int) * j);
-	//j = 0;
-	//while (tree->arguments[z])
-	//{
-	//	while (tree->arguments[z][j])
-	//	{
-	//		if (both_quote_checker(tree->arguments[1], j)
-	//			&& tree->arguments[1][j] == '>')
-	//			quote[i] == 1;
-	//		j++;
-	//	}
-	//	z++;
-	//}
+	j = 0;
+	while (tree->arguments[j])
+		j++;
+	y = 0;
+	if (j > 0)
+		tree->arrow_quote = ft_calloc(sizeof(int), 50);
+	z = 0;
+	int quote_checker;
+	while (tree->arguments[z])
+	{
+		j = 0;
+		while (tree->arguments[z][j])
+		{
+			quote_checker = both_quote_checker(tree->arguments[z], j);
+			if (tree->arguments[z][j] == '>'
+				|| tree->arguments[z][j] == '<')
+			{
+				if (quote_checker == 1)
+					tree->arrow_quote[y++] = 1;
+				else if (quote_checker == 0)
+					tree->arrow_quote[y++] = 0;
+				j++;
+				if (tree->arguments[z][j]
+						&& (tree->arguments[z][j] == '>'
+						|| tree->arguments[z][j] == '<'))
+					j++;
+			}
+			else
+				j++;
+		}
+		z++;
+	}
+	//for (int k = 0; k < 50 && quote[k] == 1; k++)
+	//	ft_printf("%d ", tree->arrow_quote[k]);
+	//ft_printf("\n");
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
 	tree->args_num = i;
@@ -141,26 +161,30 @@ char	**handle_redirects(char **args, t_tree *tree)
 {
 	int	i;
 	int	j;
+	int z;
 
 	i = 0;
 	j = 0;
+	z = 0;
+	
 	while (args[i])
 	{
 		j = -1;
 		while (args[i][++j])
 		{
-			if ((ft_strncmp(&args[i][j], "<<", 2) == 0
+			if ((args[i][j] == '>' || args[i][j] == '<') && tree->arrow_quote[z++] == 1
+				&& ((ft_strncmp(&args[i][j], "<<", 2) == 0
 				&& args[i][j + 2] != '<' && (args[i][j + 2] || args[i + 1])
 				&& prep_heredoc(&args[i--], j, tree, handle_heredoc))
 				|| (ft_strncmp(&args[i][j], ">>", 2) == 0
-				&& args[i][j + 2] != '>' && (args[i][j + 2] || args[i + 1])
+				&& args[i][j + 2] != '>' && ((args[i][j + 2] || args[i + 1]))
 				&& prep_heredoc(&args[i--], j, tree, handle_append))
 				|| (ft_strncmp(&args[i][j], ">", 1) == 0
 				&& args[i][j + 1] != '>' && (args[i][j + 1] || args[i + 1])
 				&& prep_heredoc(&args[i--], j, tree, handle_trunc))
 				|| (ft_strncmp(&args[i][j], "<", 1) == 0
 				&& args[i][j + 1] != '<' && (args[i][j + 1] || args[i + 1])
-				&& prep_heredoc(&args[i--], j, tree, handle_infile)))
+				&& prep_heredoc(&args[i--], j, tree, handle_infile))))
 				update_args(&args);
 		}
 		if (args[i])

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 17:50:13 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 16:28:29 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	check_for_quotes(char **replace, t_env *envp, char **var, char *arg)
 	while (envp->name[j] && *arg && arg[j] && envp->name[j] == arg[j])
 		(j)++;
 	if (!envp->name[j] && (!arg[j] || (arg[j] && (arg[j] == ' '
-					|| arg[j] == '\'' || arg[j] == '\"' || arg[j] == '$'))))
+					|| arg[j] == '\'' || arg[j] == '\"' || arg[j] == '$'
+					|| arg[j] == '<' || arg[j] == '>'))))
 	{
 		*var = malloc(sizeof(char) * (ft_strlen(envp->name) + 2));
 		if (!(*var))
