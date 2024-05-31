@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 17:38:46 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:06:07 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	validate_outfile(char *outfile, t_tree *tree)
 	{
 		dup2(2, 1);
 		ft_printf("%s: Permission denied\n", outfile);
-		dup2(tree->stdinput, 1);
+		dup2(tree->stdoutput, 1);
 		tree->out_fd = -1;
 		tree->exit_status = 1;
 		return (free(buf), 0);

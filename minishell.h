@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 14:40:55 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 15:48:55 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ t_env	*init_node(char *envp);
 
 //	error.c
 int		pipes_error(char *errorstr, t_tree *tree, char **array);
-int		print_str_return_exit(char *str, int exit_code);
+int		print_str_return_exit(char *str, int exit_code, t_tree *tree);
 //--------------------------- execution functions ------------------------------
 
 //	execute.c
