@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 13:39:56 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 11:51:36 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,28 +96,33 @@ int	join_name_value(t_env *env_node, char **env_array, int i)
 	free (tmp);
 	return (1);
 }
-
+void	print_exit(char *message, char *argument, int errorcode , void *to_free)
+{
+	dup2(2, 1);
+	ft_printf("%s: %s\n", argument, message);
+	if (to_free)
+		free(to_free);
+	exit (errorcode);
+}
 void	absolute_path(t_tree *tmp, char **env_array)
 {
-	DIR		*dir;
+	DIR	*dir;
 
-	dir = opendir(tmp->arguments[0]);
-	if (!dir)
+	if (tmp->arguments[0][0] == '/')
+		dir = opendir(&(tmp->arguments[0][1]));
+	else
+		dir = opendir(&(tmp->arguments[0][2]));
+	if (dir)
+		print_exit("is a directory", tmp->arguments[0], 126, dir);
+	else if (access(tmp->arguments[0], F_OK) == 0)
 	{
 		if (access(tmp->arguments[0], X_OK) == 0)
 			execve(tmp->arguments[0], tmp->arguments, env_array);
 		else
-		{
-			dup2(2, 1);
-			ft_printf("%s: Permission denied\n", tmp->arguments[0]);
-			exit (126);
-		}
+			print_exit("Permission denied", tmp->arguments[0], 126, NULL);
 	}
+	else if (dir)
+		print_exit("is a directory", tmp->arguments[0], 126, dir);
 	else
-	{
-		closedir(dir);
-		dup2(2, 1);
-		ft_printf("%s: is a directory\n", tmp->arguments[0]);
-		exit(0);
-	}
+		print_exit("no such file or directory", tmp->arguments[0], 127, NULL);
 }
