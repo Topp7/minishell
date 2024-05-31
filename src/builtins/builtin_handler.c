@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 15:15:34 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 17:16:59 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ int	exit_handler(t_tree *tree)
 
 void	execute_builtin(t_tree *tree, t_env **env_lst)
 {
-	char	*dup_ex;
-
 	open_close_fds(tree);
 	if (tree->command == ECHO)
 		ft_echo(tree);
@@ -66,8 +64,10 @@ void	execute_builtin(t_tree *tree, t_env **env_lst)
 		ft_unset(tree, tree->arguments[1]);
 	else if (tree->command == EXPORT)
 	{
-		dup_ex = ft_strdup(tree->arguments[1]);
-		export(tree, dup_ex);
+		if(!tree->arguments[1])
+			export_env(tree);
+		else
+			export(tree, ft_strdup(tree->arguments[1]));
 	}
 	else if (tree->command == EXIT)
 	{

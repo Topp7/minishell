@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 14:40:55 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 17:31:09 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	print_env(t_tree *tree);
 void	ft_unset(t_tree *tree, char	*env);
 //export.c
 void	export(t_tree *tree, char *new_env);
+void	export_env(t_tree *tree);
 //----------------------------- clean functions --------------------------------
 
 //	clean.c

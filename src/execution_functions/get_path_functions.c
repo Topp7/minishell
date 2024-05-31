@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 13:14:10 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 17:48:25 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,7 @@ void	absolute_path(t_tree *tmp, char **env_array)
 {
 	DIR	*dir;
 
-	if (tmp->arguments[0][0] == '/')
-		dir = opendir(&(tmp->arguments[0][1]));
-	else
-		dir = opendir(&(tmp->arguments[0][2]));
+	dir = opendir((tmp->arguments[0]));
 	if (dir)
 		print_exit("is a directory", tmp->arguments[0], 126, dir);
 	else if (access(tmp->arguments[0], F_OK) == 0)

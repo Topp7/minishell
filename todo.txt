@@ -33,3 +33,5 @@ exit status fuer absolute paths
 
 
 leere string aus pipe array loeschen
+
+~/ muss expanden
