@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:53:04 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 21:37:22 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	check_dir(t_tree *tree, char *dir)
 	if (stat(dir, buf) == -1)
 	{
 		dup2(2, 1);
-		ft_printf("cd: %s: No such file or directory\n", tree->arguments[1]);
+		ft_printf("cd: %s: No such file or directory\n", tree->args[1]);
 		dup2(tree->stdoutput, 1);
 		free(buf);
 		return (0);
@@ -67,7 +67,7 @@ int	check_dir(t_tree *tree, char *dir)
 	else if (!S_ISDIR(buf->st_mode))
 	{
 		dup2(2, 1);
-		ft_printf("cd: %s: Not a directory\n", tree->arguments[1]);
+		ft_printf("cd: %s: Not a directory\n", tree->args[1]);
 		dup2(tree->stdoutput, 1);
 		free(buf);
 		return (0);
@@ -80,18 +80,18 @@ int	change_dir(t_tree *tree)
 {
 	char	*new_dir;
 
-	if (tree->arguments[1] == ft_strchr(tree->arguments[1], '/'))
+	if (tree->args[1] == ft_strchr(tree->args[1], '/'))
 	{
-		if (check_dir(tree, tree->arguments[1]) == 0)
+		if (check_dir(tree, tree->args[1]) == 0)
 			return (0);
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
-		chdir(tree->arguments[1]);
+		chdir(tree->args[1]);
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
 	}
 	else
 	{
 		new_dir = strjoin_free(getcwd(NULL, 0), "/", 1);
-		new_dir = strjoin_free(new_dir, tree->arguments[1], 1);
+		new_dir = strjoin_free(new_dir, tree->args[1], 1);
 		if (check_dir(tree, new_dir) == 0)
 			return (free(new_dir), 0);
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
@@ -105,24 +105,23 @@ int	change_dir(t_tree *tree)
 void	ft_chdir(t_tree *tree, t_env **env_lst)
 {
 	(void)env_lst;
-	if (!tree->arguments[1])
+	if (!tree->args[1])
 		change_to_home(tree);
-	else if (ft_strncmp(tree->arguments[1], "..", 3) == 0)
+	else if (ft_strncmp(tree->args[1], "..", 3) == 0)
 	{
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
 		chdir("..");
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
 	}
-	else if (ft_strncmp(tree->arguments[1], "-", 2) == 0)
+	else if (ft_strncmp(tree->args[1], "-", 2) == 0)
 		change_to_previous(tree);
-	else if (ft_strncmp(tree->arguments[1], ".", 2) == 0)
+	else if (ft_strncmp(tree->args[1], ".", 2) == 0)
 		return ;
 	else
 	{
-		if(change_dir(tree) == 0)
+		if (change_dir(tree) == 0)
 			tree->exit_status = 1;
 		else
 			tree->exit_status = 1;
 	}
-
 }

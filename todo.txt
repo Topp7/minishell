@@ -1,42 +1,17 @@
-stuff for later:
-quotes here_doc
+Flo:
 
-exit:
+~/ muss expanden - erledigt, passt das?
 
-1	Catchall for general errors
-2	Misuse of shell builtins (according to Bash documentation)
-126	Command invoked cannot execute
-127	Command not found
-128	Invalid argument to exit command
-128+n	Fatal error signal “n”
-130	Bash script terminated by Control-C
-255*	Exit status out of range
+norminette -passt, nur deine heredoc
 
-~ expanden nur pfad noch auslesen
+<< a | cat -> mache ich naechste Woche
 
-mumber (* n) (+ al) = 1 (too many arguments);
+-----------------------------------------
 
-al (* n) + (number (+ al (* n)))= exit 255 (numeric argument required);
-
-signal executen prozess nicht, nur neue line
-
-Redirections :
-
-command << delimiter =  command kann ein beliebiger command sein, << bedeuted dass ein heredoc startet und delimiter ist ein string der genauso
-						auftreten muss um das here_doc zu beenden.
-command >> outfile   = command wie oben, >> sagt dass der output au dem vorherigen command an das folgende file angehaengt(append) werden soll
-						outfile ist die datei besagte datei
-command > outfile    = das gleiche wie vorher aber alles aus der datei wird ersetzt mit dem output aus dem command
-command < infile     = der command hat als input das infile.
-
-exit status fuer absolute paths
-
-
-leere string aus pipe array loeschen
-
-~/ muss expanden
 exit codes bei builtins resetten
-norminette
+
 get_next_line
+
 verbotene funktionen checken
-<< a | cat
+
+segfault checken

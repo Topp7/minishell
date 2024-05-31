@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:19 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:53:41 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 21:50:30 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,33 @@ int	join_name_value(t_env *env_node, char **env_array, int i)
 		return (free(tmp), 0);
 	free (tmp);
 	return (1);
+}
+
+char	*create_str(char *str, char *here_doc)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (skip_here(&i, str, here_doc) == 0)
+		{
+			j++;
+			i++;
+		}
+	}
+	new_str = malloc(j + 1);
+	new_str[j] = '\0';
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (skip_here(&i, str, here_doc) == 0)
+			new_str[j++] = str[i++];
+	}
+	free(str);
+	return (new_str);
 }

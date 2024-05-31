@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:52:47 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 21:25:06 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 			else
 			{
 				dup2(2, 1);
-				ft_printf("%s: Permission denied\n", tree->arguments[0]);
+				ft_printf("%s: Permission denied\n", tree->args[0]);
 				exit (126);
 			}
 		}
@@ -96,16 +96,16 @@ void	absolute_path(t_tree *tmp, char **env_array)
 {
 	DIR	*dir;
 
-	dir = opendir((tmp->arguments[0]));
+	dir = opendir((tmp->args[0]));
 	if (dir)
-		print_exit("is a directory", tmp->arguments[0], 126, dir);
-	else if (access(tmp->arguments[0], F_OK) == 0)
+		print_exit("is a directory", tmp->args[0], 126, dir);
+	else if (access(tmp->args[0], F_OK) == 0)
 	{
-		if (access(tmp->arguments[0], X_OK) == 0)
-			execve(tmp->arguments[0], tmp->arguments, env_array);
+		if (access(tmp->args[0], X_OK) == 0)
+			execve(tmp->args[0], tmp->args, env_array);
 		else
-			print_exit("Permission denied", tmp->arguments[0], 126, NULL);
+			print_exit("Permission denied", tmp->args[0], 126, NULL);
 	}
 	else
-		print_exit("no such file or directory", tmp->arguments[0], 127, NULL);
+		print_exit("No such file or directory", tmp->args[0], 127, NULL);
 }

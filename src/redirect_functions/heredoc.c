@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 19:18:21 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 22:25:20 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,6 @@ int	skip_here(int *i, char *str, char *here_doc)
 	}
 	else
 		return (0);
-}
-
-char	*create_str(char *str, char *here_doc)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (skip_here(&i, str, here_doc) == 0)
-		{
-			j++;
-			i++;
-		}
-	}
-	new_str = malloc(j + 1);
-	new_str[j] = '\0';
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (skip_here(&i, str, here_doc) == 0)
-			new_str[j++] = str[i++];
-	}
-	free(str);
-	return (new_str);
 }
 
 void	here_doc_loop(char	*str, int *fd)
@@ -130,6 +101,5 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 		if (cmd_str[i])
 			i++;
 	}
-	ft_printf("test\n");
 	return (cmd_str);
 }

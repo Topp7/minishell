@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 19:18:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 22:21:28 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ typedef struct s_parse_tree
 	int					type;
 	int					command;
 	char				*here_doc;
-	char				**arguments;
+	char				**args;
 	int					*arrow_quote;
 	int					args_num;
 	char				*cmd_brch;
@@ -125,6 +125,7 @@ void	free_tree(t_tree *parse_tree);
 void	ft_free(char **split, int words);
 void	free_env_list(t_env **env_list);
 void	print_list(t_env *env_list);
+void	free_parent_tree(t_tree **parse_tree);
 
 //---------------------------- redirect functions ------------------------------
 
@@ -179,6 +180,12 @@ int		join_name_value(t_env *env_node, char **env_array, int i);
 
 //---------------------------- parsing functions -------------------------------
 
+//	parse_redirects.c
+void	red_counter(t_tree *tree, int z, int counter);
+int		check_for_redirections(t_tree *tree, char ***args, int i, int j);
+int		update_args(char ***args);
+//	redirec_helper.c
+int		update_args(char ***args);
 //	parsing.c
 int		init_tree(t_tree *tree, char **pipes, int ex_st, int i);
 int		parse_command(char **command, t_tree **tree);
@@ -186,7 +193,7 @@ int		parse_command(char **command, t_tree **tree);
 char	*ft_fgets(void);
 int		adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st);
 int		split_command(t_tree *tree, char **command_str, int ex_st);
-int		build_command_tree(t_tree **tree, char *command_str);
+int		build_command_tree(t_tree **tree, char *cmd_str, char **pipes, int i);
 char	**handle_redirects(char **args, t_tree *tree);
 //	quote_check.c
 int		check_for_quotes_and_slash(char *command_str);
