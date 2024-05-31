@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 14:42:14 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 15:19:53 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	execute_command(t_tree *tree)
 	tmp = tree;
 	pid = 0;
 	exec_exit = 0;
-	while (tmp && tmp->signal_exit == 0)
+	while (tmp)
 	{
 		if (tmp->arguments[0] && tree->out_fd >= 0)
 		{
