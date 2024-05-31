@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 20:13:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:16:43 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void	execute_command(t_tree *tree)
 	tmp = tree;
 	pid = 0;
 	exec_exit = 0;
-	while (tmp && tmp->signal_exit == 0)
+	while (tmp)
 	{
 		if (tmp->arguments[0] && tree->out_fd >= 0)
 		{

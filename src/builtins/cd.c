@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 19:03:20 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:33:29 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	check_dir(t_tree *tree, char *dir)
 	{
 		dup2(2, 1);
 		ft_printf("cd: %s: No such file or directory\n", tree->arguments[1]);
-		dup2(tree->stdinput, 1);;
+		dup2(tree->stdinput, 1);
 		free(buf);
 		return (0);
 	}
@@ -68,7 +68,7 @@ int	check_dir(t_tree *tree, char *dir)
 	{
 		dup2(2, 1);
 		ft_printf("cd: %s: Not a directory\n", tree->arguments[1]);
-		dup2(tree->stdinput, 1);;
+		dup2(tree->stdinput, 1);
 		free(buf);
 		return (0);
 	}

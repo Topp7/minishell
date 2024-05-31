@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 09:05:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:58:36 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,10 @@ int	prompt_loop(t_tree	**parse_tree)
 		signal(SIGINT, SIG_IGN);
 		if (parse_command(&command, parse_tree) == EXIT_FAILURE)
 			exit ((*parse_tree)->exit_status);
+		//print_parse_tree(*parse_tree);
 		if ((*parse_tree)->out_fd < 0)
 		{
-			free_tree(*parse_tree);
+			free(command);
 			continue ;
 		}
 		if (debug_mode)

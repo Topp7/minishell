@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 13:03:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:09:28 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 //	count_arguments and remove quotes
 int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 {
-	int *quote;
+	int quote_checker;
 	int	i;
 	int j;
 	int z;
@@ -31,7 +31,6 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 
 	i = 1;
 	(void)ex_st;
-	quote = NULL;
 	tree->arguments = split_with_quotes(command_str, ' ', &i);
 	j = 0;
 	while (tree->arguments[j])
@@ -40,7 +39,6 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 	if (j > 0)
 		tree->arrow_quote = ft_calloc(sizeof(int), 50);
 	z = 0;
-	int quote_checker;
 	while (tree->arguments[z])
 	{
 		j = 0;
@@ -228,7 +226,7 @@ void free_parent_tree(t_tree **parse_tree)
 {
 	if (!(*parse_tree))
 		return ;
-	// Free child nodes
+
 	if ((*parse_tree)->parent_pipe)
 	{
 		free_parent_tree(&(*parse_tree)->parent_pipe);
@@ -241,7 +239,10 @@ void free_parent_tree(t_tree **parse_tree)
 		(*parse_tree)->cmd_brch = NULL;
 	}
 	if ((*parse_tree)->arguments)
+	{
 		free_two_dimensional_array((*parse_tree)->arguments);
+		(*parse_tree)->arguments = NULL;
+	}
 	if ((*parse_tree)->arrow_quote)
 	{
 		free((*parse_tree)->arrow_quote);
@@ -271,7 +272,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 	if (init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if ((*tree)->out_fd < 0 && !pipes[pipe_num])
-		return (EXIT_SUCCESS);
+		return (free_parent_tree(tree), free_two_dimensional_array(pipes), EXIT_SUCCESS);
 	while (pipes[pipe_num])
 	{
 		if ((*tree)->out_fd >= 0)
@@ -285,7 +286,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			if (temp->out_fd < 0)
 			{
 				if (!pipes[pipe_num])
-					return (EXIT_SUCCESS);
+					return (free_parent_tree(tree), free_two_dimensional_array(pipes), (*tree)->out_fd = -1, EXIT_SUCCESS);
 				(*tree)->out_fd = -1;
 			}
 			else
@@ -296,14 +297,15 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			free_parent_tree(tree);
 			if (init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
+			(*tree)->parent_pipe = NULL;
+			parent = NULL;
 			if ((*tree)->out_fd < 0)
 			{
 				if (!pipes[pipe_num])
-					return (EXIT_SUCCESS);
+					return (free_tree(*tree), free_two_dimensional_array(pipes), (*tree)->out_fd = -1, EXIT_SUCCESS);
 			}
 		}
 	}
-	//print_parse_tree(*tree);
 	//free_parent_tree(tree);
 	//print_parse_tree(*tree);
 	return (free(command_str), free_two_dimensional_array(pipes), EXIT_SUCCESS);
