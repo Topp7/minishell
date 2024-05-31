@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:53:11 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 19:18:09 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	update_exit(t_tree *tree, int exec_exit);
 //echo.c
 void	ft_echo(t_tree *tree);
 //pwd.c
-void	ft_pwd(void);
+void	ft_pwd(t_tree *tree);
 //cd.c
 void	ft_chdir(t_tree *tree, t_env **env_lst);
 //env.c
@@ -115,6 +115,9 @@ void	ft_unset(t_tree *tree, char	*env);
 //export.c
 void	export(t_tree *tree, char *new_env);
 void	export_env(t_tree *tree);
+int		name_check(char *tmp, t_tree *tree);
+int		export_err(char *name, t_tree *tree);
+
 //----------------------------- clean functions --------------------------------
 
 //	clean.c

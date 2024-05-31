@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 16:05:27 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:53:04 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,14 @@ int	check_dir(t_tree *tree, char *dir)
 	return (1);
 }
 
-void	change_dir(t_tree *tree)
+int	change_dir(t_tree *tree)
 {
 	char	*new_dir;
 
 	if (tree->arguments[1] == ft_strchr(tree->arguments[1], '/'))
 	{
-		if (!check_dir(tree, tree->arguments[1]))
-		{
-			tree->exit_status = 1;
-			return ;
-		}
+		if (check_dir(tree, tree->arguments[1]) == 0)
+			return (0);
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
 		chdir(tree->arguments[1]);
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
@@ -95,13 +92,14 @@ void	change_dir(t_tree *tree)
 	{
 		new_dir = strjoin_free(getcwd(NULL, 0), "/", 1);
 		new_dir = strjoin_free(new_dir, tree->arguments[1], 1);
-		if (!check_dir(tree, new_dir))
-			return (free(new_dir));
+		if (check_dir(tree, new_dir) == 0)
+			return (free(new_dir), 0);
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));
 		chdir(new_dir);
 		export(tree, strjoin_free("PWD=", getcwd(NULL, 0), 2));
 		free(new_dir);
 	}
+	return (1);
 }
 
 void	ft_chdir(t_tree *tree, t_env **env_lst)
@@ -120,5 +118,11 @@ void	ft_chdir(t_tree *tree, t_env **env_lst)
 	else if (ft_strncmp(tree->arguments[1], ".", 2) == 0)
 		return ;
 	else
-		change_dir(tree);
+	{
+		if(change_dir(tree) == 0)
+			tree->exit_status = 1;
+		else
+			tree->exit_status = 1;
+	}
+
 }

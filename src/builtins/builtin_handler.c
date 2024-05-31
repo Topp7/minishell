@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:36:02 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 19:18:16 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,18 @@ void	execute_builtin(t_tree *tree, t_env **env_lst)
 	if (tree->command == ECHO)
 		ft_echo(tree);
 	else if (tree->command == PWD)
-		ft_pwd();
+		ft_pwd(tree);
 	else if (tree->command == CD)
 		ft_chdir(tree, env_lst);
 	else if (tree->command == ENV)
 		print_env(tree);
 	else if (tree->command == UNSET)
-		ft_unset(tree, tree->arguments[1]);
+	{
+		if(!tree->arguments[1])
+			ft_unset(tree, NULL);
+		else
+			ft_unset(tree, ft_strdup(tree->arguments[1]));
+	}
 	else if (tree->command == EXPORT)
 	{
 		if (!tree->arguments[1])
