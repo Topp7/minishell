@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 18:06:16 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:51:31 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,6 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 		if (cmd_str[i])
 			i++;
 	}
+	ft_printf("test\n");
 	return (cmd_str);
 }
-

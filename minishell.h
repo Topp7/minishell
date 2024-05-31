@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:24:37 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 18:53:11 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ void	remove_char(char *str, char char_to_remove, int start, int *end);
 void	ft_treeadd_back(t_tree **lst, t_tree *new, t_tree **parent);
 int		alloc_string(char **s, int result_len);
 int		create_var_and_rep_str(char **var, char	**replace, char *arg, int j);
+int		join_name_value(t_env *env_node, char **env_array, int i);
 
 //---------------------------- parsing functions -------------------------------
 

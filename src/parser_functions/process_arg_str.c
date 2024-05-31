@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:20:12 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 19:05:25 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,6 @@ int	adapt_and_count_arguments(t_tree *tree, char **command_str, int *ex_st)
 		}
 		z++;
 	}
-	//for (int k = 0; k < 50 && quote[k] == 1; k++)
-	//	ft_printf("%d ", tree->arrow_quote[k]);
-	//ft_printf("\n");
 	if (tree->arguments == NULL)
 		return (pipes_error("error split", tree, NULL));
 	tree->args_num = i;
@@ -130,7 +127,7 @@ int	update_args(char ***args)
 	return (0);
 }
 
-typedef char    *(*t_cmd_func)(char *cmd_str, t_tree *tree);
+typedef char	*(*t_cmd_func)(char *cmd_str, t_tree *tree);
 
 int	prep_heredoc(char **args, int j, t_tree *tree, t_cmd_func func)
 {
@@ -164,7 +161,6 @@ char	**handle_redirects(char **args, t_tree *tree)
 	i = 0;
 	j = 0;
 	z = 0;
-
 	while (args[i])
 	{
 		j = -1;
@@ -226,7 +222,6 @@ void free_parent_tree(t_tree **parse_tree)
 {
 	if (!(*parse_tree))
 		return ;
-
 	if ((*parse_tree)->parent_pipe)
 	{
 		free_parent_tree(&(*parse_tree)->parent_pipe);
@@ -249,9 +244,7 @@ void free_parent_tree(t_tree **parse_tree)
 		(*parse_tree)->arrow_quote = NULL;
 	}
 	while ((*parse_tree)->child_pipe)
-	{
 		(*parse_tree) = (*parse_tree)->child_pipe;
-	}
 }
 
 //	function to seperate the pipes into the arguments and assign everything
@@ -266,15 +259,11 @@ int	build_command_tree(t_tree **tree, char *command_str)
 	parent = *tree;
 	ex_st = (*tree)->exit_status;
 	pipes = split_with_quotes(&command_str, '|', &pipe_num);
-	if (!pipes)
+	if (!pipes || init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
 		return (pipes_error("error split", NULL, pipes));
-	pipe_num = 0;
-	if (init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
 	if ((*tree)->out_fd < 0 && !pipes[pipe_num])
 		return (free_parent_tree(tree), free_two_dimensional_array(pipes), EXIT_SUCCESS);
-	else
-		(*tree)->exit_status = 0;
+	(*tree)->exit_status = 0;
 	while (pipes[pipe_num])
 	{
 		if ((*tree)->out_fd >= 0)
@@ -306,7 +295,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 				if (!pipes[pipe_num])
 					return (free_tree(*tree), free_two_dimensional_array(pipes), (*tree)->out_fd = -1, EXIT_SUCCESS);
 			}
-			if ((!(*tree)->arguments[1] || ((*tree)->arguments[1] && !(*tree)->arguments[1][0])) && ft_strncmp((*tree)->arguments[0],"cat", 3) == 0)
+			if ((!(*tree)->arguments[1] || !(*tree)->arguments[1][0]) && ft_strncmp((*tree)->arguments[0], "cat", 3) == 0)
 			{
 				ft_printf("test\n");
 				(*tree)->out_fd = -1;
@@ -317,7 +306,5 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			}
 		}
 	}
-	//free_parent_tree(tree);
-	//print_parse_tree(*tree);
 	return (free(command_str), free_two_dimensional_array(pipes), EXIT_SUCCESS);
 }

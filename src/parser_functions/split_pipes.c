@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:19 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/29 10:19:57 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:57:59 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,7 @@ char	**split_with_quotes(char **s, char c, int *pipe_num)
 	{
 		return (NULL);
 	}
+	if (c == '|')
+		*pipe_num = 0;
 	return (split);
 }

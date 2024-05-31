@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:24:43 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 18:36:02 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	exit_handler(t_tree *tree)
 		if (tree->arguments[2])
 		{
 			tree->command = 0;
-			return (print_str_return_exit("exit: too many arguments\n", 1, tree));
+			return (print_str_return_exit("too many arguments\n", 1, tree));
 		}
 		tree->exit_status = ft_atoi(tree->arguments[1]) % 256;
 	}
@@ -64,7 +64,7 @@ void	execute_builtin(t_tree *tree, t_env **env_lst)
 		ft_unset(tree, tree->arguments[1]);
 	else if (tree->command == EXPORT)
 	{
-		if(!tree->arguments[1])
+		if (!tree->arguments[1])
 			export_env(tree);
 		else
 			export(tree, ft_strdup(tree->arguments[1]));

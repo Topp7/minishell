@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 16:06:07 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:39:33 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,9 @@ char	*handle_append(char *cmdstr, t_tree *tree)
 	int		j;
 	char	*outfile;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	while (cmdstr[i])
+	while (cmdstr[++i])
 	{
 		if (ft_strncmp(&cmdstr[i], ">>", 2) == 0)
 		{
@@ -117,7 +117,6 @@ char	*handle_append(char *cmdstr, t_tree *tree)
 			cmdstr = open_outfile(tree, cmdstr, outfile);
 			break ;
 		}
-		i++;
 	}
 	return (cmdstr);
 }

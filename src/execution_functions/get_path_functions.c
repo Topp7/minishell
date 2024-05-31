@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:25:04 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 18:52:47 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 	return (NULL);
 }
 
-int	join_name_value(t_env *env_node, char **env_array, int i)
-{
-	char	*tmp;
-
-	tmp = ft_strjoin(env_node->name, "=");
-	if (!tmp)
-		return (0);
-	env_array[i] = ft_strjoin(tmp, env_node->value);
-	if (!env_array[i])
-		return (free(tmp), 0);
-	free (tmp);
-	return (1);
-}
-
-void	print_exit(char *message, char *argument, int errorcode , void *to_free)
+void	print_exit(char *message, char *argument, int errorcode, void *to_free)
 {
 	dup2(2, 1);
 	ft_printf("%s: %s\n", argument, message);
