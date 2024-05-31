@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 18:06:16 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:52:51 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,8 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 			i += 2;
 			while (cmd_str[i] && cmd_str[i] == ' ')
 				i++;
-			while (cmd_str[i + j] && cmd_str[i + j] != ' ')
+			while (cmd_str[i + j] && cmd_str[i + j] != ' '
+				&& cmd_str[i + j] != '<' && cmd_str[i + j] != '>')
 				j++;
 			here_str = malloc(sizeof(char) * (j + 1));
 			if (!here_str)
@@ -131,4 +132,3 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 	}
 	return (cmd_str);
 }
-
