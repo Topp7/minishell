@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 15:09:28 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:20:12 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -273,6 +273,8 @@ int	build_command_tree(t_tree **tree, char *command_str)
 		return (EXIT_FAILURE);
 	if ((*tree)->out_fd < 0 && !pipes[pipe_num])
 		return (free_parent_tree(tree), free_two_dimensional_array(pipes), EXIT_SUCCESS);
+	else
+		(*tree)->exit_status = 0;
 	while (pipes[pipe_num])
 	{
 		if ((*tree)->out_fd >= 0)
@@ -285,9 +287,9 @@ int	build_command_tree(t_tree **tree, char *command_str)
 				return (EXIT_FAILURE);
 			if (temp->out_fd < 0)
 			{
-				if (!pipes[pipe_num])
-					return (free_parent_tree(tree), free_two_dimensional_array(pipes), (*tree)->out_fd = -1, EXIT_SUCCESS);
 				(*tree)->out_fd = -1;
+				if (!pipes[pipe_num])
+					return ((*tree)->exit_status = 1, free_parent_tree(tree), free_two_dimensional_array(pipes), EXIT_SUCCESS);
 			}
 			else
 				ft_treeadd_back(tree, temp, &parent);
@@ -303,6 +305,15 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			{
 				if (!pipes[pipe_num])
 					return (free_tree(*tree), free_two_dimensional_array(pipes), (*tree)->out_fd = -1, EXIT_SUCCESS);
+			}
+			if ((!(*tree)->arguments[1] || ((*tree)->arguments[1] && !(*tree)->arguments[1][0])) && ft_strncmp((*tree)->arguments[0],"cat", 3) == 0)
+			{
+				ft_printf("test\n");
+				(*tree)->out_fd = -1;
+				if (!pipes[pipe_num] && !(*tree)->arguments[1])
+					return ((*tree)->exit_status = 0, free_tree(*tree), free_two_dimensional_array(pipes), EXIT_SUCCESS);
+				free_tree(*tree);
+				(*tree)->exit_status = 0;
 			}
 		}
 	}

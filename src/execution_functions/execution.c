@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 15:39:02 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 18:24:57 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ void	execute_command(t_tree *tree)
 	}
 	waitpid(pid, &tree->exit_status, 0);
 	dup2(tree->stdinput, STDIN_FILENO);
+	dup2(tree->stdoutput, STDOUT_FILENO);
 	update_exit(tree, exec_exit);
 	signal(SIGINT, signal_handler);
 }

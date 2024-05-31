@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 19:18:54 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 16:06:02 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	validate_infile(char *infile, t_tree *tree)
 	{
 		dup2(2, 1);
 		ft_printf("%s: No such file or directory\n", infile);
-		dup2(tree->stdinput, 1);
+		dup2(tree->stdoutput, 1);
 		tree->out_fd = -1;
 		tree->exit_status = 1;
 		return (free(buf), 0);
@@ -61,7 +61,7 @@ int	validate_infile(char *infile, t_tree *tree)
 	{
 		dup2(2, 1);
 		ft_printf("%s: Permission denied\n", infile);
-		dup2(tree->stdinput, 1);
+		dup2(tree->stdoutput, 1);
 		tree->out_fd = -1;
 		tree->exit_status = 1;
 		return (free(buf), 0);

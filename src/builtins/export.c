@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:21:53 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 18:24:28 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	export_err(char *name, t_tree *tree)
 	tree->exit_status = 1;
 	dup2(2, 1);
 	ft_printf("export : %s: not a valid identifier\n", name);
-	dup2(tree->stdinput, 1);
+	dup2(tree->stdoutput, 1);
 	free(name);
 	return (0);
 }

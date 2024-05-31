@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 17:48:25 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 18:25:04 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	join_name_value(t_env *env_node, char **env_array, int i)
 	free (tmp);
 	return (1);
 }
+
 void	print_exit(char *message, char *argument, int errorcode , void *to_free)
 {
 	dup2(2, 1);
@@ -104,6 +105,7 @@ void	print_exit(char *message, char *argument, int errorcode , void *to_free)
 		free(to_free);
 	exit (errorcode);
 }
+
 void	absolute_path(t_tree *tmp, char **env_array)
 {
 	DIR	*dir;

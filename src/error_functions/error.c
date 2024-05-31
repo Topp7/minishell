@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 14:50:00 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 16:05:35 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ int	pipes_error(char *errorstr, t_tree *tree, char **array)
 	return (EXIT_FAILURE);
 }
 
-int	print_str_return_exit(char *str, int exit_code)
+int	print_str_return_exit(char *str, int exit_code, t_tree *tree)
 {
 	dup2(2, 1);
 	ft_printf(" %s", str);
-	dup2(1, 1);
+	dup2(tree->stdoutput, 1);
 	return (exit_code);
 }
