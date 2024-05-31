@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 19:25:29 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 09:05:56 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	prompt_loop(t_tree	**parse_tree)
 	while ((*parse_tree)->signal_exit == 0)
 	{
 		command = readline("\033[32mminishell> \033[0m");
-		if (command == NULL || (*parse_tree)->signal_exit)
+		if (command == NULL)
 		{
 			if (command)
 				free(command);
@@ -50,6 +50,7 @@ int	prompt_loop(t_tree	**parse_tree)
 			print_parse_tree(*parse_tree);
 		execute_command(*parse_tree);
 		free_tree(*parse_tree);
+		//ft_printf("ex: %d\n", (*parse_tree)->exit_status);
 	}
 	return ((*parse_tree)->exit_status);
 }
@@ -77,6 +78,6 @@ int	main(int argc, char **argv, char **envp)
 	free_env_list(parse_tree->env);
 	free(parse_tree);
 	clear_history();
-	printf("%d\n", shell_status);
+	//printf("%d\n", shell_status);
 	return(shell_status);
 }

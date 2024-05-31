@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 18:39:40 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/30 20:13:28 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	update_exit(t_tree *tree, int exec_exit)
 {
 	if (WIFEXITED(tree->exit_status))
 		tree->exit_status = WEXITSTATUS(tree->exit_status);
-	if (tree->exit_status > 1 && !tree->signal_exit && exec_exit != 0)
+	if (tree->exit_status > 1 && exec_exit != 0)
 		tree->exit_status += 128;
 }
 

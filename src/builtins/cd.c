@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 16:34:22 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 17:39:35 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/30 19:03:20 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	change_dir(t_tree *tree)
 		if (!check_dir(tree, tree->arguments[1]))
 		{
 			tree->exit_status = 1;
-			tree->signal_exit = 1;
 			return ;
 		}
 		export(tree, strjoin_free("OLDPWD=", getcwd(NULL, 0), 2));

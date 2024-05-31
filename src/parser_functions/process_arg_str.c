@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 20:09:06 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 13:03:09 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,6 +223,36 @@ int	split_command(t_tree *tree, char **command_str, int ex_st)
 	return (EXIT_SUCCESS);
 }
 
+//	function to free the entire parsing tree
+void free_parent_tree(t_tree **parse_tree)
+{
+	if (!(*parse_tree))
+		return ;
+	// Free child nodes
+	if ((*parse_tree)->parent_pipe)
+	{
+		free_parent_tree(&(*parse_tree)->parent_pipe);
+		free((*parse_tree)->parent_pipe);
+		(*parse_tree)->parent_pipe = NULL;
+	}
+	if ((*parse_tree)->cmd_brch)
+	{
+		free((*parse_tree)->cmd_brch);
+		(*parse_tree)->cmd_brch = NULL;
+	}
+	if ((*parse_tree)->arguments)
+		free_two_dimensional_array((*parse_tree)->arguments);
+	if ((*parse_tree)->arrow_quote)
+	{
+		free((*parse_tree)->arrow_quote);
+		(*parse_tree)->arrow_quote = NULL;
+	}
+	while ((*parse_tree)->child_pipe)
+	{
+		(*parse_tree) = (*parse_tree)->child_pipe;
+	}
+}
+
 //	function to seperate the pipes into the arguments and assign everything
 int	build_command_tree(t_tree **tree, char *command_str)
 {
@@ -244,22 +274,7 @@ int	build_command_tree(t_tree **tree, char *command_str)
 		return (EXIT_SUCCESS);
 	while (pipes[pipe_num])
 	{
-		if(parent->out_fd < 0)
-		{
-			temp = (t_tree *)malloc(sizeof(t_tree));
-			if (!temp)
-				return (pipes_error("error malloc", temp, pipes));
-			temp->parent_pipe = parent->parent_pipe;
-			if (temp->parent_pipe)
-				temp->parent_pipe->child_pipe = temp;
-			free_tree(parent);
-			if (init_tree(temp, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
-				return (EXIT_FAILURE);
-			if (temp->out_fd < 0)
-				free_tree(temp);
-			parent = temp;
-		}
-		else
+		if ((*tree)->out_fd >= 0)
 		{
 			temp = (t_tree *)malloc(sizeof(t_tree));
 			if (!temp)
@@ -268,10 +283,28 @@ int	build_command_tree(t_tree **tree, char *command_str)
 			if (init_tree(temp, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 			if (temp->out_fd < 0)
-				free(temp);
+			{
+				if (!pipes[pipe_num])
+					return (EXIT_SUCCESS);
+				(*tree)->out_fd = -1;
+			}
 			else
 				ft_treeadd_back(tree, temp, &parent);
 		}
+		else
+		{
+			free_parent_tree(tree);
+			if (init_tree(*tree, pipes, ex_st, pipe_num++) == EXIT_FAILURE)
+				return (EXIT_FAILURE);
+			if ((*tree)->out_fd < 0)
+			{
+				if (!pipes[pipe_num])
+					return (EXIT_SUCCESS);
+			}
+		}
 	}
+	//print_parse_tree(*tree);
+	//free_parent_tree(tree);
+	//print_parse_tree(*tree);
 	return (free(command_str), free_two_dimensional_array(pipes), EXIT_SUCCESS);
 }
