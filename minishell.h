@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 19:03:33 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 14:40:55 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ typedef struct s_parse_tree
 //-------------------------------- builtins ------------------------------------
 
 //builtin_handler.c
-void	handle_builtins(t_tree *tree, t_env **env_lst);
+int		handle_builtins(t_tree *tree, t_env **env_lst, int *exec_exit);
 void	update_exit(t_tree *tree, int exec_exit);
 //echo.c
 void	ft_echo(t_tree *tree);

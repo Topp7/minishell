@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 11:51:36 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 13:14:10 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,8 +121,6 @@ void	absolute_path(t_tree *tmp, char **env_array)
 		else
 			print_exit("Permission denied", tmp->arguments[0], 126, NULL);
 	}
-	else if (dir)
-		print_exit("is a directory", tmp->arguments[0], 126, dir);
 	else
 		print_exit("no such file or directory", tmp->arguments[0], 127, NULL);
 }

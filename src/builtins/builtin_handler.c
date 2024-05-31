@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_handler.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 20:13:28 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 15:15:34 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,22 +53,23 @@ void	execute_builtin(t_tree *tree, t_env **env_lst)
 {
 	char	*dup_ex;
 
+	open_close_fds(tree);
 	if (tree->command == ECHO)
 		ft_echo(tree);
-	if (tree->command == PWD)
+	else if (tree->command == PWD)
 		ft_pwd();
-	if (tree->command == CD)
+	else if (tree->command == CD)
 		ft_chdir(tree, env_lst);
-	if (tree->command == ENV)
+	else if (tree->command == ENV)
 		print_env(tree);
-	if (tree->command == UNSET)
+	else if (tree->command == UNSET)
 		ft_unset(tree, tree->arguments[1]);
-	if (tree->command == EXPORT)
+	else if (tree->command == EXPORT)
 	{
 		dup_ex = ft_strdup(tree->arguments[1]);
 		export(tree, dup_ex);
 	}
-	if (tree->command == EXIT)
+	else if (tree->command == EXIT)
 	{
 		tree->exit_status = exit_handler(tree);
 		if (tree->command == EXIT && !tree->child_pipe && !tree->parent_pipe)
@@ -76,27 +77,43 @@ void	execute_builtin(t_tree *tree, t_env **env_lst)
 	}
 }
 
-void	handle_builtins(t_tree *tree, t_env **env_lst)
+pid_t	exec_pipe(t_tree *tree, t_env **env_lst, int *exec_exit)
 {
-	int		fd[2];
-	int		pipebool;
+	pid_t		pid;
+	int			fd[2];
 
-	pipebool = 0;
-	wait(NULL);
-	if (tree->child_pipe)
+	if (pipe(fd) == -1)
+		return (0);
+	pid = fork();
+	if (pid == -1)
+		return (0);
+	if (pid == 0)
 	{
-		if (pipe(fd) == -1)
-			return ;
-		dup2(fd[1], STDOUT_FILENO);
+		close(fd[0]);
+		if (tree->child_pipe)
+			dup2(fd[1], STDOUT_FILENO);
 		close(fd[1]);
-		pipebool = 1;
+		*exec_exit = 1;
+		execute_builtin(tree, env_lst);
+		exit (0);
 	}
-	open_close_fds(tree);
-	execute_builtin(tree, env_lst);
-	if (pipebool == 1)
+	else
 	{
+		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
 		close (fd[0]);
 	}
-	dup2(tree->stdoutput, STDOUT_FILENO);
+	return (pid);
+}
+
+pid_t	handle_builtins(t_tree *tree, t_env **env_lst, int *exec_exit)
+{
+	pid_t	pid;
+
+	pid = 0;
+	if (tree->child_pipe || tree->parent_pipe)
+		pid = exec_pipe(tree, env_lst, exec_exit);
+	else
+		execute_builtin(tree, env_lst);
+	return (pid);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 20:13:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/05/31 14:42:14 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,12 @@ char	**create_env_array(t_env *env_lst)
 
 void	open_close_fds(t_tree *tree)
 {
-	if (tree->out_fd > 0)
+	if (tree->out_fd != 0)
 	{
 		dup2(tree->out_fd, STDOUT_FILENO);
 		close (tree->out_fd);
 	}
-	if (tree->in_fd > 0)
+	if (tree->in_fd != 0)
 	{
 		dup2(tree->in_fd, STDIN_FILENO);
 		close (tree->in_fd);
@@ -82,7 +82,7 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	}
 }
 
-int	pipe_cmds(t_tree *tmp, t_env **env_lst, int *exec_exit)
+pid_t	pipe_cmds(t_tree *tmp, t_env **env_lst, int *exec_exit)
 {
 	int		fd[2];
 	pid_t	pid;
@@ -124,8 +124,8 @@ void	execute_command(t_tree *tree)
 	{
 		if (tmp->arguments[0] && tree->out_fd >= 0)
 		{
-			if (tmp->command)
-				handle_builtins(tmp, tmp->env);
+			if (tmp->command > 0)
+				pid = handle_builtins(tmp, tmp->env, &exec_exit);
 			else
 				pid = pipe_cmds(tmp, tmp->env, &exec_exit);
 			if (tmp->child_pipe)
