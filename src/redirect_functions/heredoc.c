@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 15:12:00 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/06 15:19:57 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,6 @@ char	*create_here_str(char *cmd_str, int i, int j)
 		return (NULL);
 	ft_strlcpy(here_str, &cmd_str[i], j + 1);
 	return (here_str);
-}
-
-void	iterate(char *cmd_str, t_tree *tree, int *i, int *j)
-{
-	char	*here_str;
-
-	*i += 2;
-	while (cmd_str[*i] && cmd_str[*i] == ' ')
-		(*i)++;
-	while (cmd_str[*i + *j] && cmd_str[*i + *j] != ' '
-		&& cmd_str[*i + *j] != '<' && cmd_str[*i + *j] != '>')
-		(*j)++;
-	here_str = create_here_str(cmd_str, *i, *j);
-	cmd_str = create_heredoc(&here_str, cmd_str, tree);
-	*i = 0;
 }
 
 //	function to save the heredoc input in a string
