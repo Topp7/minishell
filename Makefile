@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+         #
+#    By: stopp <stopp@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/19 10:25:10 by fkeitel           #+#    #+#              #
-#    Updated: 2024/06/06 13:23:30 by fkeitel          ###   ########.fr        #
+#    Updated: 2024/06/06 16:53:01 by stopp            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ SRCS    := src/builtins/builtin_handler.c  src/builtins/cd.c  src/builtins/echo.
 		src/parser_functions/split_pipes.c src/redirect_functions/heredoc.c \
 		src/redirect_functions/infile.c src/redirect_functions/outfile_append.c \
 		src/redirect_functions/outfile_trunc.c src/signal_functions/signal.c \
-		src/utils/lst_utils.c src/debugging.c src/main.c\
+		src/utils/lst_utils.c src/utils/debugging.c src/main.c\
 
 LIBFT   := libft/
 LIBFTTARGET := libft/libft.a

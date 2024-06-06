@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 15:19:57 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/06 16:41:45 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree)
 	if (pid == 0)
 	{
 		here_doc_loop(*str, fd);
-		free_tree(tree);
 		exit (tree->exit_status);
 	}
 	waitpid(pid, &tree->exit_status, 0);

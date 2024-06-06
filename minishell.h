@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/06 15:10:01 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 16:49:29 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,7 @@
 
 //	public libraries
 # include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <string.h>
-# include <sys/types.h>
-# include <sys/wait.h>
 # include <signal.h>
-# include <errno.h>
-# include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
