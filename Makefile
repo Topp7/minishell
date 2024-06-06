@@ -6,7 +6,7 @@
 #    By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/19 10:25:10 by fkeitel           #+#    #+#              #
-#    Updated: 2024/06/02 20:45:36 by fkeitel          ###   ########.fr        #
+#    Updated: 2024/06/06 13:23:30 by fkeitel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,7 @@ $(LIBFTTARGET):
 # Rule to compile source files into object files in a separate obj folder
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR) $(HEADER)
 	@mkdir -p $(dir $@)
-	@$(info Compiling $<)
+	@echo Compiling:  $<
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 # Create the objects directory

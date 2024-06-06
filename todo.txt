@@ -8,12 +8,4 @@ norminette -passt, nur deine heredoc
 
 -----------------------------------------
 
-exit codes bei builtins resetten
-
-get_next_line
-
 verbotene funktionen checken
-
-segfault checken
-
-export X=x C=c V=v crash wenn dannch env
