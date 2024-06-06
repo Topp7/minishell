@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_append.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:39:33 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 15:17:09 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	*handle_append(char *cmdstr, t_tree *tree)
 			i += 2;
 			while (cmdstr[i] && cmdstr[i] == ' ')
 				i++;
-			while (cmdstr[i + j] && cmdstr[i + j] != ' '
+			while (cmdstr[i + j]
 				&& cmdstr[i + j] != '<' && cmdstr[i + j] != '>')
 				j++;
 			outfile = malloc(sizeof(char) * (j + 1));
