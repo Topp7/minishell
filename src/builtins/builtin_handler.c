@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 19:13:46 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 19:16:51 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ pid_t	exec_pipe(t_tree *tree, t_env **env_lst, int *exec_exit)
 		close(fd[1]);
 		*exec_exit = 1;
 		execute_builtin(tree, env_lst);
-		exit (0);
+		exit (tree->exit_status);
 	}
 	else
 	{
