@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_arg_str.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/06 14:55:22 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 19:34:18 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,9 @@ int	add_node_red_err(t_tree **tree, t_tree **parent, char ***args, int *i)
 			return (1);
 		}
 	}
-	else if ((*tree)->args[0] && (ft_strncmp((*tree)->args[0], "cat", 3) == 0)
-		&& !(*tree)->args[1] && check_cat((*tree)->cmd_brch) == 0)
+	else if ((((*tree)->args[0] && (ft_strncmp((*tree)->args[0], "cat", 3) == 0))
+		|| ((*tree)->args[0] && (ft_strncmp((*tree)->args[0], "grep", 4) == 0)))
+		&& !(*tree)->args[1] && check_cat((*tree)->cmd_brch + *i) == 0)
 	{
 		(*tree)->exit_status = 0;
 		(*tree)->out_fd = -1;

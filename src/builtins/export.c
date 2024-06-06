@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 15:10:21 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 19:29:47 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	export(t_tree *tree, char *new_env)
 	free(new_env);
 	while (tmp)
 	{
-		if (ft_strncmp(tmp->name, new->name, ft_strlen(new->name)) == 0)
+		if (ft_strncmp(tmp->name, new->name, ft_strlen(tmp->name)) == 0)
 		{
 			free(tmp->value);
 			tmp->value = new->value;
@@ -98,6 +98,7 @@ void	export_loop(t_tree *tree)
 		export_env(tree);
 	else
 	{
+		ft_printf("%s\n", tree->args[i]);
 		while (tree->args[i])
 			export(tree, ft_strdup(tree->args[i++]));
 	}

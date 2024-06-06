@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirec_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 21:56:38 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/06 15:09:07 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 19:03:13 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ int	check_cat(char *str)
 {
 	int	i;
 
-	i = 3;
+	if (ft_strncmp(str, "cat", 3) == 0)
+		i = 3;
+	else
+		i = 4;
 	while (str[i])
 	{
 		if (str[i] != ' ' || str[i] != '\t')
