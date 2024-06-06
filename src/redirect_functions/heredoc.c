@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 12:43:46 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 13:30:53 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree)
 	if (pipe(fd) == -1)
 		return (NULL);
 	pid = fork();
+	if (pid == -1)
+		return (NULL);
 	if (pid == 0)
 	{
 		here_doc_loop(*str, fd);

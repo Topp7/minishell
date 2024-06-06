@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/02 20:36:15 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:31:59 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,12 @@ int		export_err(char *name, t_tree *tree);
 int		name_check(char *tmp, t_tree *tree);
 void	export(t_tree *tree, char *new_env);
 void	export_env(t_tree *tree);
+void	export_loop(t_tree *tree);
 //	pwd.c
 void	ft_pwd(t_tree *tree);
 //	unset.c
 void	ft_unset(t_tree *tree, char	*env);
+void	unset_loop(t_tree *tree);
 
 //----------------------------- clean functions --------------------------------
 

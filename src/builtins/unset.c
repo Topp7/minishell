@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:32:56 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 19:14:40 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:31:24 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,6 @@ void	ft_unset(t_tree *tree, char	*env)
 
 	temp = *tree->env;
 	un_env = NULL;
-	if (!env)
-	{
-		tree->exit_status = 0;
-		return ;
-	}
 	if (name_check(env, tree) == 0)
 		return ;
 	while (temp->next)
@@ -39,4 +34,19 @@ void	ft_unset(t_tree *tree, char	*env)
 		}
 		temp = temp->next;
 	}
+	tree->exit_status = 0;
+}
+
+void	unset_loop(t_tree *tree)
+{
+	int	i;
+
+	i = 1;
+	if (!tree->args[i])
+	{
+		tree->exit_status = 0;
+		return ;
+	}
+	while (tree->args[i])
+		ft_unset(tree, tree->args[i++]);
 }

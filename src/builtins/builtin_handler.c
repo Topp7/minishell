@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 12:12:06 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/06 12:31:43 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,9 @@ void	execute_builtin(t_tree *tree, t_env **env_lst)
 	else if (tree->command == ENV)
 		print_env(tree);
 	else if (tree->command == UNSET)
-	{
-		if (!tree->args[1])
-			ft_unset(tree, NULL);
-		else
-			ft_unset(tree, ft_strdup(tree->args[1]));
-	}
+		unset_loop(tree);
 	else if (tree->command == EXPORT)
-	{
-		if (!tree->args[1])
-			export_env(tree);
-		else
-			export(tree, ft_strdup(tree->args[1]));
-	}
+		export_loop(tree);
 }
 
 pid_t	exec_pipe(t_tree *tree, t_env **env_lst, int *exec_exit)
