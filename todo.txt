@@ -4,7 +4,7 @@ Flo:
 
 norminette -passt, nur deine heredoc
 
-<< a | cat -> mache ich naechste Woche
+<< a | cat -> mache ich naechste Woche -> lauft
 
 -----------------------------------------
 
@@ -15,3 +15,5 @@ get_next_line
 verbotene funktionen checken
 
 segfault checken
+
+export X=x C=c V=v crash wenn dannch env

@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 21:25:06 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/02 14:39:14 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,15 +81,6 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 	}
 	free_two_dimensional_array(paths);
 	return (NULL);
-}
-
-void	print_exit(char *message, char *argument, int errorcode, void *to_free)
-{
-	dup2(2, 1);
-	ft_printf("%s: %s\n", argument, message);
-	if (to_free)
-		free(to_free);
-	exit (errorcode);
 }
 
 void	absolute_path(t_tree *tmp, char **env_array)

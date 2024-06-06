@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 22:33:00 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/02 20:02:12 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,15 +103,13 @@ int	add_node_red_err(t_tree **tree, t_tree **parent, char ***args, int *i)
 			free_tree(*tree);
 			return (1);
 		}
-		if ((!(*tree)->args[1] || !(*tree)->args[1][0])
-			&& ft_strncmp((*tree)->args[0], "cat", 3) == 0)
-		{
-			(*tree)->out_fd = -1;
-			(*tree)->exit_status = 0;
-			free_tree(*tree);
-			if (!(*args)[*i] && !(*tree)->args[1])
-				return (1);
-		}
+	}
+	else if ((*tree)->args[0] && (ft_strncmp((*tree)->args[0], "cat", 3) == 0)
+		&& !(*tree)->args[1] && check_cat((*tree)->cmd_brch) == 0)
+	{
+		(*tree)->exit_status = 0;
+		(*tree)->out_fd = -1;
+		return (1);
 	}
 	return (0);
 }
@@ -120,11 +118,10 @@ int	add_node_red_err(t_tree **tree, t_tree **parent, char ***args, int *i)
 int	build_command_tree(t_tree **tree, char *command_str, char **pipes, int i)
 {
 	t_tree	*parent;
+	int		node_status;
 
 	parent = *tree;
-	if (!pipes || init_tree(*tree, pipes, (*tree)->exit_status, i++) == -1)
-		return (pipes_error("error split", NULL, pipes));
-	if ((*tree)->out_fd < 0 && !pipes[i])
+	if ((*tree)->out_fd < 0 && pipes && !pipes[1])
 	{
 		free_parent_tree(tree);
 		return (EXIT_SUCCESS);
@@ -132,13 +129,14 @@ int	build_command_tree(t_tree **tree, char *command_str, char **pipes, int i)
 	while (pipes[i])
 	{
 		if ((*tree)->out_fd >= 0)
-		{
-			if (add_node(tree, &parent, &pipes, &i) == 1)
-				return (EXIT_SUCCESS);
-		}
+			node_status = add_node(tree, &parent, &pipes, &i);
 		else
-			if (add_node_red_err(tree, &parent, &pipes, &i) == 1)
-				return (EXIT_SUCCESS);
+			node_status = add_node_red_err(tree, &parent, &pipes, &i);
+		if (node_status == 1)
+			return (EXIT_SUCCESS);
+		else if (node_status == -1)
+			return (EXIT_FAILURE);
 	}
-	return (free(command_str), EXIT_SUCCESS);
+	free(command_str);
+	return (EXIT_SUCCESS);
 }

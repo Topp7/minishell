@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 22:23:18 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/02 16:33:58 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	init_tree(t_tree *tree, char **pipes, int ex_st, int i)
 int	parse_command(char **command_str, t_tree **tree)
 {
 	char	**pipes;
-	int		pipes_num;
+	int		i;
 
 	add_history(*command_str);
 	if (*command_str)
@@ -56,8 +56,10 @@ int	parse_command(char **command_str, t_tree **tree)
 			free(*command_str);
 			return (EXIT_FAILURE);
 		}
-		pipes = split_with_quotes(command_str, '|', &pipes_num);
-		if (build_command_tree(tree, *command_str, pipes, 0) == EXIT_FAILURE)
+		pipes = split_with_quotes(command_str, '|', &i);
+		if (!pipes || init_tree(*tree, pipes, (*tree)->exit_status, 0) == -1)
+			return (pipes_error("error split command", NULL, pipes));
+		if (build_command_tree(tree, *command_str, pipes, 1) == EXIT_FAILURE)
 		{
 			free(*command_str);
 			return (EXIT_FAILURE);

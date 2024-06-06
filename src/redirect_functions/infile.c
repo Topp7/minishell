@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:49:09 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/02 19:41:56 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ char	*update_cmdstr_in(char *cmdstr, int skip_len)
 	if (!new_cmdstr)
 		return (NULL);
 	new_cmdstr[ft_strlen(cmdstr) - j] = '\0';
-	while (cmdstr[j])
+	while (cmdstr && cmdstr[j])
 	{
 		if (ft_strncmp(&cmdstr[j], "<", 1) == 0 && del == 0)
 		{
 			j += skip_len;
-			new_cmdstr[i++] = cmdstr[j++];
+			new_cmdstr[i] = cmdstr[j];
 			del = 1;
 		}
 		else
