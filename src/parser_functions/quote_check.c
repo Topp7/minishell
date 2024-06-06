@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/25 20:40:02 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 17:07:02 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 15:08:36 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	det_and_rem_quotes_first_word(char *command_str)
 			return (EXIT_FAILURE);
 		i++;
 	}
-	if (s_quote || d_quote)
+	if (skip_rest(command_str, s_quote, d_quote, i) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	if (is_substr_first_word(command_str, "<<") == 0)
 	{

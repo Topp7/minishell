@@ -6,11 +6,34 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/31 21:56:38 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/02 20:02:35 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 15:09:07 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+int	skip_rest(char *command_str, int s_quote, int d_quote, int i)
+{
+	if (s_quote)
+	{
+		while (command_str[i] && command_str[i] != '\'')
+			i++;
+		if (command_str[i] && command_str[i] != '\'')
+			return (EXIT_FAILURE);
+		while (command_str[i] && command_str[i] != ' ')
+			i++;
+	}
+	if (d_quote)
+	{
+		while (command_str[i] && command_str[i] != '\"')
+			i++;
+		if (command_str[i] && command_str[i] != '\"')
+			return (EXIT_FAILURE);
+		while (command_str[i] && command_str[i] != ' ')
+			i++;
+	}
+	return (EXIT_SUCCESS);
+}
 
 int	check_cat(char *str)
 {
