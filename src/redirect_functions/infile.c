@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   infile.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/02 19:41:56 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 15:17:00 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ char	*handle_infile(char *cmd_str, t_tree *tree)
 			i += 1;
 			while (cmd_str[i] && cmd_str[i] == ' ')
 				i++;
-			while (cmd_str[i + j] && cmd_str[i + j] != ' '
+			while (cmd_str[i + j]
 				&& cmd_str[i + j] != '<' && cmd_str[i + j] != '>')
 				j++;
 			infile = malloc(sizeof(char) * (j + 1));
