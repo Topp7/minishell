@@ -6,7 +6,7 @@
 /*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 15:43:16 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 16:06:02 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/02 19:41:56 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ char	*update_cmdstr_in(char *cmdstr, int skip_len)
 	if (!new_cmdstr)
 		return (NULL);
 	new_cmdstr[ft_strlen(cmdstr) - j] = '\0';
-	while (cmdstr[j])
+	while (cmdstr && cmdstr[j])
 	{
 		if (ft_strncmp(&cmdstr[j], "<", 1) == 0 && del == 0)
 		{
 			j += skip_len;
-			new_cmdstr[i++] = cmdstr[j++];
+			new_cmdstr[i] = cmdstr[j];
 			del = 1;
 		}
 		else
@@ -115,9 +115,9 @@ char	*handle_infile(char *cmd_str, t_tree *tree)
 	int		i;
 	int		j;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	while (cmd_str[i])
+	while (cmd_str[++i])
 	{
 		if (ft_strncmp(&cmd_str[i], "<", 1) == 0)
 		{
@@ -134,7 +134,6 @@ char	*handle_infile(char *cmd_str, t_tree *tree)
 			cmd_str = open_infile(tree, cmd_str, infile);
 			break ;
 		}
-		i++;
 	}
 	return (cmd_str);
 }

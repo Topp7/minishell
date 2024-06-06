@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:09:19 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 12:55:34 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 21:50:30 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,47 @@ int	create_var_and_rep_str(char **var, char	**replace, char *arg, int j)
 		return (free(*var), -1);
 	(*replace)[0] = '\0';
 	return (1);
+}
+
+int	join_name_value(t_env *env_node, char **env_array, int i)
+{
+	char	*tmp;
+
+	tmp = ft_strjoin(env_node->name, "=");
+	if (!tmp)
+		return (0);
+	env_array[i] = ft_strjoin(tmp, env_node->value);
+	if (!env_array[i])
+		return (free(tmp), 0);
+	free (tmp);
+	return (1);
+}
+
+char	*create_str(char *str, char *here_doc)
+{
+	int		i;
+	int		j;
+	char	*new_str;
+
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (skip_here(&i, str, here_doc) == 0)
+		{
+			j++;
+			i++;
+		}
+	}
+	new_str = malloc(j + 1);
+	new_str[j] = '\0';
+	i = 0;
+	j = 0;
+	while (str[i])
+	{
+		if (skip_here(&i, str, here_doc) == 0)
+			new_str[j++] = str[i++];
+	}
+	free(str);
+	return (new_str);
 }

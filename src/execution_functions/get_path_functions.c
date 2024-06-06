@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path_functions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:57:40 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:25:04 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/02 14:39:14 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 			else
 			{
 				dup2(2, 1);
-				ft_printf("%s: Permission denied\n", tree->arguments[0]);
+				ft_printf("%s: Permission denied\n", tree->args[0]);
 				exit (126);
 			}
 		}
@@ -83,43 +83,20 @@ char	*get_cmdpath(char *cmd, t_env **env_lst, t_tree *tree)
 	return (NULL);
 }
 
-int	join_name_value(t_env *env_node, char **env_array, int i)
-{
-	char	*tmp;
-
-	tmp = ft_strjoin(env_node->name, "=");
-	if (!tmp)
-		return (0);
-	env_array[i] = ft_strjoin(tmp, env_node->value);
-	if (!env_array[i])
-		return (free(tmp), 0);
-	free (tmp);
-	return (1);
-}
-
-void	print_exit(char *message, char *argument, int errorcode , void *to_free)
-{
-	dup2(2, 1);
-	ft_printf("%s: %s\n", argument, message);
-	if (to_free)
-		free(to_free);
-	exit (errorcode);
-}
-
 void	absolute_path(t_tree *tmp, char **env_array)
 {
 	DIR	*dir;
 
-	dir = opendir((tmp->arguments[0]));
+	dir = opendir((tmp->args[0]));
 	if (dir)
-		print_exit("is a directory", tmp->arguments[0], 126, dir);
-	else if (access(tmp->arguments[0], F_OK) == 0)
+		print_exit("is a directory", tmp->args[0], 126, dir);
+	else if (access(tmp->args[0], F_OK) == 0)
 	{
-		if (access(tmp->arguments[0], X_OK) == 0)
-			execve(tmp->arguments[0], tmp->arguments, env_array);
+		if (access(tmp->args[0], X_OK) == 0)
+			execve(tmp->args[0], tmp->args, env_array);
 		else
-			print_exit("Permission denied", tmp->arguments[0], 126, NULL);
+			print_exit("Permission denied", tmp->args[0], 126, NULL);
 	}
 	else
-		print_exit("no such file or directory", tmp->arguments[0], 127, NULL);
+		print_exit("No such file or directory", tmp->args[0], 127, NULL);
 }

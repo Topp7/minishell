@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 10:38:16 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/30 19:03:16 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 22:30:46 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ int	tilde_expander(char **arg, int j)
 	char	*replace;
 
 	if (both_quote_checker(*arg, j) && (*arg)[j] == '~'
-		&& (!(*arg)[j + 1] || ((*arg)[j + 1]) == ' '))
+		&& (!(*arg)[j + 1]
+		|| (((*arg)[j + 1]) == ' ' || ((*arg)[j + 1]) == '/')))
 	{
 		var = ft_strdup("~");
 		if (!var)

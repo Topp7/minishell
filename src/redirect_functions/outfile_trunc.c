@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   outfile_trunc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 14:56:51 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/30 16:14:10 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/02 19:40:58 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*update_cmdstr_trunc(char *cmdstr, int skip_len)
 		if (ft_strncmp(&cmdstr[j], ">", 1) == 0 && del == 0)
 		{
 			j += skip_len;
-			new_cmdstr[i++] = cmdstr[j++];
+			new_cmdstr[i] = cmdstr[j];
 			del = 1;
 		}
 		else
@@ -76,9 +76,9 @@ char	*handle_trunc(char *cmdstr, t_tree *tree)
 	int		j;
 	char	*outfile;
 
-	i = 0;
+	i = -1;
 	j = 0;
-	while (cmdstr[i])
+	while (cmdstr[++i])
 	{
 		if (ft_strncmp(&cmdstr[i], ">", 1) == 0)
 		{
@@ -95,7 +95,6 @@ char	*handle_trunc(char *cmdstr, t_tree *tree)
 			cmdstr = open_outfile_trunc(tree, cmdstr, outfile);
 			break ;
 		}
-		i++;
 	}
 	return (cmdstr);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/05/31 18:52:51 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/02 20:31:58 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,35 +24,6 @@ int	skip_here(int *i, char *str, char *here_doc)
 	}
 	else
 		return (0);
-}
-
-char	*create_str(char *str, char *here_doc)
-{
-	int		i;
-	int		j;
-	char	*new_str;
-
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (skip_here(&i, str, here_doc) == 0)
-		{
-			j++;
-			i++;
-		}
-	}
-	new_str = malloc(j + 1);
-	new_str[j] = '\0';
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (skip_here(&i, str, here_doc) == 0)
-			new_str[j++] = str[i++];
-	}
-	free(str);
-	return (new_str);
 }
 
 void	here_doc_loop(char	*str, int *fd)
@@ -101,6 +72,17 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree)
 	return (new_cmdstr);
 }
 
+char	*create_here_str(char *cmd_str, int i, int j)
+{
+	char	*here_str;
+
+	here_str = malloc(sizeof(char) * (j + 1));
+	if (!here_str)
+		return (NULL);
+	ft_strlcpy(here_str, &cmd_str[i], j + 1);
+	return (here_str);
+}
+
 //	function to save the heredoc input in a string
 char	*handle_heredoc(char *cmd_str, t_tree *tree)
 {
@@ -120,10 +102,7 @@ char	*handle_heredoc(char *cmd_str, t_tree *tree)
 			while (cmd_str[i + j] && cmd_str[i + j] != ' '
 				&& cmd_str[i + j] != '<' && cmd_str[i + j] != '>')
 				j++;
-			here_str = malloc(sizeof(char) * (j + 1));
-			if (!here_str)
-				return (NULL);
-			ft_strlcpy(here_str, &cmd_str[i], j + 1);
+			here_str = create_here_str(cmd_str, i, j);
 			cmd_str = create_heredoc(&here_str, cmd_str, tree);
 			i = 0;
 		}

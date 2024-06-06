@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
+/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/05/31 18:24:57 by stopp            ###   ########.fr       */
+/*   Updated: 2024/05/31 21:24:54 by fkeitel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,20 @@ void	exec_cmd(t_tree *tmp, t_env **env_lst)
 	signal(SIGQUIT, signal_handle);
 	if (!env_array)
 		exit (1);
-	if (tmp->arguments[0] == ft_strchr(tmp->arguments[0], '/')
-		|| ft_strncmp(tmp->arguments[0], "./", 2) == 0)
+	if (tmp->args[0] == ft_strchr(tmp->args[0], '/')
+		|| ft_strncmp(tmp->args[0], "./", 2) == 0)
 		absolute_path(tmp, env_array);
 	else
 	{
-		cmdpath = get_cmdpath(tmp->arguments[0], env_lst, tmp);
+		cmdpath = get_cmdpath(tmp->args[0], env_lst, tmp);
 		if (!cmdpath)
 		{
 			dup2(2, 1);
-			ft_printf("%s: command not found\n", tmp->arguments[0]);
+			ft_printf("%s: command not found\n", tmp->args[0]);
 			exit (127);
 		}
 		open_close_fds(tmp);
-		execve(cmdpath, tmp->arguments, env_array);
+		execve(cmdpath, tmp->args, env_array);
 		exit(1);
 	}
 }
@@ -122,7 +122,7 @@ void	execute_command(t_tree *tree)
 	exec_exit = 0;
 	while (tmp)
 	{
-		if (tmp->arguments[0] && tree->out_fd >= 0)
+		if (tmp->args[0] && tree->out_fd >= 0)
 		{
 			if (tmp->command > 0)
 				pid = handle_builtins(tmp, tmp->env, &exec_exit);
