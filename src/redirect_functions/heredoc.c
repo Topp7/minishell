@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/02 20:31:58 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/06 12:43:46 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ char	*create_heredoc(char **str, char *cmd_str, t_tree *tree)
 	if (pipe(fd) == -1)
 		return (NULL);
 	pid = fork();
+	if (pid == -1)
+		return (NULL);
 	if (pid == 0)
 	{
 		here_doc_loop(*str, fd);
