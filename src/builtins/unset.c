@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 16:32:56 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 12:31:24 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/07 17:39:02 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ void	unset_loop(t_tree *tree)
 		return ;
 	}
 	while (tree->args[i])
-		ft_unset(tree, tree->args[i++]);
+		ft_unset(tree, ft_strdup(tree->args[i++]));
 }

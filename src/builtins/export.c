@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 19:29:47 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/07 17:37:21 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ int	name_check(char *tmp, t_tree *tree)
 	char	*name;
 
 	name = tmp;
-	if (tree->child_pipe)
-	{
-		write(1, "\0", 1);
-		return (0);
-	}
 	if (ft_isalpha(*name) == 1 || *name == '_')
 		name++;
 	else
@@ -98,7 +93,6 @@ void	export_loop(t_tree *tree)
 		export_env(tree);
 	else
 	{
-		ft_printf("%s\n", tree->args[i]);
 		while (tree->args[i])
 			export(tree, ft_strdup(tree->args[i++]));
 	}

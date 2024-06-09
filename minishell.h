@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/06 16:49:29 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/07 17:22:12 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void	free_parent_tree(t_tree **parse_tree);
 
 //	error.c
 int		pipes_error(char *errorstr, t_tree *tree, char **array);
-int		print_str_return_exit(char *str, int exit_code, t_tree *tree);
+void	print_str_return_exit(char *str, int exit_code, t_tree *tree);
 void	print_exit(char *message, char *argument, int errorcode, void *to_free);
 
 //--------------------------- execution functions ------------------------------

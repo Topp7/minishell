@@ -3,14 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fkeitel <fkeitel@student.42.fr>            +#+  +:+       +#+        */
+/*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/06 14:11:11 by fkeitel          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:32:39 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	print_synerror(char *c, char *cmd, t_tree *tree)
+{
+	dup2(2, 1);
+	ft_printf("syntax error near unexpected token: `%s'\n", c);
+	dup2(tree->stdoutput, 1);
+	tree->exit_status = 2;
+	free(cmd);
+}
+
+int	chk_syntax(char *cmd, t_tree *tree)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	if (*cmd == '|')
+		return (print_synerror("|", cmd, tree), 0);
+	while (cmd[i])
+	{
+		if ((cmd[i] == '<' || cmd[i] == '>')
+			&& (cmd[i + 1] == '\0' || cmd[i + 1] == '\n'))
+			return (print_synerror("newline", cmd, tree), 0);
+		if (cmd[i] == '|')
+		{
+			j = i - 1;
+			while (j >= 0)
+			{
+				if (cmd[j] == '|')
+					return (print_synerror("|", cmd, tree), 0);
+				else if (ft_isprint(cmd[j]) == 1)
+					break ;
+				j--;
+			}
+		}
+		i++;
+	}
+	return (1);
+}
 
 int	prompt_loop(t_tree	**parse_tree)
 {
@@ -26,6 +66,8 @@ int	prompt_loop(t_tree	**parse_tree)
 		if (command == NULL)
 			return ((*parse_tree)->exit_status);
 		signal(SIGINT, SIG_IGN);
+		if (chk_syntax(command, *parse_tree) == 0)
+			continue ;
 		if (parse_command(&command, parse_tree) == EXIT_FAILURE)
 			exit ((*parse_tree)->exit_status);
 		if ((*parse_tree)->out_fd < 0)
