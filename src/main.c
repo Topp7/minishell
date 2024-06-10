@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/10 12:54:17 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 16:19:49 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,22 @@ int	chk_syntax(char *cmd, t_tree *tree)
 		return (print_synerror("|", cmd, tree), 0);
 	while (cmd[i])
 	{
-		if ((cmd[i] == '<' || cmd[i] == '>')
-			&& (cmd[i + 1] == '\0' || cmd[i + 1] == '\n'))
-			return (print_synerror("newline", cmd, tree), 0);
-		if (cmd[i] == '|')
+		if (both_quote_checker(cmd, i) == 1)
 		{
-			j = i - 1;
-			while (j >= 0)
+			if ((cmd[i] == '<' || cmd[i] == '>')
+				&& (cmd[i + 1] == '\0' || cmd[i + 1] == '\n'))
+				return (print_synerror("newline", cmd, tree), 0);
+			if (cmd[i] == '|')
 			{
-				if (cmd[j] == '|')
-					return (print_synerror("|", cmd, tree), 0);
-				else if (ft_isprint(cmd[j]) == 1)
-					break ;
-				j--;
+				j = i - 1;
+				while (j >= 0)
+				{
+					if (cmd[j] == '|')
+						return (print_synerror("|", cmd, tree), 0);
+					else if (ft_isprint(cmd[j]) == 1)
+						break ;
+					j--;
+				}
 			}
 		}
 		i++;

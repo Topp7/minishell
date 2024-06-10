@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/10 12:02:48 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 16:18:53 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,40 @@ char	*update_cmdstr(char *cmdstr, int skip_len)
 	return (new_cmdstr);
 }
 
-// int	if_path(char *oufile, t_tree *tree)
-// {
-// }
+int	if_path(char *outfile, t_tree *tree)
+{
+	char	*tmp;
+	int		i;
+	int		j;
+	DIR		*dir;
+
+	dir = opendir(outfile);
+	if (dir)
+	{
+		dup2(2, 1);
+		ft_printf("%s, is a directory\n", outfile);
+		dup2(tree->stdoutput, 1);
+		return (free(dir), 0);
+	}
+	i = ft_strlen(outfile) - 1;
+	j = 0;
+	while (outfile[i] != '/')
+		i--;
+	tmp = malloc(i + 1);
+	if (!tmp)
+		return (0);
+	ft_strlcpy(tmp, outfile, i);
+	dir = opendir(tmp);
+	if (dir)
+		return (1);
+}
 
 int	validate_outfile(char *outfile, t_tree *tree)
 {
 	struct stat	*buf;
 
-	// if (*outfile == '/')
-	// 	if_path(outfile, tree);
+	if (ft_strncmp(outfile, "./", 2) == 0)
+		if_path(outfile, tree);
 	buf = malloc(sizeof(struct stat));
 	if (!buf)
 		return (0);

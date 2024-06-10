@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/10 12:54:37 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 16:02:29 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	add_node(t_tree **tree, t_tree **parent, char ***args, int *i)
 		(*tree)->out_fd = -1;
 		(*tree)->exit_status = 1;
 		free_tree(&temp);
-		free(temp);
+		// free(temp);
 		if (!(*args)[*i])
 		{
 			free_parent_tree(tree);
@@ -93,15 +93,10 @@ int	add_node(t_tree **tree, t_tree **parent, char ***args, int *i)
 
 int	add_node_red_err(t_tree **tree, t_tree **parent, char ***args, int *i)
 {
-	print_parse_tree(*tree);
-	ft_printf("\n");
-	free_parent_tree(tree);
-	print_parse_tree(*tree);
+	free_tree(tree);
 	if (init_tree(*tree, *args, (*tree)->exit_status, (*i)++) == -1)
 		return (EXIT_FAILURE);
-	ft_printf("\n");
-	print_parse_tree(*tree);
-	*parent = NULL;
+	*parent = *tree;
 	if ((*tree)->out_fd < 0)
 	{
 		free_tree(tree);

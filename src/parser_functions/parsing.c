@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/10 12:40:50 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 15:51:54 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int	init_tree(t_tree *tree, char **pipes, int ex_st, int i)
 		tree->env = tree->parent_pipe->env;
 		tree->stdinput = tree->parent_pipe->stdinput;
 		tree->stdoutput = tree->parent_pipe->stdoutput;
-		tree->arrow_quote = tree->parent_pipe->arrow_quote;
-		tree->cmd_brch = tree->parent_pipe->cmd_brch;
 	}
 	else
 		tree->parent_pipe = NULL;
