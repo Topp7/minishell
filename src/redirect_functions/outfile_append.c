@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 16:43:57 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/06 15:17:09 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 12:02:48 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,16 @@ char	*update_cmdstr(char *cmdstr, int skip_len)
 	return (new_cmdstr);
 }
 
+// int	if_path(char *oufile, t_tree *tree)
+// {
+// }
+
 int	validate_outfile(char *outfile, t_tree *tree)
 {
 	struct stat	*buf;
 
+	// if (*outfile == '/')
+	// 	if_path(outfile, tree);
 	buf = malloc(sizeof(struct stat));
 	if (!buf)
 		return (0);

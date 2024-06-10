@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 11:03:04 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/08 17:32:39 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 12:54:17 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	prompt_loop(t_tree	**parse_tree)
 			continue ;
 		}
 		execute_command(*parse_tree);
-		free_tree(*parse_tree);
+		free_tree(parse_tree);
 	}
 	return ((*parse_tree)->exit_status);
 }

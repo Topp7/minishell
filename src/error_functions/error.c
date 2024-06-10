@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:47:36 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/07 17:15:09 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 12:54:06 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	pipes_error(char *errorstr, t_tree *tree, char **array)
 	ft_printf("%s\n", errorstr);
 	(void)array;
 	free_two_dimensional_array(array);
-	free_tree(tree);
+	free_tree(&tree);
 	return (EXIT_FAILURE);
 }
 

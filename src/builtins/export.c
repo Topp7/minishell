@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 17:06:36 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/07 17:37:21 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/09 18:03:45 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	export(t_tree *tree, char *new_env)
 		return ;
 	new = init_node(new_env);
 	if (!new)
-		return ;
+		return (free(new_env));
 	free(new_env);
 	while (tmp)
 	{

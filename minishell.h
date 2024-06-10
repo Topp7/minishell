@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 10:41:13 by fkeitel           #+#    #+#             */
-/*   Updated: 2024/06/07 17:22:12 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 12:54:44 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	unset_loop(t_tree *tree);
 
 //	clean.c
 void	free_env_list(t_env **env_list);
-void	free_tree(t_tree *parse_tree);
+void	free_tree(t_tree **parse_tree);
 void	ft_free(char **split, int words);
 void	free_parent_tree(t_tree **parse_tree);
 

@@ -6,7 +6,7 @@
 /*   By: stopp <stopp@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 15:15:21 by stopp             #+#    #+#             */
-/*   Updated: 2024/06/08 13:02:27 by stopp            ###   ########.fr       */
+/*   Updated: 2024/06/10 12:12:19 by stopp            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,25 +49,7 @@ int	exit_handler(t_tree *tree)
 	if (tree->pipes_num == 1)
 		ft_printf("exit\n");
 	if (tree->args[1])
-	{
 		chk_exarg(tree, tree->args);
-		// while (tree->args[1][i])
-		// {
-		// 	if (*tree->args[1] != 45 && (!ft_isdigit(tree->args[1][i])
-		// 		&& tree->args[1][i] != '+'))
-		// 	{
-		// 		return (print_str_return_exit
-		// 			("numeric argument required\n", 255, tree));
-		// 	}
-		// 	i++;
-		// }
-		// if (tree->args[2])
-		// {
-		// 	tree->command = 0;
-		// 	return (print_str_return_exit("too many arguments\n", 1, tree));
-		// }
-		// tree->exit_status = ft_atoi(tree->args[1]) % 256;
-	}
 	return (tree->exit_status);
 }
 
